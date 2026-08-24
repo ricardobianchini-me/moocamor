@@ -21,6 +21,8 @@
     --card: #ffffff;
     --shadow: rgba(6, 48, 79, 0.16);
     --focus: #2f6e52;
+    --urgency-bg: #fdf1dc;
+    --urgency-text: #8a5a1a;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -37,6 +39,8 @@
       --card: #10283b;
       --shadow: rgba(0, 0, 0, 0.5);
       --focus: #5fae86;
+      --urgency-bg: #3a2c12;
+      --urgency-text: #f0c878;
     }
   }
 
@@ -53,6 +57,8 @@
     --card: #10283b;
     --shadow: rgba(0, 0, 0, 0.5);
     --focus: #5fae86;
+    --urgency-bg: #3a2c12;
+    --urgency-text: #f0c878;
   }
 
   * { box-sizing: border-box; }
@@ -203,6 +209,37 @@
     color: var(--ink);
     mix-blend-mode: difference;
     filter: invert(1) grayscale(1) contrast(2);
+  }
+
+  .urgency {
+    margin-top: 16px;
+    background: var(--urgency-bg);
+    border: 1px solid var(--mustard);
+    border-radius: 12px;
+    padding: 12px 16px;
+    text-align: center;
+    font-family: "Lato", sans-serif;
+  }
+
+  .urgency-amount {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--urgency-text);
+  }
+
+  .urgency-days {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--urgency-text);
+    margin-left: 4px;
+  }
+
+  .urgency.done {
+    background: var(--basil-soft);
+    border-color: var(--basil);
+    color: var(--basil);
+    font-weight: 700;
+    font-size: 1.05rem;
   }
 
   /* supply cards grid */
@@ -448,10 +485,19 @@
     return { goalTotal, raisedTotal };
   }
 
+  function daysUntilFesta() {
+    const festa = new Date("2026-09-19T00:00:00-03:00");
+    const now = new Date();
+    const diff = Math.ceil((festa - now) / (1000 * 60 * 60 * 24));
+    return diff;
+  }
+
   function render() {
     const st = state;
     const { goalTotal, raisedTotal } = computeTotals(st);
     const pct = goalTotal > 0 ? Math.min(100, (raisedTotal / goalTotal) * 100) : 0;
+    const missing = Math.max(0, goalTotal - raisedTotal);
+    const daysLeft = daysUntilFesta();
 
     const itemCards = Object.entries(st.supplies).map(([key, it]) => {
       const itemPct = it.goalQty > 0 ? Math.min(100, (it.raisedQty / it.goalQty) * 100) : 0;
@@ -489,6 +535,12 @@
           <div class="bar-fill" style="width:${pct}%"></div>
           <div class="bar-pct">${pct.toFixed(0)}%</div>
         </div>
+        ${missing > 0 ? `
+        <div class="urgency">
+          <span class="urgency-amount">Faltam ${fmtBRL(missing)}</span>
+          <span class="urgency-days">${daysLeft > 0 ? `· a festa é em ${daysLeft} dia${daysLeft === 1 ? "" : "s"}!` : "· a festa já começou!"}</span>
+        </div>` : `
+        <div class="urgency done">🎉 Meta batida! Muito obrigado a todos que ajudaram!</div>`}
       </div>
 
       <div class="grid">
