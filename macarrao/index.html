@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arrecadação da Barraca do Macarrão</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%8D%9D</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fbf3e2;
+    --paper-line: #e8d9b8;
+    --ink: #2b1b14;
+    --ink-soft: #6b5a48;
+    --sauce: #c33c26;
+    --sauce-dark: #a12e1b;
+    --mustard: #d99a1f;
+    --basil: #4f7942;
+    --basil-soft: #e4efdd;
+    --card: #ffffff;
+    --shadow: rgba(43, 27, 20, 0.14);
+    --focus: #1c6ee0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #211510;
+      --paper-line: #3a281f;
+      --ink: #f3e7d8;
+      --ink-soft: #b9a48f;
+      --sauce: #e2593f;
+      --sauce-dark: #ff7a5c;
+      --mustard: #e8b545;
+      --basil: #8ec97c;
+      --basil-soft: #26331f;
+      --card: #2c1d16;
+      --shadow: rgba(0, 0, 0, 0.45);
+      --focus: #6cb2ff;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #211510;
+    --paper-line: #3a281f;
+    --ink: #f3e7d8;
+    --ink-soft: #b9a48f;
+    --sauce: #e2593f;
+    --sauce-dark: #ff7a5c;
+    --mustard: #e8b545;
+    --basil: #8ec97c;
+    --basil-soft: #26331f;
+    --card: #2c1d16;
+    --shadow: rgba(0, 0, 0, 0.45);
+    --focus: #6cb2ff;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image: repeating-linear-gradient(var(--paper-line) 0 1px, transparent 1px 34px);
+    color: var(--ink);
+    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
+    padding: 28px 16px 64px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sheet { width: 100%; max-width: 900px; }
+
+  header.ticket {
+    background: var(--sauce);
+    color: #fff8ee;
+    border-radius: 14px;
+    padding: 22px 24px 20px;
+    box-shadow: 0 10px 24px var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header.ticket::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 10px;
+    background: repeating-linear-gradient(-45deg, transparent 0 8px, rgba(255,255,255,0.18) 8px 16px);
+  }
+
+  .ticket .eyebrow {
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin: 0 0 6px;
+  }
+
+  .ticket h1 {
+    font-family: "Baloo 2", "Segoe UI", sans-serif;
+    font-size: clamp(1.6rem, 4.6vw, 2.3rem);
+    line-height: 1.05;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+
+  .ticket p.sub { margin: 0; font-size: 1rem; opacity: 0.92; max-width: 60ch; }
+
+  /* overall thermometer */
+  .totalcard {
+    margin-top: 22px;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px var(--shadow);
+    padding: 22px 24px;
+  }
+
+  .totalcard .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .totalcard .label {
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .totalcard .amounts {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+  }
+
+  .totalcard .amounts b { color: var(--basil); font-size: 1.3rem; }
+
+  .bar-track {
+    width: 100%;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--paper-line);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--basil) 0%, #6fae5c 100%);
+    transition: width 0.5s ease;
+    min-width: 2%;
+  }
+
+  .bar-pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--ink);
+    mix-blend-mode: difference;
+    filter: invert(1) grayscale(1) contrast(2);
+  }
+
+  /* supply cards grid */
+  .grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .item-card {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 6px 18px var(--shadow);
+    padding: 16px 18px;
+  }
+
+  .item-card .head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .item-card .icon { font-size: 1.7rem; }
+
+  .item-card .name {
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+  }
+
+  .item-card .qty {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  .item-card .qty b { color: var(--ink); }
+
+  .item-card .bar-track { height: 16px; }
+  .item-card .bar-pct { display: none; }
+
+  .item-card .money {
+    margin-top: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  .cash-card {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 6px 18px var(--shadow);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .cash-card .icon { font-size: 2rem; }
+  .cash-card .name { font-family: "Baloo 2", sans-serif; font-weight: 600; }
+  .cash-card .value { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.3rem; color: var(--basil); }
+
+  .note {
+    margin-top: 18px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    background: var(--card);
+    border: 1px dashed var(--paper-line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    line-height: 1.5;
+  }
+
+  /* admin */
+  .admin-toggle {
+    margin-top: 22px;
+    text-align: center;
+  }
+
+  .admin-toggle button {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+  }
+  .admin-toggle button:hover { color: var(--ink); }
+
+  .admin-panel {
+    margin-top: 14px;
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  .admin-panel h2 {
+    font-family: "Baloo 2", sans-serif;
+    font-size: 1rem;
+    margin: 0 0 12px;
+  }
+
+  .admin-panel input {
+    font-family: inherit;
+    font-size: 0.92rem;
+    padding: 9px 11px;
+    border-radius: 8px;
+    border: 1px solid var(--paper-line);
+    background: var(--paper);
+    color: var(--ink);
+    width: 100%;
+  }
+
+  .admin-panel input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+  .pin-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .pin-row input { max-width: 140px; }
+
+  .pin-row button, .save-row button {
+    background: var(--sauce);
+    color: #fff8ee;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .pin-row button:hover, .save-row button:hover { background: var(--sauce-dark); }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .field-grid label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+
+  .pin-error { color: var(--sauce); font-size: 0.82rem; margin-top: 8px; display: none; }
+  .save-status { font-size: 0.82rem; color: var(--basil); margin-left: 10px; }
+
+  footer.legend {
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar-fill { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <p style="text-align:center;padding:40px 0;color:var(--ink-soft)">Carregando…</p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
+    authDomain: "fraternidadedoamor-ef315.firebaseapp.com",
+    databaseURL: "https://fraternidadedoamor-ef315-default-rtdb.firebaseio.com",
+    projectId: "fraternidadedoamor-ef315",
+    storageBucket: "fraternidadedoamor-ef315.firebasestorage.app",
+    messagingSenderId: "703575848763",
+    appId: "1:703575848763:web:52548e6124b8a0841c691e",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const rootRef = db.ref("arrecadacaoMacarrao");
+
+  const ADMIN_PIN = "1313";
+
+  const SEED = {
+    supplies: {
+      frango:   { label: "Frango",              unit: "kg", icon: "🐔", goalQty: 200, price: 16, raisedQty: 0 },
+      polenta:  { label: "Polenta",              unit: "kg", icon: "🌽", goalQty: 100, price: 10, raisedQty: 0 },
+      queijo:   { label: "Queijo parmesão",      unit: "kg", icon: "🧀", goalQty: 6,   price: 75, raisedQty: 0 },
+      macarrao: { label: "Macarrão spaguetti c/ ovos", unit: "kg", icon: "🍝", goalQty: 40, price: 9, raisedQty: 0 },
+    },
+    cash: { raised: 0 },
+  };
+
+  let state = null;
+  let seeded = false;
+  let unlocked = false;
+
+  function fmtBRL(n) {
+    return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  }
+  function fmtKg(n) {
+    return n.toLocaleString("pt-BR", { maximumFractionDigits: 1 });
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  function computeTotals(st) {
+    const items = Object.values(st.supplies);
+    const goalTotal = items.reduce((sum, it) => sum + it.goalQty * it.price, 0);
+    const raisedFromSupplies = items.reduce((sum, it) => sum + Math.min(it.raisedQty, it.goalQty * 10) * it.price, 0);
+    const raisedTotal = raisedFromSupplies + (st.cash.raised || 0);
+    return { goalTotal, raisedTotal };
+  }
+
+  function render() {
+    const st = state;
+    const { goalTotal, raisedTotal } = computeTotals(st);
+    const pct = goalTotal > 0 ? Math.min(100, (raisedTotal / goalTotal) * 100) : 0;
+
+    const itemCards = Object.entries(st.supplies).map(([key, it]) => {
+      const itemPct = it.goalQty > 0 ? Math.min(100, (it.raisedQty / it.goalQty) * 100) : 0;
+      const raisedValue = it.raisedQty * it.price;
+      const goalValue = it.goalQty * it.price;
+      return `<div class="item-card">
+        <div class="head"><span class="icon">${it.icon}</span><span class="name">${esc(it.label)}</span></div>
+        <div class="qty"><b>${fmtKg(it.raisedQty)}</b> de ${fmtKg(it.goalQty)} ${esc(it.unit)}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${itemPct}%"></div></div>
+        <div class="money">${fmtBRL(raisedValue)} de ${fmtBRL(goalValue)} · ${fmtBRL(it.price)}/${esc(it.unit)}</div>
+      </div>`;
+    }).join("");
+
+    document.getElementById("sheet").innerHTML = `
+      <header class="ticket">
+        <p class="eyebrow">Fraternidade do Amor · Festa beneficente</p>
+        <h1>Arrecadação — Barraca do Macarrão</h1>
+        <p class="sub">Acompanhe em tempo real quanto já conseguimos arrecadar em insumos e dinheiro pra festa do MoocAmor, 19 e 20 de setembro.</p>
+      </header>
+
+      <div class="totalcard">
+        <div class="row">
+          <span class="label">Total geral da campanha</span>
+          <span class="amounts"><b>${fmtBRL(raisedTotal)}</b> de ${fmtBRL(goalTotal)}</span>
+        </div>
+        <div class="bar-track" style="height:30px">
+          <div class="bar-fill" style="width:${pct}%"></div>
+          <div class="bar-pct">${pct.toFixed(0)}%</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        ${itemCards}
+      </div>
+
+      <div class="cash-card" style="margin-top:14px">
+        <span class="icon">💰</span>
+        <div>
+          <div class="name">Dinheiro em caixa</div>
+          <div class="value">${fmtBRL(st.cash.raised || 0)}</div>
+        </div>
+      </div>
+
+      <p class="note">Os valores em Reais mostrados nos insumos são apenas referência de quanto cada doação física representa — o "Total geral" soma o valor de tudo que já foi doado (insumos + dinheiro) contra o custo total estimado da festa.</p>
+
+      <div class="admin-toggle">
+        <button type="button" id="admin-toggle-btn">🔒 Atualizar arrecadação</button>
+      </div>
+      <div id="admin-panel-slot"></div>
+
+      <footer class="legend">Fraternidade do Amor · MoocAmor · Barraca do Macarrão</footer>
+    `;
+
+    attachToggle();
+    if (unlocked) renderAdminPanel();
+  }
+
+  function attachToggle() {
+    document.getElementById("admin-toggle-btn").addEventListener("click", () => {
+      unlocked = !unlocked;
+      if (unlocked) renderAdminPanel();
+      else document.getElementById("admin-panel-slot").innerHTML = "";
+    });
+  }
+
+  function renderAdminPanel() {
+    const slot = document.getElementById("admin-panel-slot");
+    slot.innerHTML = `
+      <div class="admin-panel">
+        <h2>Digite o PIN pra editar</h2>
+        <div class="pin-row">
+          <input type="password" inputmode="numeric" id="pin-input" placeholder="PIN" maxlength="8" />
+          <button type="button" id="pin-submit">Entrar</button>
+        </div>
+        <div class="pin-error" id="pin-error">PIN incorreto.</div>
+        <div id="edit-form-slot"></div>
+      </div>
+    `;
+    document.getElementById("pin-submit").addEventListener("click", checkPin);
+    document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
+  }
+
+  function checkPin() {
+    const val = document.getElementById("pin-input").value;
+    const err = document.getElementById("pin-error");
+    if (val !== ADMIN_PIN) {
+      err.style.display = "block";
+      return;
+    }
+    err.style.display = "none";
+    renderEditForm();
+  }
+
+  function renderEditForm() {
+    const st = state;
+    const slot = document.getElementById("edit-form-slot");
+    const supplyFields = Object.entries(st.supplies).map(([key, it]) => `
+      <div>
+        <label for="f-${key}">${it.icon} ${esc(it.label)} (${esc(it.unit)} já arrecadados)</label>
+        <input type="number" min="0" step="0.5" id="f-${key}" value="${it.raisedQty}" />
+      </div>
+    `).join("");
+    slot.innerHTML = `
+      <div class="field-grid">
+        ${supplyFields}
+        <div>
+          <label for="f-cash">💰 Dinheiro em caixa (R$)</label>
+          <input type="number" min="0" step="1" id="f-cash" value="${st.cash.raised || 0}" />
+        </div>
+      </div>
+      <div class="save-row">
+        <button type="button" id="save-btn">Salvar</button>
+        <span class="save-status" id="save-status"></span>
+      </div>
+    `;
+    document.getElementById("save-btn").addEventListener("click", saveEdits);
+  }
+
+  function saveEdits() {
+    const updates = {};
+    Object.keys(state.supplies).forEach((key) => {
+      const v = parseFloat(document.getElementById(`f-${key}`).value);
+      updates[`supplies/${key}/raisedQty`] = isNaN(v) || v < 0 ? 0 : v;
+    });
+    const cashV = parseFloat(document.getElementById("f-cash").value);
+    updates["cash/raised"] = isNaN(cashV) || cashV < 0 ? 0 : cashV;
+    rootRef.update(updates).then(() => {
+      const status = document.getElementById("save-status");
+      if (status) { status.textContent = "Salvo!"; setTimeout(() => { if (status) status.textContent = ""; }, 2500); }
+    }).catch(() => {
+      const status = document.getElementById("save-status");
+      if (status) status.textContent = "Erro ao salvar.";
+    });
+  }
+
+  rootRef.on("value", (snap) => {
+    const data = snap.val();
+    if (!data && !seeded) {
+      seeded = true;
+      rootRef.set(SEED);
+      return;
+    }
+    state = data || SEED;
+    if (!state.supplies) state.supplies = SEED.supplies;
+    if (!state.cash) state.cash = SEED.cash;
+    render();
+  });
+</script>
+</body>
+</html>
