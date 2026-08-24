@@ -209,18 +209,30 @@
   }
 
   .board-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 10px;
   }
 
-  .col-head {
+  .bingo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .row-letter {
+    flex: 0 0 auto;
+    width: clamp(40px, 6.5vw, 60px);
+    height: clamp(40px, 6.5vw, 60px);
+    border-radius: 14px;
+    background: var(--col-color, var(--gold));
+    color: #1b1330;
     font-family: "Fredoka", sans-serif;
     font-weight: 700;
-    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
-    text-align: center;
-    padding-bottom: 6px;
-    border-bottom: 3px solid var(--col-color, var(--gold));
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .col-b { --col-color: #7ec8ff; }
   .col-i { --col-color: #ff9f6e; }
@@ -228,11 +240,12 @@
   .col-g { --col-color: #ff5f7e; }
   .col-o { --col-color: #ffc84a; }
 
-  .col-cells {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 8px;
+  .row-cells {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 5px;
+    min-width: 0;
   }
 
   .cell {
@@ -243,7 +256,7 @@
     justify-content: center;
     font-family: "Archivo", sans-serif;
     font-weight: 700;
-    font-size: clamp(0.72rem, 1.6vw, 1.05rem);
+    font-size: clamp(0.6rem, 1.5vw, 1.05rem);
     background: var(--bg-deep);
     color: var(--text-soft);
     border: 1px solid var(--panel-line);
@@ -265,9 +278,9 @@
     text-align: center;
   }
 
-  @media (max-width: 560px) {
-    .board-grid { gap: 5px; }
-    .col-cells { gap: 4px; }
+  @media (max-width: 720px) {
+    .board { overflow-x: auto; }
+    .board-grid { min-width: 640px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -362,9 +375,9 @@
         const isCurrent = n === current;
         cells.push(`<div class="cell${isCalled ? " called" : ""}${isCurrent ? " current" : ""}">${n}</div>`);
       }
-      return `<div>
-        <div class="col-head ${c.cls}">${c.letter}</div>
-        <div class="col-cells">${cells.join("")}</div>
+      return `<div class="bingo-row">
+        <div class="row-letter ${c.cls}">${c.letter}</div>
+        <div class="row-cells">${cells.join("")}</div>
       </div>`;
     }).join("");
     document.getElementById("board").innerHTML = `<div class="board-grid">${cols}</div>`;
