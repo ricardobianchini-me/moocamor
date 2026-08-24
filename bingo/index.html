@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bingo da Fraternidade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #171033;
+    --bg-deep: #0f0a24;
+    --panel: #241a4a;
+    --panel-line: #3a2c6b;
+    --text: #f5f1ff;
+    --text-soft: #b3a6df;
+    --gold: #ffc84a;
+    --gold-deep: #e0a220;
+    --called: #ff5f7e;
+    --called-deep: #d63f5e;
+    --ok: #4ade80;
+    --focus: #7ec8ff;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: radial-gradient(circle at 50% -10%, #2c1f5c 0%, var(--bg) 45%, var(--bg-deep) 100%);
+    color: var(--text);
+    font-family: "Archivo", "Segoe UI", system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  h1 {
+    font-family: "Fredoka", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    margin: 0;
+    text-align: center;
+    letter-spacing: 0.01em;
+  }
+
+  .subtitle {
+    margin: -14px 0 0;
+    color: var(--text-soft);
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* current draw */
+  .stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .ball {
+    width: clamp(160px, 26vw, 240px);
+    height: clamp(160px, 26vw, 240px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff6df 0%, var(--gold) 45%, var(--gold-deep) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 8px var(--panel), 0 0 60px 10px rgba(255, 200, 74, 0.45), 0 20px 40px rgba(0,0,0,0.5);
+    color: #2b1b14;
+    transition: transform 0.25s ease;
+  }
+
+  .ball.pop { animation: pop 0.5s ease; }
+  @keyframes pop {
+    0% { transform: scale(0.6) rotate(-8deg); }
+    60% { transform: scale(1.08) rotate(3deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  .ball .letter {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    letter-spacing: 0.05em;
+  }
+
+  .ball .num {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 700;
+    font-size: clamp(3.2rem, 9vw, 5.2rem);
+    line-height: 1;
+  }
+
+  .ball.empty {
+    background: var(--panel);
+    box-shadow: 0 0 0 8px var(--panel-line), inset 0 0 0 3px var(--panel-line);
+    color: var(--text-soft);
+  }
+  .ball.empty .num { font-size: clamp(1.4rem, 3vw, 1.8rem); }
+
+  .side-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 160px;
+  }
+
+  .info-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 12px 18px;
+    text-align: center;
+  }
+
+  .info-card .label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-soft);
+    margin-bottom: 4px;
+  }
+
+  .info-card .value {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+  }
+
+  /* controls */
+  .controls {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 600;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.1s ease, filter 0.15s ease;
+  }
+  button:active { transform: scale(0.97); }
+  button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+  .btn-draw {
+    background: linear-gradient(180deg, var(--called) 0%, var(--called-deep) 100%);
+    color: #fff;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    padding: 18px 48px;
+    box-shadow: 0 8px 0 #a8203c, 0 14px 24px rgba(0,0,0,0.4);
+  }
+  .btn-draw:hover:not(:disabled) { filter: brightness(1.06); }
+  .btn-draw:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+  .btn-draw:active:not(:disabled) { box-shadow: 0 3px 0 #a8203c; transform: translateY(5px) scale(0.99); }
+
+  .btn-reset {
+    background: var(--panel);
+    color: var(--text-soft);
+    font-size: 1rem;
+    padding: 14px 26px;
+    border: 1px solid var(--panel-line);
+  }
+  .btn-reset:hover { color: var(--text); border-color: var(--text-soft); }
+
+  /* board */
+  .board {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  .board-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  .col-head {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    text-align: center;
+    padding-bottom: 6px;
+    border-bottom: 3px solid var(--col-color, var(--gold));
+  }
+  .col-b { --col-color: #7ec8ff; }
+  .col-i { --col-color: #ff9f6e; }
+  .col-n { --col-color: #4ade80; }
+  .col-g { --col-color: #ff5f7e; }
+  .col-o { --col-color: #ffc84a; }
+
+  .col-cells {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: clamp(0.72rem, 1.6vw, 1.05rem);
+    background: var(--bg-deep);
+    color: var(--text-soft);
+    border: 1px solid var(--panel-line);
+  }
+
+  .cell.called {
+    background: var(--col-color, var(--gold));
+    color: #1b1330;
+    border-color: transparent;
+  }
+
+  .cell.current {
+    box-shadow: 0 0 0 3px #fff, 0 0 18px 4px rgba(255,255,255,0.6);
+  }
+
+  footer {
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+
+  @media (max-width: 560px) {
+    .board-grid { gap: 5px; }
+    .col-cells { gap: 4px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ball.pop { animation: none; }
+    button { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎱 Bingo da Fraternidade</h1>
+  <p class="subtitle">MoocAmor — acompanhe aqui os números já sorteados</p>
+
+  <div class="stage">
+    <div class="side-info">
+      <div class="info-card">
+        <div class="label">Anterior</div>
+        <div class="value" id="prev-value">—</div>
+      </div>
+    </div>
+
+    <div class="ball empty" id="ball">
+      <span class="letter" id="ball-letter"></span>
+      <span class="num" id="ball-num">Pronto?</span>
+    </div>
+
+    <div class="side-info">
+      <div class="info-card">
+        <div class="label">Sorteados</div>
+        <div class="value"><span id="count-value">0</span>/75</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-draw" id="draw-btn">🎱 Sortear número</button>
+    <button class="btn-reset" id="reset-btn">↺ Reiniciar jogo</button>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <footer>Fraternidade do Amor · MoocAmor</footer>
+</div>
+
+<script>
+  const STORAGE_KEY = "bingo-fraternidade-state-v1";
+  const COLS = [
+    { letter: "B", min: 1, max: 15, cls: "col-b" },
+    { letter: "I", min: 16, max: 30, cls: "col-i" },
+    { letter: "N", min: 31, max: 45, cls: "col-n" },
+    { letter: "G", min: 46, max: 60, cls: "col-g" },
+    { letter: "O", min: 61, max: 75, cls: "col-o" },
+  ];
+
+  function letterFor(n) {
+    return COLS.find((c) => n >= c.min && n <= c.max)?.letter || "?";
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.called)) return parsed;
+      }
+    } catch (e) {}
+    return { called: [] };
+  }
+
+  let state = loadState();
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function remainingPool() {
+    const calledSet = new Set(state.called);
+    const pool = [];
+    for (let n = 1; n <= 75; n++) if (!calledSet.has(n)) pool.push(n);
+    return pool;
+  }
+
+  function renderBoard() {
+    const calledSet = new Set(state.called);
+    const current = state.called[state.called.length - 1];
+    const cols = COLS.map((c) => {
+      const cells = [];
+      for (let n = c.min; n <= c.max; n++) {
+        const isCalled = calledSet.has(n);
+        const isCurrent = n === current;
+        cells.push(`<div class="cell${isCalled ? " called" : ""}${isCurrent ? " current" : ""}">${n}</div>`);
+      }
+      return `<div>
+        <div class="col-head ${c.cls}">${c.letter}</div>
+        <div class="col-cells">${cells.join("")}</div>
+      </div>`;
+    }).join("");
+    document.getElementById("board").innerHTML = `<div class="board-grid">${cols}</div>`;
+  }
+
+  function renderStage(animate) {
+    const current = state.called[state.called.length - 1];
+    const prev = state.called[state.called.length - 2];
+    const ball = document.getElementById("ball");
+    const letterEl = document.getElementById("ball-letter");
+    const numEl = document.getElementById("ball-num");
+    const prevEl = document.getElementById("prev-value");
+    const countEl = document.getElementById("count-value");
+
+    if (current === undefined) {
+      ball.classList.add("empty");
+      letterEl.textContent = "";
+      numEl.textContent = "Pronto?";
+    } else {
+      ball.classList.remove("empty");
+      letterEl.textContent = letterFor(current);
+      numEl.textContent = current;
+    }
+    prevEl.textContent = prev !== undefined ? `${letterFor(prev)} ${prev}` : "—";
+    countEl.textContent = state.called.length;
+
+    if (animate) {
+      ball.classList.remove("pop");
+      void ball.offsetWidth;
+      ball.classList.add("pop");
+    }
+  }
+
+  function renderAll(animate) {
+    renderStage(animate);
+    renderBoard();
+    const pool = remainingPool();
+    const drawBtn = document.getElementById("draw-btn");
+    drawBtn.disabled = pool.length === 0;
+    drawBtn.textContent = pool.length === 0 ? "🎉 Todos os números saíram!" : "🎱 Sortear número";
+  }
+
+  document.getElementById("draw-btn").addEventListener("click", () => {
+    const pool = remainingPool();
+    if (pool.length === 0) return;
+    const idx = Math.floor(Math.random() * pool.length);
+    const n = pool[idx];
+    state.called.push(n);
+    saveState();
+    renderAll(true);
+  });
+
+  document.getElementById("reset-btn").addEventListener("click", () => {
+    if (state.called.length === 0) return;
+    const ok = confirm("Tem certeza que quer reiniciar o jogo? Todos os números sorteados serão apagados.");
+    if (!ok) return;
+    state = { called: [] };
+    saveState();
+    renderAll(false);
+  });
+
+  renderAll(false);
+</script>
+</body>
+</html>
