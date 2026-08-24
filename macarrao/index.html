@@ -222,6 +222,25 @@
     border-radius: 16px;
     box-shadow: 0 6px 18px var(--shadow);
     padding: 22px 24px;
+    position: relative;
+  }
+
+  .item-card.done {
+    border: 2px solid var(--basil);
+  }
+
+  .done-badge {
+    position: absolute;
+    top: -12px;
+    right: 16px;
+    background: var(--basil);
+    color: #fff;
+    font-family: "Lato", sans-serif;
+    font-weight: 700;
+    font-size: 0.76rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px var(--shadow);
   }
 
   .item-card .head {
@@ -438,7 +457,9 @@
       const itemPct = it.goalQty > 0 ? Math.min(100, (it.raisedQty / it.goalQty) * 100) : 0;
       const raisedValue = it.raisedQty * it.price;
       const goalValue = it.goalQty * it.price;
-      return `<div class="item-card">
+      const done = it.raisedQty >= it.goalQty;
+      return `<div class="item-card${done ? " done" : ""}">
+        ${done ? `<span class="done-badge">✅ Conseguido!</span>` : ""}
         <div class="head"><span class="icon">${it.icon}</span><span class="name">${esc(it.label)}</span></div>
         <div class="qty"><b>${fmtKg(it.raisedQty)}</b> de ${fmtKg(it.goalQty)} ${esc(it.unit)}</div>
         <div class="bar-track"><div class="bar-fill" style="width:${itemPct}%"></div></div>
