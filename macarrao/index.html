@@ -209,15 +209,19 @@
   .grid {
     margin-top: 18px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 620px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   .item-card {
     background: var(--card);
-    border-radius: 14px;
+    border-radius: 16px;
     box-shadow: 0 6px 18px var(--shadow);
-    padding: 16px 18px;
+    padding: 22px 24px;
   }
 
   .item-card .head {
@@ -227,12 +231,12 @@
     margin-bottom: 10px;
   }
 
-  .item-card .icon { font-size: 1.7rem; }
+  .item-card .icon { font-size: 2.2rem; }
 
   .item-card .name {
     font-family: "Lato", sans-serif;
     font-weight: 600;
-    font-size: 1.02rem;
+    font-size: 1.18rem;
   }
 
   .item-card .qty {
