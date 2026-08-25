@@ -510,15 +510,16 @@
 
   function pickFemalePtVoice(voices) {
     const pt = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("pt"));
-    // ordered by preference: natural cloud voices first, generic robotic OS voices last
-    const priorityOrder = ["google português do brasil", "google", "luciana", "francisca", "joana", "vitória", "vitoria"];
+    // ordered by preference: natural neural voices first, "Google" (GPS/assistant-style) and
+    // legacy robotic system voices pushed to dead last, only as an absolute fallback
+    const priorityOrder = ["francisca", "luciana", "camila", "yara", "elza", "joana", "vitória", "vitoria"];
     for (const name of priorityOrder) {
       const v = pt.find(v => v.name.toLowerCase().includes(name));
       if (v) return v;
     }
-    // avoid known robotic system voices (e.g. "Microsoft Maria") if a better option exists
-    const robotic = ["maria", "helena", "microsoft"];
-    const nonRobotic = pt.find(v => v.lang.toLowerCase() === "pt-br" && !robotic.some(r => v.name.toLowerCase().includes(r)));
+    // avoid known robotic/GPS-style voices (Google's default, legacy "Microsoft Maria") if anything else exists
+    const avoid = ["google", "maria", "helena", "microsoft"];
+    const nonRobotic = pt.find(v => v.lang.toLowerCase() === "pt-br" && !avoid.some(r => v.name.toLowerCase().includes(r)));
     if (nonRobotic) return nonRobotic;
     return pt.find(v => v.lang.toLowerCase() === "pt-br") || pt[0] || null;
   }
