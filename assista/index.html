@@ -582,6 +582,25 @@
     audio.play().catch(() => {});
   });
 
+  // ---------- keep the screen awake while the narration plays ----------
+  let wakeLock = null;
+  async function requestWakeLock() {
+    try {
+      if ("wakeLock" in navigator) {
+        wakeLock = await navigator.wakeLock.request("screen");
+        wakeLock.addEventListener("release", () => { wakeLock = null; });
+      }
+    } catch (e) {}
+  }
+  function releaseWakeLock() {
+    if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
+  }
+  audio.addEventListener("play", requestWakeLock);
+  audio.addEventListener("pause", releaseWakeLock);
+  audio.addEventListener("ended", releaseWakeLock);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && !audio.paused) requestWakeLock();
+  });
 </script>
 </body>
 </html>
