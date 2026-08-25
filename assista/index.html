@@ -469,59 +469,41 @@
     });
   });
 
-  // ---------- narration ----------
-  const CHUNKS = [
-    { caption: "Meus caros, a alegria que toma conta da nossa rua,", speak: "Meus caros, a alegria que toma conta da nossa rua," },
-    { caption: "o cheiro daquela fogazza quentinha, o cannoli recheado na hora", speak: "o cheiro daquela fogazza quentinha, o cannoli recheado na hora" },
-    { caption: "e o som dos encontros não surgem por acaso.", speak: "e o som dos encontros não surgem por acaso." },
-    { caption: "Eles são frutos de sementes regadas com muito suor, fé e solidariedade —", speak: "Eles são frutos de sementes regadas com muito suor, fé e solidariedade," },
-    { caption: "uma tradição que já alcança a sua 14ª edição.", speak: "uma tradição que já alcança a sua décima quarta edição." },
-    { caption: "A Festa MoocAmor é a alma e o sustento da nossa Fraternidade do Amor.", speak: "A Festa MoocAmor é a alma e o sustento da nossa Fraternidade do Amor." },
-    { caption: "É graças a cada abraço trocado, a cada risada no nosso bingo", speak: "É graças a cada abraço trocado, a cada risada no nosso bingo" },
-    { caption: "e a cada prato saboreado na nossa rua", speak: "e a cada prato saboreado na nossa rua" },
-    { caption: "que conseguimos manter de pé as mãos estendidas a quem mais precisa o ano todo.", speak: "que conseguimos manter de pé as mãos estendidas a quem mais precisa o ano todo." },
-    { caption: "Nos dias 19 e 20 de setembro, na Rua Madre de Deus, 915, na nossa querida Mooca,", speak: "Nos dias dezenove e vinte de setembro, na Rua Madre de Deus, novecentos e quinze, na nossa querida Mooca," },
-    { caption: "será fechada para celebrar a vida, a união e o aniversário do nosso bairro,", speak: "será fechada para celebrar a vida, a união e o aniversário do nosso bairro," },
-    { caption: "com entrada franca para toda a família!", speak: "com entrada franca para toda a família!" },
-    { caption: "Teremos shows incríveis, atrações especiais e aquela energia que só o nosso povo tem.", speak: "Teremos shows incríveis, atrações especiais e aquela energia que só o nosso povo tem." },
-    { caption: "Para que esta grande festa aconteça e cumpra o seu sagrado propósito beneficente, precisamos de você.", speak: "Para que esta grande festa aconteça e cumpra o seu sagrado propósito beneficente, precisamos de você." },
-    { caption: "Contribua com a nossa causa, venha se deliciar, traga sua família", speak: "Contribua com a nossa causa, venha se deliciar, traga sua família" },
-    { caption: "e seja parte ativa dessa corrente do bem.", speak: "e seja parte ativa dessa corrente do bem." },
-    { caption: "Porque na Mooca, o amor a gente pratica junto.", speak: "Porque na Mooca, o amor a gente pratica junto." },
-    { caption: "Esperamos você na nossa rua! 💚", speak: "Esperamos você na nossa rua!" },
+  // ---------- narration (real recorded audio, synced captions) ----------
+  const CAPTIONS = [
+    { t: 0.35,  c: "Meus caros, a alegria que toma conta da nossa rua," },
+    { t: 3.39,  c: "o cheiro daquela fogazza quentinha, o cannoli recheado na hora" },
+    { t: 6.76,  c: "e o som dos encontros não surgem por acaso." },
+    { t: 9.86,  c: "Eles são frutos de sementes regadas com muito suor, fé e solidariedade —" },
+    { t: 14.10, c: "uma tradição que já alcança a sua 14ª edição." },
+    { t: 17.30, c: "A Festa MoocAmor é a alma e o sustento da nossa Fraternidade do Amor." },
+    { t: 21.81, c: "É graças a cada abraço trocado, a cada risada no nosso bingo" },
+    { t: 25.07, c: "e a cada prato saboreado na nossa rua" },
+    { t: 27.08, c: "que conseguimos manter de pé as mãos estendidas a quem mais precisa o ano todo." },
+    { t: 32.14, c: "Nos dias 19 e 20 de setembro, a Rua Madre de Deus, 915, na nossa querida Mooca," },
+    { t: 36.76, c: "será fechada para celebrar a vida, a união e o aniversário do nosso bairro," },
+    { t: 41.16, c: "com entrada franca para toda a família!" },
+    { t: 44.04, c: "Teremos shows incríveis, atrações especiais e aquela energia que só o nosso povo tem." },
+    { t: 49.42, c: "Para que esta grande festa aconteça e cumpra o seu sagrado propósito beneficente, precisamos de você." },
+    { t: 55.67, c: "Contribua com a nossa causa, venha se deliciar, traga sua família" },
+    { t: 59.20, c: "e seja parte ativa dessa corrente do bem." },
+    { t: 62.19, c: "Porque na Mooca, o amor a gente pratica junto." },
+    { t: 65.45, c: "Esperamos você na nossa rua! 💚" },
   ];
 
-  let current = 0;
-  let playing = true;
-  let fallbackTimer = null;
-  let playToken = 0;
-  let selectedVoice = null;
+  const audio = new Audio("narracao.mp3");
+  audio.preload = "auto";
+
   const captionEl = document.getElementById("caption");
   const progressFill = document.getElementById("progress-fill");
+  let lastShown = -1;
 
-  const voicesReady = new Promise((resolve) => {
-    const synth = window.speechSynthesis;
-    if (!synth) return resolve([]);
-    const v = synth.getVoices();
-    if (v.length) return resolve(v);
-    synth.onvoiceschanged = () => resolve(synth.getVoices());
-    setTimeout(() => resolve(synth.getVoices()), 1200);
-  });
-
-  function pickFemalePtVoice(voices) {
-    const pt = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("pt"));
-    // ordered by preference: natural neural voices first, "Google" (GPS/assistant-style) and
-    // legacy robotic system voices pushed to dead last, only as an absolute fallback
-    const priorityOrder = ["francisca", "luciana", "camila", "yara", "elza", "joana", "vitória", "vitoria"];
-    for (const name of priorityOrder) {
-      const v = pt.find(v => v.name.toLowerCase().includes(name));
-      if (v) return v;
+  function chunkIndexFor(time) {
+    let idx = 0;
+    for (let i = 0; i < CAPTIONS.length; i++) {
+      if (time >= CAPTIONS[i].t) idx = i; else break;
     }
-    // avoid known robotic/GPS-style voices (Google's default, legacy "Microsoft Maria") if anything else exists
-    const avoid = ["google", "maria", "helena", "microsoft"];
-    const nonRobotic = pt.find(v => v.lang.toLowerCase() === "pt-br" && !avoid.some(r => v.name.toLowerCase().includes(r)));
-    if (nonRobotic) return nonRobotic;
-    return pt.find(v => v.lang.toLowerCase() === "pt-br") || pt[0] || null;
+    return idx;
   }
 
   function setCaption(text) {
@@ -532,103 +514,57 @@
     }, 120);
   }
 
-  function updateProgress() {
-    progressFill.style.width = ((current) / CHUNKS.length * 100) + "%";
-  }
-
-  async function playChunk() {
-    clearTimeout(fallbackTimer);
-    const myToken = ++playToken;
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
-    if (current >= CHUNKS.length) { finish(); return; }
-    const chunk = CHUNKS[current];
-
-    // resolve the voice BEFORE showing the caption, so the words on screen
-    // never sit there ahead of the voice actually starting to speak them
-    const synth = window.speechSynthesis;
-    if (!selectedVoice) {
-      const voices = await voicesReady;
-      if (myToken !== playToken) return; // superseded while we were awaiting voices
-      selectedVoice = pickFemalePtVoice(voices);
+  audio.addEventListener("timeupdate", () => {
+    const idx = chunkIndexFor(audio.currentTime);
+    if (idx !== lastShown) {
+      lastShown = idx;
+      setCaption(CAPTIONS[idx].c);
     }
-    const voice = selectedVoice;
-
-    const fallbackMs = Math.max(2200, chunk.speak.length * 78);
-
-    if (synth && voice) {
-      const utter = new SpeechSynthesisUtterance(chunk.speak);
-      utter.voice = voice;
-      utter.lang = "pt-BR";
-      utter.rate = 1.18;
-      utter.pitch = 1.05;
-      // caption is tied to the browser's real "speech actually started" event,
-      // not to when we merely requested it — this is what keeps text and voice in sync
-      let started = false;
-      const showCaptionNow = () => {
-        if (started) return;
-        started = true;
-        updateProgress();
-        setCaption(chunk.caption);
-      };
-      utter.onstart = showCaptionNow;
-      // safety net: some engines never fire onstart reliably — don't leave the
-      // caption blank forever if that happens
-      setTimeout(showCaptionNow, 900);
-      utter.onend = () => { if (myToken === playToken && playing) advance(); };
-      utter.onerror = () => { if (myToken === playToken && playing) advance(); };
-      if (playing) synth.speak(utter);
-      fallbackTimer = setTimeout(() => { if (myToken === playToken && playing) advance(); }, fallbackMs + 2500);
-    } else if (playing) {
-      updateProgress();
-      setCaption(chunk.caption);
-      fallbackTimer = setTimeout(() => { if (myToken === playToken && playing) advance(); }, fallbackMs);
-    }
-  }
-
-  function advance() {
-    current += 1;
-    if (current >= CHUNKS.length) { finish(); return; }
-    playChunk();
-  }
-
-  function finish() {
-    progressFill.style.width = "100%";
-    document.getElementById("closing-overlay").classList.add("show");
-  }
-
-  function goToChunk(i) {
-    window.speechSynthesis && window.speechSynthesis.cancel();
-    clearTimeout(fallbackTimer);
-    current = Math.max(0, Math.min(CHUNKS.length - 1, i));
-    document.getElementById("closing-overlay").classList.remove("show");
-    playChunk();
-  }
-
-  document.getElementById("play-btn").addEventListener("click", () => {
-    const synth = window.speechSynthesis;
-    playing = !playing;
-    document.getElementById("play-btn").textContent = playing ? "⏸" : "▶";
-    if (playing) {
-      // true resume: continue the same in-progress utterance instead of
-      // restarting the sentence from scratch
-      if (synth && synth.paused && synth.speaking) {
-        synth.resume();
-      } else {
-        playChunk();
-      }
-    } else {
-      if (synth && synth.speaking) synth.pause();
-      clearTimeout(fallbackTimer);
+    if (audio.duration) {
+      progressFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
     }
   });
 
-  document.getElementById("next-btn").addEventListener("click", () => goToChunk(current + 1));
-  document.getElementById("prev-btn").addEventListener("click", () => goToChunk(current - 1));
+  audio.addEventListener("ended", () => {
+    progressFill.style.width = "100%";
+    document.getElementById("closing-overlay").classList.add("show");
+    document.getElementById("play-btn").textContent = "▶";
+  });
 
-  document.getElementById("skip-btn").addEventListener("click", (e) => {
-    window.speechSynthesis && window.speechSynthesis.cancel();
-    clearTimeout(fallbackTimer);
-    playing = false;
+  function updatePlayIcon() {
+    document.getElementById("play-btn").textContent = audio.paused ? "▶" : "⏸";
+  }
+
+  function jumpToChunk(i) {
+    i = Math.max(0, Math.min(CAPTIONS.length - 1, i));
+    lastShown = -1;
+    audio.currentTime = CAPTIONS[i].t + 0.02;
+    document.getElementById("closing-overlay").classList.remove("show");
+    if (audio.paused) audio.play().catch(() => {});
+  }
+
+  document.getElementById("play-btn").addEventListener("click", () => {
+    if (audio.ended || audio.currentTime >= (audio.duration || Infinity) - 0.05) {
+      jumpToChunk(0);
+    } else if (audio.paused) {
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+    updatePlayIcon();
+  });
+  audio.addEventListener("play", updatePlayIcon);
+  audio.addEventListener("pause", updatePlayIcon);
+
+  document.getElementById("next-btn").addEventListener("click", () => {
+    jumpToChunk(chunkIndexFor(audio.currentTime) + 1);
+  });
+  document.getElementById("prev-btn").addEventListener("click", () => {
+    jumpToChunk(chunkIndexFor(audio.currentTime) - 1);
+  });
+
+  document.getElementById("skip-btn").addEventListener("click", () => {
+    audio.pause();
   });
 
   document.getElementById("goto-pix-btn").addEventListener("click", () => {
@@ -638,22 +574,14 @@
   document.getElementById("replay-btn").addEventListener("click", () => {
     document.getElementById("closing-overlay").classList.remove("show");
     document.querySelector(".hero").scrollIntoView({ behavior: "smooth" });
-    playing = true;
-    document.getElementById("play-btn").textContent = "⏸";
-    goToChunk(0);
+    jumpToChunk(0);
   });
 
   document.getElementById("start-btn").addEventListener("click", () => {
     document.getElementById("start-overlay").classList.add("hidden");
-    // "warm up" the speech engine right on the user gesture, then give it a
-    // beat before the real narration starts so the first word isn't clipped
-    if (window.speechSynthesis) {
-      const warmup = new SpeechSynthesisUtterance(" ");
-      warmup.volume = 0;
-      window.speechSynthesis.speak(warmup);
-    }
-    setTimeout(playChunk, 650);
+    audio.play().catch(() => {});
   });
+
 </script>
 </body>
 </html>
