@@ -469,6 +469,7 @@
   let current = 0;
   let playing = true;
   let fallbackTimer = null;
+  let playToken = 0;
   const captionEl = document.getElementById("caption");
   const progressFill = document.getElementById("progress-fill");
 
@@ -504,6 +505,8 @@
 
   async function playChunk() {
     clearTimeout(fallbackTimer);
+    const myToken = ++playToken;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
     if (current >= CHUNKS.length) { finish(); return; }
     updateProgress();
     const chunk = CHUNKS[current];
@@ -511,22 +514,22 @@
 
     const synth = window.speechSynthesis;
     const voices = await voicesReady;
+    if (myToken !== playToken) return; // superseded while we were awaiting voices
     const voice = pickFemalePtVoice(voices);
     const fallbackMs = Math.max(2200, chunk.speak.length * 78);
 
     if (synth && voice) {
-      synth.cancel();
       const utter = new SpeechSynthesisUtterance(chunk.speak);
       utter.voice = voice;
       utter.lang = "pt-BR";
       utter.rate = 1.0;
       utter.pitch = 1.05;
-      utter.onend = () => { if (playing) advance(); };
-      utter.onerror = () => { if (playing) advance(); };
+      utter.onend = () => { if (myToken === playToken && playing) advance(); };
+      utter.onerror = () => { if (myToken === playToken && playing) advance(); };
       if (playing) synth.speak(utter);
-      fallbackTimer = setTimeout(() => { if (playing) advance(); }, fallbackMs + 2500);
+      fallbackTimer = setTimeout(() => { if (myToken === playToken && playing) advance(); }, fallbackMs + 2500);
     } else if (playing) {
-      fallbackTimer = setTimeout(advance, fallbackMs);
+      fallbackTimer = setTimeout(() => { if (myToken === playToken && playing) advance(); }, fallbackMs);
     }
   }
 
