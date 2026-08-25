@@ -470,6 +470,7 @@
   let playing = true;
   let fallbackTimer = null;
   let playToken = 0;
+  let selectedVoice = null;
   const captionEl = document.getElementById("caption");
   const progressFill = document.getElementById("progress-fill");
 
@@ -484,11 +485,17 @@
 
   function pickFemalePtVoice(voices) {
     const pt = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("pt"));
-    const preferred = ["luciana", "maria", "francisca", "vitória", "vitoria", "joana", "google português do brasil"];
-    let v = pt.find(v => preferred.some(n => v.name.toLowerCase().includes(n)));
-    if (!v) v = pt.find(v => v.lang.toLowerCase() === "pt-br");
-    if (!v) v = pt[0];
-    return v || null;
+    // ordered by preference: natural cloud voices first, generic robotic OS voices last
+    const priorityOrder = ["google português do brasil", "google", "luciana", "francisca", "joana", "vitória", "vitoria"];
+    for (const name of priorityOrder) {
+      const v = pt.find(v => v.name.toLowerCase().includes(name));
+      if (v) return v;
+    }
+    // avoid known robotic system voices (e.g. "Microsoft Maria") if a better option exists
+    const robotic = ["maria", "helena", "microsoft"];
+    const nonRobotic = pt.find(v => v.lang.toLowerCase() === "pt-br" && !robotic.some(r => v.name.toLowerCase().includes(r)));
+    if (nonRobotic) return nonRobotic;
+    return pt.find(v => v.lang.toLowerCase() === "pt-br") || pt[0] || null;
   }
 
   function setCaption(text) {
@@ -513,16 +520,19 @@
     setCaption(chunk.caption);
 
     const synth = window.speechSynthesis;
-    const voices = await voicesReady;
-    if (myToken !== playToken) return; // superseded while we were awaiting voices
-    const voice = pickFemalePtVoice(voices);
+    if (!selectedVoice) {
+      const voices = await voicesReady;
+      if (myToken !== playToken) return; // superseded while we were awaiting voices
+      selectedVoice = pickFemalePtVoice(voices);
+    }
+    const voice = selectedVoice;
     const fallbackMs = Math.max(2200, chunk.speak.length * 78);
 
     if (synth && voice) {
       const utter = new SpeechSynthesisUtterance(chunk.speak);
       utter.voice = voice;
       utter.lang = "pt-BR";
-      utter.rate = 1.0;
+      utter.rate = 1.18;
       utter.pitch = 1.05;
       utter.onend = () => { if (myToken === playToken && playing) advance(); };
       utter.onerror = () => { if (myToken === playToken && playing) advance(); };
@@ -574,7 +584,14 @@
 
   document.getElementById("start-btn").addEventListener("click", () => {
     document.getElementById("start-overlay").classList.add("hidden");
-    playChunk();
+    // "warm up" the speech engine right on the user gesture, then give it a
+    // beat before the real narration starts so the first word isn't clipped
+    if (window.speechSynthesis) {
+      const warmup = new SpeechSynthesisUtterance(" ");
+      warmup.volume = 0;
+      window.speechSynthesis.speak(warmup);
+    }
+    setTimeout(playChunk, 650);
   });
 </script>
 </body>
