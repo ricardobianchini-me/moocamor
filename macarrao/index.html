@@ -280,6 +280,31 @@
     box-shadow: 0 4px 10px var(--shadow);
   }
 
+  .item-card.cash-only {
+    background: var(--basil-soft);
+    border: 1px dashed var(--basil);
+  }
+
+  .cash-only-tag {
+    display: inline-block;
+    font-family: "Lato", sans-serif;
+    font-weight: 700;
+    font-size: 0.74rem;
+    color: var(--basil);
+    background: var(--card);
+    border-radius: 999px;
+    padding: 4px 10px;
+    margin-bottom: 6px;
+  }
+
+  .cash-only-value {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
   .item-card .head {
     display: flex;
     align-items: center;
@@ -453,8 +478,8 @@
 
   const SEED = {
     supplies: {
-      frango:   { label: "Frango",              unit: "kg", icon: "🐔", goalQty: 200, price: 16, raisedQty: 0 },
-      polenta:  { label: "Polenta",              unit: "kg", icon: "🌽", goalQty: 100, price: 10, raisedQty: 0 },
+      frango:   { label: "Frango a passarinho",  unit: "kg", icon: "🐔", goalQty: 200, price: 16, raisedQty: 0, cashOnly: true },
+      polenta:  { label: "Polenta",              unit: "kg", icon: "🌽", goalQty: 100, price: 10, raisedQty: 0, cashOnly: true },
       queijo:   { label: "Queijo parmesão",      unit: "kg", icon: "🧀", goalQty: 6,   price: 75, raisedQty: 0 },
       macarrao: { label: "Macarrão spaguetti c/ ovos", unit: "kg", icon: "🍝", goalQty: 40, price: 9, raisedQty: 0 },
       carne:    { label: "Carne moída de primeira", unit: "kg", icon: "🥩", goalQty: 20, price: 40, raisedQty: 0 },
@@ -500,9 +525,17 @@
     const daysLeft = daysUntilFesta();
 
     const itemCards = Object.entries(st.supplies).map(([key, it]) => {
+      const goalValue = it.goalQty * it.price;
+      if (it.cashOnly) {
+        return `<div class="item-card cash-only">
+          <div class="head"><span class="icon">${it.icon}</span><span class="name">${esc(it.label)}</span></div>
+          <div class="cash-only-tag">💰 Somente em dinheiro</div>
+          <div class="cash-only-value">${fmtBRL(goalValue)}</div>
+          <div class="money">Comprado direto do fornecedor · ${fmtBRL(it.price)}/${esc(it.unit)}</div>
+        </div>`;
+      }
       const itemPct = it.goalQty > 0 ? Math.min(100, (it.raisedQty / it.goalQty) * 100) : 0;
       const raisedValue = it.raisedQty * it.price;
-      const goalValue = it.goalQty * it.price;
       const done = it.raisedQty >= it.goalQty;
       return `<div class="item-card${done ? " done" : ""}">
         ${done ? `<span class="done-badge">✅ Conseguido!</span>` : ""}
@@ -608,7 +641,7 @@
   function renderEditForm() {
     const st = state;
     const slot = document.getElementById("edit-form-slot");
-    const supplyFields = Object.entries(st.supplies).map(([key, it]) => `
+    const supplyFields = Object.entries(st.supplies).filter(([key, it]) => !it.cashOnly).map(([key, it]) => `
       <div>
         <label for="f-${key}">${it.icon} ${esc(it.label)} (${esc(it.unit)} já arrecadados)</label>
         <input type="number" min="0" step="0.5" id="f-${key}" value="${it.raisedQty}" />
@@ -632,8 +665,11 @@
 
   function saveEdits() {
     const updates = {};
-    Object.keys(state.supplies).forEach((key) => {
-      const v = parseFloat(document.getElementById(`f-${key}`).value);
+    Object.entries(state.supplies).forEach(([key, it]) => {
+      if (it.cashOnly) return;
+      const el = document.getElementById(`f-${key}`);
+      if (!el) return;
+      const v = parseFloat(el.value);
       updates[`supplies/${key}/raisedQty`] = isNaN(v) || v < 0 ? 0 : v;
     });
     const cashV = parseFloat(document.getElementById("f-cash").value);
