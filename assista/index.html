@@ -62,6 +62,16 @@
     animation: kenburns 40s ease-in-out infinite alternate;
   }
 
+  /* the source photo is portrait — on wide/desktop viewports "cover" would
+     zoom in on just the tent ceiling, so switch to "contain" there and let
+     the navy hero background letterbox the sides instead */
+  @media (min-width: 700px) {
+    .bg-layer {
+      background-size: contain;
+      background-position: center 8%;
+    }
+  }
+
   @keyframes kenburns {
     0% { transform: scale(1); }
     100% { transform: scale(1.09); }
@@ -124,48 +134,52 @@
   .narrator-avatar {
     flex: 0 0 auto;
     width: 58px;
-    height: 58px;
-    border-radius: 50%;
+    height: 56px;
     position: relative;
-    background: radial-gradient(circle at 34% 28%, #fff6df 0%, var(--mustard) 55%, #b9862c 100%);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.4), inset 0 -6px 10px rgba(0,0,0,0.15), inset 0 4px 8px rgba(255,255,255,0.4);
     margin-bottom: 4px;
-    transition: transform 0.25s ease;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,0.45));
+  }
+  .narrator-avatar .heart-fill {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 33% 28%, #a9edc0 0%, var(--basil) 55%, #1a4c37 100%);
+    clip-path: path('M29 11 C22 2 5 4 5 19 C5 33 19 43 29 52 C39 43 53 33 53 19 C53 4 36 2 29 11 Z');
   }
   .narrator-avatar .eye {
     position: absolute;
-    top: 22px;
-    width: 7px;
-    height: 7px;
+    top: 21px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: #2b1b14;
+    background: #0c2318;
   }
-  .narrator-avatar .eye.left { left: 17px; }
-  .narrator-avatar .eye.right { right: 17px; }
+  .narrator-avatar .eye.left { left: 15px; }
+  .narrator-avatar .eye.right { right: 15px; }
   .narrator-avatar .mouth {
     position: absolute;
-    bottom: 14px;
+    top: 29px;
     left: 50%;
     transform: translateX(-50%);
-    width: 16px;
-    height: 6px;
-    border-radius: 0 0 16px 16px;
-    background: #8a4a34;
+    width: 14px;
+    height: 5px;
+    border-radius: 0 0 14px 14px;
+    background: #0c2318;
     transition: height 0.1s ease;
   }
   .narrator-avatar.talking {
-    animation: avatar-bob 0.6s ease-in-out infinite alternate;
+    animation: avatar-beat 0.7s ease-in-out infinite;
   }
   .narrator-avatar.talking .mouth {
     animation: avatar-talk 0.28s ease-in-out infinite alternate;
   }
-  @keyframes avatar-bob {
-    from { transform: translateY(0) rotate(-3deg); }
-    to { transform: translateY(-5px) rotate(3deg); }
+  @keyframes avatar-beat {
+    0%, 100% { transform: scale(1); }
+    35% { transform: scale(1.1); }
+    55% { transform: scale(0.96); }
   }
   @keyframes avatar-talk {
-    from { height: 5px; width: 16px; }
-    to { height: 13px; width: 12px; }
+    from { height: 4px; width: 14px; }
+    to { height: 11px; width: 10px; }
   }
 
   #caption {
@@ -243,18 +257,19 @@
   .closing-overlay p { color: #e7e0cb; margin: 0; max-width: 34ch; }
   .btn-goto-pix {
     margin-top: 6px;
-    background: var(--basil);
-    color: #fff;
+    background: #f7f1e1;
+    color: #06304f;
     border: none;
     border-radius: 999px;
-    padding: 14px 30px;
+    padding: 15px 34px;
     font-family: "Lato", sans-serif;
-    font-weight: 800;
-    font-size: 1rem;
+    font-weight: 900;
+    font-size: 1.08rem;
     cursor: pointer;
-    box-shadow: 0 6px 0 var(--basil-dark), 0 12px 20px rgba(0,0,0,0.35);
+    box-shadow: 0 6px 0 #cfc3a0, 0 14px 26px rgba(0,0,0,0.45);
   }
-  .btn-goto-pix:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--basil-dark); }
+  .btn-goto-pix:hover { background: #fffaf0; }
+  .btn-goto-pix:active { transform: translateY(4px); box-shadow: 0 2px 0 #cfc3a0; }
 
   .closing-actions {
     display: flex;
@@ -455,6 +470,7 @@
 
   <div class="caption-zone">
     <div class="narrator-avatar" id="narrator-avatar">
+      <div class="heart-fill"></div>
       <span class="eye left"></span>
       <span class="eye right"></span>
       <span class="mouth"></span>
