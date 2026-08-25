@@ -553,8 +553,6 @@
     }
     const voice = selectedVoice;
 
-    updateProgress();
-    setCaption(chunk.caption);
     const fallbackMs = Math.max(2200, chunk.speak.length * 78);
 
     if (synth && voice) {
@@ -563,11 +561,26 @@
       utter.lang = "pt-BR";
       utter.rate = 1.18;
       utter.pitch = 1.05;
+      // caption is tied to the browser's real "speech actually started" event,
+      // not to when we merely requested it — this is what keeps text and voice in sync
+      let started = false;
+      const showCaptionNow = () => {
+        if (started) return;
+        started = true;
+        updateProgress();
+        setCaption(chunk.caption);
+      };
+      utter.onstart = showCaptionNow;
+      // safety net: some engines never fire onstart reliably — don't leave the
+      // caption blank forever if that happens
+      setTimeout(showCaptionNow, 900);
       utter.onend = () => { if (myToken === playToken && playing) advance(); };
       utter.onerror = () => { if (myToken === playToken && playing) advance(); };
       if (playing) synth.speak(utter);
       fallbackTimer = setTimeout(() => { if (myToken === playToken && playing) advance(); }, fallbackMs + 2500);
     } else if (playing) {
+      updateProgress();
+      setCaption(chunk.caption);
       fallbackTimer = setTimeout(() => { if (myToken === playToken && playing) advance(); }, fallbackMs);
     }
   }
