@@ -541,10 +541,10 @@
     const myToken = ++playToken;
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     if (current >= CHUNKS.length) { finish(); return; }
-    updateProgress();
     const chunk = CHUNKS[current];
-    setCaption(chunk.caption);
 
+    // resolve the voice BEFORE showing the caption, so the words on screen
+    // never sit there ahead of the voice actually starting to speak them
     const synth = window.speechSynthesis;
     if (!selectedVoice) {
       const voices = await voicesReady;
@@ -552,6 +552,9 @@
       selectedVoice = pickFemalePtVoice(voices);
     }
     const voice = selectedVoice;
+
+    updateProgress();
+    setCaption(chunk.caption);
     const fallbackMs = Math.max(2200, chunk.speak.length * 78);
 
     if (synth && voice) {
@@ -589,10 +592,21 @@
   }
 
   document.getElementById("play-btn").addEventListener("click", () => {
+    const synth = window.speechSynthesis;
     playing = !playing;
     document.getElementById("play-btn").textContent = playing ? "⏸" : "▶";
-    if (playing) playChunk();
-    else { window.speechSynthesis && window.speechSynthesis.cancel(); clearTimeout(fallbackTimer); }
+    if (playing) {
+      // true resume: continue the same in-progress utterance instead of
+      // restarting the sentence from scratch
+      if (synth && synth.paused && synth.speaking) {
+        synth.resume();
+      } else {
+        playChunk();
+      }
+    } else {
+      if (synth && synth.speaking) synth.pause();
+      clearTimeout(fallbackTimer);
+    }
   });
 
   document.getElementById("next-btn").addEventListener("click", () => goToChunk(current + 1));
