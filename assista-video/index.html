@@ -64,15 +64,33 @@
     object-fit: cover;
     object-position: center 28%;
     background: #06304f;
+    z-index: 1;
   }
 
-  /* the source footage is portrait — on wide/desktop viewports "cover" would
-     zoom in too tight, so switch to "contain" there and let the navy hero
-     background letterbox the sides instead */
+  .bg-blur { display: none; }
+
+  /* the source footage is portrait — on wide/desktop viewports the sharp
+     video shrinks to a centered vertical strip so it never crops; a blurred,
+     full-bleed copy of the same footage fills the space behind it so the
+     hero doesn't read as mostly flat navy on wide screens */
   @media (min-width: 700px) {
     .bg-layer {
-      object-fit: contain;
-      object-position: center 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      aspect-ratio: 9 / 16;
+    }
+    .bg-blur {
+      display: block;
+      position: absolute;
+      inset: -6%;
+      width: 112%;
+      height: 112%;
+      object-fit: cover;
+      object-position: center 20%;
+      filter: blur(60px) saturate(1.3) brightness(0.55);
+      transform: scale(1.15);
+      z-index: 0;
     }
   }
 
@@ -458,6 +476,9 @@
 <body>
 
 <section class="hero">
+  <video class="bg-blur" id="bg-video-blur" muted playsinline preload="none" aria-hidden="true">
+    <source src="festa-video.mp4" type="video/mp4">
+  </video>
   <video class="bg-layer" id="bg-video" muted playsinline preload="auto" poster="festa-moocamor.png">
     <source src="festa-video.mp4" type="video/mp4">
   </video>
@@ -569,9 +590,12 @@
   audio.preload = "auto";
 
   const bgVideo = document.getElementById("bg-video");
-  function playBgVideo() { bgVideo.play().catch(() => {}); }
-  function pauseBgVideo() { bgVideo.pause(); }
-  function resetBgVideo() { bgVideo.pause(); bgVideo.currentTime = 0; }
+  const bgVideoBlur = document.getElementById("bg-video-blur");
+  const isDesktopBg = () => window.matchMedia("(min-width: 700px)").matches;
+  function activeBgVideos() { return isDesktopBg() ? [bgVideo, bgVideoBlur] : [bgVideo]; }
+  function playBgVideo() { activeBgVideos().forEach((v) => v.play().catch(() => {})); }
+  function pauseBgVideo() { activeBgVideos().forEach((v) => v.pause()); }
+  function resetBgVideo() { [bgVideo, bgVideoBlur].forEach((v) => { v.pause(); v.currentTime = 0; }); }
   audio.addEventListener("play", playBgVideo);
   audio.addEventListener("pause", pauseBgVideo);
   audio.addEventListener("ended", resetBgVideo);
@@ -628,7 +652,7 @@
 
   document.getElementById("play-btn").addEventListener("click", () => {
     if (audio.ended || audio.currentTime >= (audio.duration || Infinity) - 0.05) {
-      bgVideo.currentTime = 0;
+      resetBgVideo();
       jumpToChunk(0);
     } else if (audio.paused) {
       audio.play().catch(() => {});
@@ -663,13 +687,13 @@
   document.getElementById("replay-btn").addEventListener("click", () => {
     document.getElementById("closing-overlay").classList.remove("show");
     document.querySelector(".hero").scrollIntoView({ behavior: "smooth" });
-    bgVideo.currentTime = 0;
+    resetBgVideo();
     jumpToChunk(0);
   });
 
   document.getElementById("start-btn").addEventListener("click", () => {
     document.getElementById("start-overlay").classList.add("hidden");
-    bgVideo.currentTime = 0;
+    resetBgVideo();
     audio.play().catch(() => {});
   });
 
