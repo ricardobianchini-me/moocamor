@@ -458,7 +458,7 @@
 <body>
 
 <section class="hero">
-  <video class="bg-layer" autoplay muted loop playsinline poster="festa-moocamor.png">
+  <video class="bg-layer" id="bg-video" muted playsinline preload="auto" poster="festa-moocamor.png">
     <source src="festa-video.mp4" type="video/mp4">
   </video>
   <div class="scrim"></div>
@@ -504,7 +504,7 @@
     <h1>A 14ª MoocAmor está chegando</h1>
     <p>Ouça o convite da nossa Fraternidade — 35 segundos.</p>
     <button class="btn-start" id="start-btn">▶ Assistir agora</button>
-    <p class="start-hint">Com som — ative o volume do celular</p>
+    <p class="start-hint">Contém som — ative ou aumente o volume</p>
   </div>
 </section>
 
@@ -568,6 +568,14 @@
   const audio = new Audio("narracao.mp3");
   audio.preload = "auto";
 
+  const bgVideo = document.getElementById("bg-video");
+  function playBgVideo() { bgVideo.play().catch(() => {}); }
+  function pauseBgVideo() { bgVideo.pause(); }
+  function resetBgVideo() { bgVideo.pause(); bgVideo.currentTime = 0; }
+  audio.addEventListener("play", playBgVideo);
+  audio.addEventListener("pause", pauseBgVideo);
+  audio.addEventListener("ended", resetBgVideo);
+
   const captionEl = document.getElementById("caption");
   const progressFill = document.getElementById("progress-fill");
   let lastShown = -1;
@@ -620,6 +628,7 @@
 
   document.getElementById("play-btn").addEventListener("click", () => {
     if (audio.ended || audio.currentTime >= (audio.duration || Infinity) - 0.05) {
+      bgVideo.currentTime = 0;
       jumpToChunk(0);
     } else if (audio.paused) {
       audio.play().catch(() => {});
@@ -654,11 +663,13 @@
   document.getElementById("replay-btn").addEventListener("click", () => {
     document.getElementById("closing-overlay").classList.remove("show");
     document.querySelector(".hero").scrollIntoView({ behavior: "smooth" });
+    bgVideo.currentTime = 0;
     jumpToChunk(0);
   });
 
   document.getElementById("start-btn").addEventListener("click", () => {
     document.getElementById("start-overlay").classList.add("hidden");
+    bgVideo.currentTime = 0;
     audio.play().catch(() => {});
   });
 
