@@ -184,6 +184,23 @@
     margin-bottom: 3px;
   }
 
+  thead th .min-tag {
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--mustard);
+    margin-top: 2px;
+  }
+
+  .min-hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.62rem;
+    color: var(--mustard);
+    margin-top: 2px;
+  }
+
   thead th:first-child {
     text-align: left;
     min-width: 170px;
@@ -320,6 +337,11 @@
     border: 1px dashed var(--paper-line);
   }
 
+  .tally[data-low="true"] {
+    background: var(--mustard);
+    color: #2b1b14;
+  }
+
   .addrow {
     display: flex;
     gap: 8px;
@@ -428,6 +450,8 @@
     { id: "dom-tarde", day: "Dom · 20/09", time: "16h–22h" },
   ];
 
+  const MIN_PER_SHIFT = 5;
+
   const SEED_VOLUNTEERS = {
     v1: { name: "Ricardo Bianchini", phone: "(11) 99320-2884", order: 1 },
     v2: { name: "Alessandra Aparecida", phone: "(11) 99110-3829", order: 2 },
@@ -489,10 +513,12 @@
 
     const totals = SHIFTS.map((s) => {
       const count = vols.filter((v) => state.availability[v.id] && state.availability[v.id][s.id]).length;
-      return `<td>${count > 0 ? `<span class="tally">${count}</span>` : `<span class="tally" data-empty="true">0</span>`}</td>`;
+      if (count === 0) return `<td><span class="tally" data-empty="true">0</span></td>`;
+      const low = count < MIN_PER_SHIFT;
+      return `<td><span class="tally"${low ? ' data-low="true"' : ""}>${count}</span>${low ? `<div class="min-hint">faltam ${MIN_PER_SHIFT - count}</div>` : ""}</td>`;
     }).join("");
 
-    const headCells = SHIFTS.map((s) => `<th><span class="day">${s.day}</span>${s.time}</th>`).join("");
+    const headCells = SHIFTS.map((s) => `<th><span class="day">${s.day}</span>${s.time}<span class="min-tag">mín. ${MIN_PER_SHIFT}</span></th>`).join("");
 
     document.getElementById("sheet").innerHTML = `
       <header class="ticket">
@@ -506,7 +532,7 @@
         </div>
       </header>
 
-      <p class="note">Horários sujeitos a ajuste conforme o movimento da barraca. Marque um ✓ em cada turno que você confirma — pode marcar mais de um. Use "+ Adicionar nome" se seu nome não estiver na lista.</p>
+      <p class="note">Horários sujeitos a ajuste conforme o movimento da barraca. Marque um ✓ em cada turno que você confirma — pode marcar mais de um. Precisamos de pelo menos <b>5 voluntários por turno</b>. Use "+ Adicionar nome" se seu nome não estiver na lista.</p>
 
       <div class="board">
         <table>
