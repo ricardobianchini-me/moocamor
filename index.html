@@ -494,7 +494,7 @@
   function volunteerList() {
     return Object.entries(state.volunteers || {})
       .map(([id, v]) => ({ id, ...v }))
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+      .sort((a, b) => (a.name || "").localeCompare(b.name || "", "pt-BR", { sensitivity: "base" }));
   }
 
   function render() {
