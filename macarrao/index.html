@@ -436,6 +436,34 @@
   .pin-error { color: var(--sauce); font-size: 0.82rem; margin-top: 8px; display: none; }
   .save-status { font-size: 0.82rem; color: var(--basil); margin-left: 10px; }
 
+  .new-item-box {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--paper-line);
+  }
+  .new-item-box h3 {
+    font-family: "Lato", sans-serif;
+    font-size: 0.94rem;
+    color: var(--navy);
+    margin: 0 0 12px;
+  }
+  .new-item-box select {
+    font-family: inherit;
+    font-size: 0.92rem;
+    padding: 9px 11px;
+    border-radius: 8px;
+    border: 1px solid var(--paper-line);
+    background: var(--paper);
+    color: var(--ink);
+    width: 100%;
+  }
+  .new-item-total {
+    margin-top: 12px;
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+  }
+  .new-item-total b { color: var(--basil); font-family: "JetBrains Mono", monospace; }
+
   footer.legend {
     margin-top: 16px;
     font-size: 0.82rem;
@@ -479,6 +507,7 @@
       macarrao: { label: "Macarrão spaguetti c/ ovos", unit: "kg", icon: "🍝", goalQty: 40, price: 9, raisedQty: 0 },
       carne:    { label: "Carne moída de primeira", unit: "kg", icon: "🥩", goalQty: 20, price: 40, raisedQty: 0 },
       tomate:   { label: "Tomate",                  unit: "kg", icon: "🍅", goalQty: 20, price: 7,  raisedQty: 20 },
+      molho:    { label: "Molho branco pronto",     unit: "kg", icon: "🥛", goalQty: 20, price: 45, raisedQty: 20 },
     },
     cash: { raised: 0 },
   };
@@ -654,8 +683,103 @@
         <button type="button" id="save-btn">Salvar</button>
         <span class="save-status" id="save-status"></span>
       </div>
+
+      <div class="new-item-box">
+        <h3>➕ Adicionar novo insumo</h3>
+        <div class="field-grid">
+          <div>
+            <label for="ni-icon">Ícone (emoji)</label>
+            <input type="text" id="ni-icon" placeholder="🥩" maxlength="4" />
+          </div>
+          <div>
+            <label for="ni-name">Nome do insumo</label>
+            <input type="text" id="ni-name" placeholder="Ex: Batata" />
+          </div>
+          <div>
+            <label for="ni-unit">Unidade</label>
+            <select id="ni-unit">
+              <option value="kg">kg</option>
+              <option value="lt">lt</option>
+              <option value="un">unidade</option>
+            </select>
+          </div>
+          <div>
+            <label for="ni-qty">Quantidade necessária</label>
+            <input type="number" min="0" step="0.5" id="ni-qty" placeholder="20" />
+          </div>
+          <div>
+            <label for="ni-price">Valor médio por unidade (R$)</label>
+            <input type="number" min="0" step="0.5" id="ni-price" placeholder="10" />
+          </div>
+          <div>
+            <label for="ni-raised">Já arrecadado (opcional)</label>
+            <input type="number" min="0" step="0.5" id="ni-raised" value="0" />
+          </div>
+        </div>
+        <div class="new-item-total">Valor total estimado: <b id="ni-total">R$ 0,00</b></div>
+        <div class="save-row">
+          <button type="button" id="add-item-btn">Adicionar insumo</button>
+          <span class="save-status" id="add-item-status"></span>
+        </div>
+      </div>
     `;
     document.getElementById("save-btn").addEventListener("click", saveEdits);
+
+    const niQty = document.getElementById("ni-qty");
+    const niPrice = document.getElementById("ni-price");
+    const niTotal = document.getElementById("ni-total");
+    function updateNiTotal() {
+      const q = parseFloat(niQty.value) || 0;
+      const p = parseFloat(niPrice.value) || 0;
+      niTotal.textContent = fmtBRL(q * p);
+    }
+    niQty.addEventListener("input", updateNiTotal);
+    niPrice.addEventListener("input", updateNiTotal);
+    document.getElementById("add-item-btn").addEventListener("click", addNewSupplyItem);
+  }
+
+  function slugify(text) {
+    return text
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") || ("insumo-" + Date.now());
+  }
+
+  function addNewSupplyItem() {
+    const status = document.getElementById("add-item-status");
+    const icon = document.getElementById("ni-icon").value.trim() || "📦";
+    const name = document.getElementById("ni-name").value.trim();
+    const unit = document.getElementById("ni-unit").value;
+    const qty = parseFloat(document.getElementById("ni-qty").value);
+    const price = parseFloat(document.getElementById("ni-price").value);
+    const raised = parseFloat(document.getElementById("ni-raised").value) || 0;
+
+    if (!name || isNaN(qty) || qty <= 0 || isNaN(price) || price <= 0) {
+      status.textContent = "Preencha nome, quantidade e valor.";
+      status.style.color = "var(--sauce)";
+      return;
+    }
+
+    let key = slugify(name);
+    if (state.supplies[key]) key = key + "-" + Date.now().toString(36);
+
+    rootRef.child("supplies").child(key).set({
+      label: name, icon, unit, goalQty: qty, price, raisedQty: Math.max(0, raised),
+    }).then(() => {
+      status.textContent = "✅ Insumo adicionado!";
+      status.style.color = "var(--basil)";
+      document.getElementById("ni-icon").value = "";
+      document.getElementById("ni-name").value = "";
+      document.getElementById("ni-qty").value = "";
+      document.getElementById("ni-price").value = "";
+      document.getElementById("ni-raised").value = "0";
+      document.getElementById("ni-total").textContent = fmtBRL(0);
+      setTimeout(() => { if (status) status.textContent = ""; }, 3000);
+    }).catch(() => {
+      status.textContent = "Erro ao adicionar.";
+      status.style.color = "var(--sauce)";
+    });
   }
 
   function saveEdits() {
