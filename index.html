@@ -184,6 +184,19 @@
     margin-bottom: 3px;
   }
 
+  thead th .vol-count {
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--paper-line);
+    border-radius: 999px;
+    padding: 1px 8px;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+
   thead th .min-tag {
     display: block;
     font-family: "JetBrains Mono", monospace;
@@ -538,7 +551,7 @@
         <table>
           <thead>
             <tr>
-              <th>Voluntário(a)</th>
+              <th>Voluntário(a) <span class="vol-count">${vols.length}</span></th>
               <th>WhatsApp</th>
               ${headCells}
             </tr>
