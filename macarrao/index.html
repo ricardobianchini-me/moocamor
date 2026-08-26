@@ -562,7 +562,7 @@
       const raisedValue = it.raisedQty * it.price;
       const done = it.raisedQty >= it.goalQty;
       return `<div class="item-card${done ? " done" : ""}">
-        ${done ? `<span class="done-badge">✅ Conseguido!</span>` : ""}
+        ${done ? `<span class="done-badge">✅ Arrecadado!</span>` : ""}
         <div class="head"><span class="icon">${it.icon}</span><span class="name">${esc(it.label)}</span></div>
         <div class="qty"><b>${fmtKg(it.raisedQty)}</b> de ${fmtKg(it.goalQty)} ${esc(it.unit)}</div>
         <div class="bar-track"><div class="bar-fill" style="width:${itemPct}%"></div></div>
