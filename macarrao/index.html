@@ -665,11 +665,16 @@
   function renderEditForm() {
     const st = state;
     const slot = document.getElementById("edit-form-slot");
-    const supplyFields = Object.entries(st.supplies).filter(([key, it]) => !it.cashOnly).map(([key, it]) => `
+    const supplyFields = Object.entries(st.supplies).map(([key, it]) => `
+      <div>
+        <label for="fname-${key}">${it.icon} Nome do insumo</label>
+        <input type="text" id="fname-${key}" value="${esc(it.label)}" />
+      </div>
+      ${it.cashOnly ? "" : `
       <div>
         <label for="f-${key}">${it.icon} ${esc(it.label)} (${esc(it.unit)} já arrecadados)</label>
         <input type="number" min="0" step="0.5" id="f-${key}" value="${it.raisedQty}" />
-      </div>
+      </div>`}
     `).join("");
     slot.innerHTML = `
       <div class="field-grid">
@@ -785,6 +790,10 @@
   function saveEdits() {
     const updates = {};
     Object.entries(state.supplies).forEach(([key, it]) => {
+      const nameEl = document.getElementById(`fname-${key}`);
+      if (nameEl && nameEl.value.trim()) {
+        updates[`supplies/${key}/label`] = nameEl.value.trim();
+      }
       if (it.cashOnly) return;
       const el = document.getElementById(`f-${key}`);
       if (!el) return;
