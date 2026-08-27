@@ -149,6 +149,56 @@
     line-height: 1.5;
   }
 
+  .roles-card {
+    margin-top: 12px;
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .roles-card h3 {
+    margin: 0 0 10px;
+    font-family: "Baloo 2", sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+
+  .roles-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 8px 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .roles-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+
+  .roles-list .role-emoji {
+    font-size: 1rem;
+  }
+
+  .roles-list .role-count {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    color: var(--sauce);
+  }
+
+  .roles-total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--paper-line);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
   .board {
     margin-top: 22px;
     background: var(--card);
@@ -552,6 +602,19 @@
       </header>
 
       <p class="note">Horários sujeitos a ajuste conforme o movimento da barraca. Marque um ✓ em cada turno que você confirma — pode marcar mais de um. Precisamos de pelo menos <b>17 voluntários por turno</b>. Use "+ Adicionar nome" se seu nome não estiver na lista.</p>
+
+      <div class="roles-card">
+        <h3>Pra barraca rodar redondinha em cada turno, precisamos de:</h3>
+        <ul class="roles-list">
+          <li><span class="role-emoji">🔥</span><span class="role-count">5</span> na fritura</li>
+          <li><span class="role-emoji">🧹</span><span class="role-count">2</span> organizando e limpando</li>
+          <li><span class="role-emoji">🍗</span><span class="role-count">2</span> fracionando o frango e a polenta</li>
+          <li><span class="role-emoji">🥣</span><span class="role-count">1 ou 2</span> cuidando do molho</li>
+          <li><span class="role-emoji">🍝</span><span class="role-count">3</span> no macarrão</li>
+          <li><span class="role-emoji">🧾</span><span class="role-count">3</span> atendendo no balcão</li>
+        </ul>
+        <p class="roles-total">Somando tudo, dá os 17 voluntários por turno da meta acima.</p>
+      </div>
 
       <div class="board">
         <table>
