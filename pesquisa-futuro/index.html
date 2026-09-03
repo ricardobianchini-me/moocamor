@@ -212,6 +212,25 @@
   .thanks-card p { color: var(--ink-soft); font-size: 1.15rem; }
 
   /* ---------- admin / pin ---------- */
+  .kiosk-badge {
+    text-align: center; margin-top: 18px; font-size: 0.95rem; font-weight: 700;
+    color: var(--basil); background: var(--basil-soft); border-radius: 999px;
+    padding: 8px 16px; display: inline-block;
+  }
+  .kiosk-toggle {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--basil-soft); border: 2px solid var(--basil); border-radius: 14px;
+    padding: 16px 18px; margin-bottom: 22px;
+  }
+  .kiosk-toggle .txt { font-size: 1rem; line-height: 1.4; }
+  .kiosk-toggle .txt b { display: block; font-family: "Lato", sans-serif; font-size: 1.05rem; }
+  .kiosk-toggle button {
+    font-family: "Lato", sans-serif; font-weight: 800; font-size: 1rem;
+    border: none; border-radius: 999px; padding: 12px 20px; cursor: pointer; white-space: nowrap;
+  }
+  .kiosk-toggle button[data-on="true"] { background: var(--basil); color: #fff; }
+  .kiosk-toggle button[data-on="false"] { background: var(--card); color: var(--ink); border: 2px solid var(--paper-line); }
+
   .admin-link {
     display: block; text-align: center; margin-top: 30px;
     font-size: 1rem; color: var(--ink-soft); text-decoration: none;
@@ -284,6 +303,7 @@
         <p>Sua opinião ajuda a organização a planejar as barracas, atrações e brincadeiras da próxima festa. É só apertar os botões do que você curte — sem precisar digitar nada.</p>
         <button class="btn-big" id="btn-start">Começar 👉</button>
       </div>
+      <div class="kiosk-badge" id="kiosk-badge" style="display:none;">📱 Modo tablet ativo neste aparelho</div>
       <button class="admin-link" id="open-admin-link-intro">⚙️ Área da organização</button>
     </section>
 
@@ -422,8 +442,9 @@
     alimentacao: ["salgados", "doces"],
   };
 
+  const KIOSK_KEY = "moocamor_pesquisa_kiosk";
   const params = new URLSearchParams(location.search);
-  const isKiosk = params.get("modo") === "kiosk";
+  let isKiosk = params.get("modo") === "kiosk" || localStorage.getItem(KIOSK_KEY) === "1";
 
   let options = null;      // opcoes vindas do Firebase
   let allResponses = null; // pra ranking
@@ -445,6 +466,10 @@
     document.querySelectorAll(".screen").forEach((s) => s.classList.remove("show"));
     document.getElementById(id).classList.add("show");
   }
+  function updateKioskBadge() {
+    document.getElementById("kiosk-badge").style.display = isKiosk ? "inline-block" : "none";
+  }
+  updateKioskBadge();
 
   function startResponse() {
     respostaId = rootRef.child("respostas").push().key;
@@ -671,7 +696,11 @@
 
   function renderAdmin() {
     const { counts, outroCounts, totalRespostas } = tallyRanking();
-    let html = `<p style="color:var(--ink-soft);font-size:0.85rem;">${totalRespostas} resposta(s) registrada(s) (inclui parciais).</p>`;
+    let html = `<div class="kiosk-toggle">
+      <div class="txt"><b>📱 Modo tablet neste aparelho</b>Depois de cada resposta, reinicia sozinho pra próxima pessoa. Ative só no tablet que fica fixo na festa — não no seu celular pessoal.</div>
+      <button id="kiosk-toggle-btn" data-on="${isKiosk}">${isKiosk ? "Ativado ✓" : "Ativar"}</button>
+    </div>`;
+    html += `<p style="color:var(--ink-soft);font-size:0.85rem;">${totalRespostas} resposta(s) registrada(s) (inclui parciais).</p>`;
 
     ["entretenimento", "alimentacao"].forEach((bk) => {
       html += `<div class="admin-block"><h3>${bk === "entretenimento" ? "🎭 Entretenimento" : "🍝 Alimentação"}</h3>`;
@@ -704,6 +733,13 @@
     });
 
     document.getElementById("admin-content").innerHTML = html;
+
+    document.getElementById("kiosk-toggle-btn").addEventListener("click", () => {
+      isKiosk = !isKiosk;
+      if (isKiosk) localStorage.setItem(KIOSK_KEY, "1"); else localStorage.removeItem(KIOSK_KEY);
+      updateKioskBadge();
+      renderAdmin();
+    });
 
     document.querySelectorAll("[data-remove-item]").forEach((btn) => {
       btn.addEventListener("click", () => {
