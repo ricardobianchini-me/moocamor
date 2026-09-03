@@ -279,6 +279,7 @@
         <p>Sua opinião ajuda a organização a planejar as barracas, atrações e brincadeiras da próxima festa. É só apertar os botões do que você curte — sem precisar digitar nada.</p>
         <button class="btn-big" id="btn-start">Começar 👉</button>
       </div>
+      <button class="admin-link" id="open-admin-link-intro">⚙️ Área da organização</button>
     </section>
 
     <!-- HUB -->
@@ -493,6 +494,7 @@
   document.getElementById("hub-alimentacao").addEventListener("click", () => enterBlock("alimentacao"));
 
   function enterBlock(blockKey) {
+    if (!options) options = SEED_OPTIONS;
     currentBlock = blockKey;
     currentSubcatIdx = 0;
     renderSubcat();
@@ -594,12 +596,14 @@
   });
 
   // ---------- PIN / admin ----------
-  document.getElementById("open-admin-link").addEventListener("click", () => {
+  function openPinGate() {
     document.getElementById("pin-input").value = "";
     document.getElementById("pin-error").textContent = "";
     document.getElementById("pin-overlay").style.display = "flex";
     document.getElementById("pin-input").focus();
-  });
+  }
+  document.getElementById("open-admin-link").addEventListener("click", openPinGate);
+  document.getElementById("open-admin-link-intro").addEventListener("click", openPinGate);
   document.getElementById("pin-cancel").addEventListener("click", () => {
     document.getElementById("pin-overlay").style.display = "none";
   });
@@ -623,6 +627,7 @@
   }
 
   function openAdmin() {
+    if (!options) options = SEED_OPTIONS;
     showScreen("screen-intro"); // esconde o wizard atras
     document.querySelector(".sheet").style.display = "none";
     document.getElementById("admin-wrap").style.display = "block";
