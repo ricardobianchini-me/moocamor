@@ -257,8 +257,33 @@
 
   .admin-panel { background: var(--card); border-radius: 18px; box-shadow: 0 8px 22px var(--shadow); padding: 24px; margin-top: 4px; }
   .admin-panel h2 { font-family: "Lato", sans-serif; font-weight: 800; margin-top: 0; }
+  .admin-panel h3 { font-family: "Lato", sans-serif; font-weight: 800; font-size: 1.25rem; margin: 28px 0 14px; padding-top: 14px; border-top: 2px solid var(--paper-line); }
+  .admin-panel h3:first-of-type { border-top: none; padding-top: 0; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px; }
+  .stat-tile { background: var(--paper); border: 1px solid var(--paper-line); border-radius: 12px; padding: 14px 12px; text-align: center; }
+  .stat-n { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.7rem; color: var(--basil); }
+  .stat-n .stat-of { font-size: 1rem; color: var(--ink-soft); font-weight: 400; }
+  .stat-label { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.35; margin-top: 4px; }
+
+  .dash-block { margin-bottom: 22px; }
+  .dash-block h4 { font-family: "Lato", sans-serif; font-weight: 800; font-size: 1.05rem; margin: 16px 0 8px; }
+  .dash-subcat { margin-bottom: 16px; }
+  .dash-subcat-title { font-weight: 700; margin-bottom: 8px; }
+  .bar-list { list-style: none; margin: 0; padding: 0; }
+  .bar-list li {
+    display: grid; grid-template-columns: minmax(90px, 34%) 1fr auto;
+    align-items: center; gap: 10px; padding: 5px 0; font-size: 0.88rem;
+  }
+  .bar-list li.top .bar-label { font-weight: 800; color: var(--basil); }
+  .bar-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { background: var(--paper); border-radius: 999px; height: 14px; overflow: hidden; }
+  .bar-fill { display: block; height: 100%; background: var(--mustard); border-radius: 999px; }
+  .bar-list li.top .bar-fill { background: var(--basil); }
+  .bar-count { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--ink-soft); min-width: 1.5em; text-align: right; }
+
   .admin-block { margin-bottom: 26px; }
-  .admin-block h3 { font-family: "Lato", sans-serif; font-weight: 800; font-size: 1.1rem; margin: 20px 0 10px; }
+  .admin-block h4 { font-family: "Lato", sans-serif; font-weight: 800; font-size: 1.05rem; margin: 16px 0 10px; }
   .admin-subcat { border: 2px dashed var(--paper-line); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
   .admin-subcat .subcat-title { font-weight: 700; margin-bottom: 10px; }
   .admin-item-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
@@ -678,38 +703,87 @@
     const outroCounts = { entretenimento: [], alimentacao: [] };
     const respostas = allResponses || {};
     let totalRespostas = 0;
+    let finalizadas = 0;
+    const blockTouched = { entretenimento: 0, alimentacao: 0 };
+    const blockComplete = { entretenimento: 0, alimentacao: 0 };
+
     Object.values(respostas).forEach((r) => {
       totalRespostas++;
+      if (r.finalizado) finalizadas++;
       ["entretenimento", "alimentacao"].forEach((bk) => {
         if (!r[bk]) return;
-        subcatKeys(bk).forEach((sc) => {
+        const keys = subcatKeys(bk);
+        let answeredSubcats = 0;
+        keys.forEach((sc) => {
           const arr = r[bk][sc];
-          if (Array.isArray(arr)) {
+          if (Array.isArray(arr) && arr.length > 0) {
+            answeredSubcats++;
             arr.forEach((id) => { counts[bk][sc][id] = (counts[bk][sc][id] || 0) + 1; });
           }
         });
+        if (answeredSubcats > 0) blockTouched[bk]++;
+        if (answeredSubcats === keys.length) blockComplete[bk]++;
         if (r[bk].outro) outroCounts[bk].push(r[bk].outro);
       });
     });
-    return { counts, outroCounts, totalRespostas };
+    return { counts, outroCounts, totalRespostas, finalizadas, blockTouched, blockComplete };
   }
 
   function renderAdmin() {
-    const { counts, outroCounts, totalRespostas } = tallyRanking();
+    const { counts, outroCounts, totalRespostas, finalizadas, blockTouched, blockComplete } = tallyRanking();
+    const parciais = totalRespostas - finalizadas;
     let html = `<div class="kiosk-toggle">
       <div class="txt"><b>📱 Modo tablet neste aparelho</b>Depois de cada resposta, reinicia sozinho pra próxima pessoa. Ative só no tablet que fica fixo na festa — não no seu celular pessoal.</div>
       <button id="kiosk-toggle-btn" data-on="${isKiosk}">${isKiosk ? "Ativado ✓" : "Ativar"}</button>
     </div>`;
-    html += `<p style="color:var(--ink-soft);font-size:0.85rem;">${totalRespostas} resposta(s) registrada(s) (inclui parciais).</p>`;
+
+    // ---------- DASHBOARD ----------
+    html += `<h3 style="margin-top:0;">📊 Dashboard de respostas</h3>`;
+    html += `<div class="stat-row">
+      <div class="stat-tile"><div class="stat-n">${totalRespostas}</div><div class="stat-label">Total de respostas</div></div>
+      <div class="stat-tile"><div class="stat-n">${finalizadas}</div><div class="stat-label">Enviadas completas</div></div>
+      <div class="stat-tile"><div class="stat-n">${parciais}</div><div class="stat-label">Parciais (não enviaram)</div></div>
+    </div>`;
+    html += `<div class="stat-row">
+      <div class="stat-tile"><div class="stat-n">${blockComplete.entretenimento}<span class="stat-of">/${blockTouched.entretenimento}</span></div><div class="stat-label">🎭 Completaram Entretenimento (de quem começou)</div></div>
+      <div class="stat-tile"><div class="stat-n">${blockComplete.alimentacao}<span class="stat-of">/${blockTouched.alimentacao}</span></div><div class="stat-label">🍝 Completaram Alimentação (de quem começou)</div></div>
+    </div>`;
 
     ["entretenimento", "alimentacao"].forEach((bk) => {
-      html += `<div class="admin-block"><h3>${bk === "entretenimento" ? "🎭 Entretenimento" : "🍝 Alimentação"}</h3>`;
+      html += `<div class="dash-block"><h4>${bk === "entretenimento" ? "🎭 Entretenimento" : "🍝 Alimentação"}</h4>`;
       subcatKeys(bk).forEach((sc) => {
         const def = options[bk][sc];
         const itens = Object.entries(def.itens || {});
         const rankedItens = itens
           .map(([id, label]) => ({ id, label, n: (counts[bk][sc] && counts[bk][sc][id]) || 0 }))
           .sort((a, b) => b.n - a.n);
+        const maxN = Math.max(1, ...rankedItens.map((it) => it.n));
+
+        html += `<div class="dash-subcat">
+          <div class="dash-subcat-title">${def.icon} ${esc(def.label)}</div>
+          <ul class="bar-list">
+            ${rankedItens.map((it, i) => `<li class="${i === 0 && it.n > 0 ? "top" : ""}">
+              <span class="bar-label">${esc(it.label)}</span>
+              <span class="bar-track"><span class="bar-fill" style="width:${(it.n / maxN) * 100}%"></span></span>
+              <span class="bar-count">${it.n}</span>
+            </li>`).join("")}
+          </ul>
+        </div>`;
+      });
+      if (outroCounts[bk].length) {
+        html += `<div class="dash-subcat"><div class="dash-subcat-title">✍️ "Outro" que as pessoas escreveram</div>
+          <ul class="rank-list">${outroCounts[bk].map((t) => `<li><span>${esc(t)}</span></li>`).join("")}</ul></div>`;
+      }
+      html += `</div>`;
+    });
+
+    // ---------- EDIÇÃO DE OPÇÕES ----------
+    html += `<h3>✏️ Editar opções por categoria</h3>`;
+    ["entretenimento", "alimentacao"].forEach((bk) => {
+      html += `<div class="admin-block"><h4>${bk === "entretenimento" ? "🎭 Entretenimento" : "🍝 Alimentação"}</h4>`;
+      subcatKeys(bk).forEach((sc) => {
+        const def = options[bk][sc];
+        const itens = Object.entries(def.itens || {});
 
         html += `<div class="admin-subcat" data-block="${bk}" data-sub="${sc}">
           <div class="subcat-title">${def.icon} ${esc(def.label)}</div>
@@ -720,15 +794,8 @@
             <input type="text" placeholder="Adicionar opção..." data-new-item data-block="${bk}" data-sub="${sc}">
             <button data-add-item data-block="${bk}" data-sub="${sc}">+ Adicionar</button>
           </div>
-          <ul class="rank-list">
-            ${rankedItens.map((it) => `<li><span>${esc(it.label)}</span><span class="count">${it.n}</span></li>`).join("")}
-          </ul>
         </div>`;
       });
-      if (outroCounts[bk].length) {
-        html += `<div class="admin-subcat"><div class="subcat-title">✍️ "Outro" que as pessoas escreveram</div>
-          <ul class="rank-list">${outroCounts[bk].map((t) => `<li><span>${esc(t)}</span></li>`).join("")}</ul></div>`;
-      }
       html += `</div>`;
     });
 
