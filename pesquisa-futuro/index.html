@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MoocAmor — Pesquisa do Futuro</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%92%9A</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fbf3e2;
+    --paper-line: #e8d9b8;
+    --ink: #2b1b14;
+    --ink-soft: #6b5a48;
+    --sauce: #c33c26;
+    --sauce-dark: #a12e1b;
+    --mustard: #d99a1f;
+    --basil: #4f7942;
+    --basil-soft: #e4efdd;
+    --card: #ffffff;
+    --shadow: rgba(43, 27, 20, 0.14);
+    --focus: #1c6ee0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #211510; --paper-line: #3a281f; --ink: #f3e7d8; --ink-soft: #b9a48f;
+      --sauce: #e2593f; --sauce-dark: #ff7a5c; --mustard: #e8b545; --basil: #8ec97c;
+      --basil-soft: #26331f; --card: #2c1d16; --shadow: rgba(0, 0, 0, 0.45); --focus: #6cb2ff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #211510; --paper-line: #3a281f; --ink: #f3e7d8; --ink-soft: #b9a48f;
+    --sauce: #e2593f; --sauce-dark: #ff7a5c; --mustard: #e8b545; --basil: #8ec97c;
+    --basil-soft: #26331f; --card: #2c1d16; --shadow: rgba(0, 0, 0, 0.45); --focus: #6cb2ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image: repeating-linear-gradient(var(--paper-line) 0 1px, transparent 1px 34px);
+    color: var(--ink);
+    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
+    padding: 28px 16px 64px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .sheet { width: 100%; max-width: 720px; }
+
+  header.ticket {
+    background: var(--sauce);
+    color: #fff8ee;
+    border-radius: 14px;
+    padding: 22px 24px 20px;
+    box-shadow: 0 10px 24px var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  header.ticket::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: 0; height: 10px;
+    background: repeating-linear-gradient(-45deg, transparent 0 8px, rgba(255,255,255,0.18) 8px 16px);
+  }
+  .ticket .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    opacity: 0.85; margin: 0 0 6px;
+  }
+  .ticket h1 {
+    font-family: "Baloo 2", sans-serif;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    line-height: 1.08; margin: 0 0 8px; text-wrap: balance;
+  }
+  .ticket p.sub { margin: 0; font-size: 1rem; opacity: 0.94; max-width: 60ch; line-height: 1.5; }
+
+  main { margin-top: 22px; }
+
+  .screen { display: none; }
+  .screen.show { display: block; }
+
+  /* ---------- intro ---------- */
+  .intro-card {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 6px 18px var(--shadow);
+    padding: 28px 22px;
+    text-align: center;
+  }
+  .intro-heart { font-size: 2.6rem; margin-bottom: 8px; }
+  .intro-card p { color: var(--ink-soft); line-height: 1.6; margin: 10px auto 0; max-width: 46ch; }
+  .btn-big {
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 700; font-size: 1.15rem;
+    background: var(--basil); color: #fff;
+    border: none; border-radius: 999px;
+    padding: 16px 34px; margin-top: 20px;
+    cursor: pointer; box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+    transition: transform .12s ease;
+  }
+  .btn-big:active { transform: scale(0.97); }
+
+  /* ---------- hub (menu de blocos) ---------- */
+  .hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  @media (max-width: 520px) { .hub-grid { grid-template-columns: 1fr; } }
+
+  .hub-card {
+    background: var(--card);
+    border: 2px solid var(--paper-line);
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 6px 16px var(--shadow);
+    transition: border-color .15s ease, transform .12s ease;
+  }
+  .hub-card:hover { border-color: var(--mustard); transform: translateY(-2px); }
+  .hub-card .emoji { font-size: 2.2rem; }
+  .hub-card h2 {
+    font-family: "Baloo 2", sans-serif; font-size: 1.15rem; margin: 8px 0 4px;
+  }
+  .hub-card .progress-txt {
+    font-family: "JetBrains Mono", monospace; font-size: 0.78rem; color: var(--ink-soft);
+  }
+  .hub-card[data-done="true"] { border-color: var(--basil); }
+  .hub-card[data-done="true"] .progress-txt { color: var(--basil); font-weight: 700; }
+
+  .hub-nudge {
+    margin-top: 16px;
+    background: var(--basil-soft);
+    border: 1px dashed var(--basil);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.86rem;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .submit-wrap { text-align: center; margin-top: 22px; }
+  .btn-submit {
+    font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 1.05rem;
+    background: var(--sauce); color: #fff8ee;
+    border: none; border-radius: 999px;
+    padding: 14px 30px; cursor: pointer;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+  }
+  .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+  .submit-hint { margin-top: 8px; font-size: 0.78rem; color: var(--ink-soft); }
+
+  /* ---------- bloco (wizard de subcategorias) ---------- */
+  .block-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .btn-back {
+    font-family: "Karla", sans-serif; font-size: 0.85rem; font-weight: 700;
+    background: none; border: none; color: var(--ink-soft); cursor: pointer;
+    padding: 6px 4px;
+  }
+  .dots { display: flex; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--paper-line); }
+  .dot[data-active="true"] { background: var(--sauce); }
+  .dot[data-filled="true"] { background: var(--mustard); }
+
+  .subcat-card {
+    background: var(--card); border-radius: 14px; box-shadow: 0 6px 18px var(--shadow);
+    padding: 20px 18px;
+  }
+  .subcat-card h3 {
+    font-family: "Baloo 2", sans-serif; font-size: 1.2rem; margin: 0 0 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .subcat-card .hint { font-size: 0.82rem; color: var(--ink-soft); margin: 0 0 16px; }
+
+  .opt-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .opt-btn {
+    font-family: "Karla", sans-serif; font-weight: 700; font-size: 0.95rem;
+    background: var(--paper); border: 2px solid var(--paper-line); color: var(--ink);
+    border-radius: 999px; padding: 12px 18px; cursor: pointer;
+    transition: all .12s ease;
+  }
+  .opt-btn[data-on="true"] {
+    background: var(--basil); border-color: var(--basil); color: #fff;
+  }
+
+  .outro-field { margin-top: 18px; }
+  .outro-field label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; }
+  .outro-field input {
+    width: 100%; font-family: "Karla", sans-serif; font-size: 0.95rem;
+    padding: 12px 14px; border-radius: 10px; border: 1px solid var(--paper-line);
+    background: var(--paper); color: var(--ink);
+  }
+
+  .nav-row { display: flex; justify-content: space-between; margin-top: 22px; gap: 10px; }
+  .btn-nav {
+    font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 1rem;
+    border-radius: 999px; padding: 13px 24px; cursor: pointer; border: none;
+    flex: 1;
+  }
+  .btn-nav.prev { background: var(--paper); border: 2px solid var(--paper-line); color: var(--ink); }
+  .btn-nav.next { background: var(--sauce); color: #fff8ee; }
+
+  /* ---------- thanks ---------- */
+  .thanks-card { text-align: center; padding: 40px 22px; }
+  .thanks-card .emoji { font-size: 3rem; }
+  .thanks-card h2 { font-family: "Baloo 2", sans-serif; margin: 10px 0 6px; }
+  .thanks-card p { color: var(--ink-soft); }
+
+  /* ---------- admin / pin ---------- */
+  .admin-link {
+    display: block; text-align: center; margin-top: 26px;
+    font-size: 0.78rem; color: var(--ink-soft); text-decoration: none;
+    background: none; border: none; cursor: pointer; width: 100%;
+  }
+  .pin-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  }
+  .pin-box {
+    background: var(--card); border-radius: 14px; padding: 26px 22px; max-width: 320px; width: 100%;
+    text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+  .pin-box h2 { font-family: "Baloo 2", sans-serif; font-size: 1.1rem; margin: 0 0 14px; }
+  .pin-box input {
+    width: 100%; text-align: center; font-size: 1.3rem; letter-spacing: 0.3em;
+    padding: 12px; border-radius: 10px; border: 1px solid var(--paper-line); margin-bottom: 10px;
+  }
+  .pin-error { color: var(--sauce); font-size: 0.82rem; min-height: 1.2em; margin-bottom: 6px; }
+  .pin-box .row { display: flex; gap: 8px; }
+  .pin-box button { flex: 1; font-family: "Baloo 2", sans-serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
+  .pin-box .cancel { background: var(--paper); border: 1px solid var(--paper-line); }
+  .pin-box .submit { background: var(--basil); color: #fff; }
+
+  .admin-panel { background: var(--card); border-radius: 14px; box-shadow: 0 6px 18px var(--shadow); padding: 20px; margin-top: 4px; }
+  .admin-panel h2 { font-family: "Baloo 2", sans-serif; margin-top: 0; }
+  .admin-block { margin-bottom: 22px; }
+  .admin-block h3 { font-family: "Baloo 2", sans-serif; font-size: 1rem; margin: 18px 0 8px; }
+  .admin-subcat { border: 1px dashed var(--paper-line); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .admin-subcat .subcat-title { font-weight: 700; margin-bottom: 8px; }
+  .admin-item-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .admin-item {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--paper); border: 1px solid var(--paper-line); border-radius: 999px;
+    padding: 6px 6px 6px 12px; font-size: 0.85rem;
+  }
+  .admin-item button { border: none; background: none; color: var(--sauce); cursor: pointer; font-weight: 700; }
+  .admin-add-row { display: flex; gap: 8px; }
+  .admin-add-row input { flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--paper-line); }
+  .admin-add-row button { background: var(--basil); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 700; }
+
+  .rank-list { list-style: none; padding: 0; margin: 0; }
+  .rank-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--paper-line); font-size: 0.88rem; }
+  .rank-list .count { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--sauce); }
+  .rank-total { font-size: 0.78rem; color: var(--ink-soft); margin-top: 4px; }
+
+  .btn-close-admin {
+    display: block; margin: 18px auto 0; background: var(--paper); border: 1px solid var(--paper-line);
+    border-radius: 999px; padding: 10px 22px; cursor: pointer; font-family: "Baloo 2", sans-serif; font-weight: 700;
+  }
+
+  footer { text-align: center; margin-top: 30px; font-size: 0.76rem; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="ticket">
+    <p class="eyebrow">Fraternidade do Amor · Festa beneficente</p>
+    <h1>Ajude a sonhar a próxima MoocAmor 💚</h1>
+    <p class="sub">Leva 2 minutinhos: escolha o que você mais quer ver em comida e diversão na próxima edição. Pode marcar quantas opções quiser!</p>
+  </header>
+
+  <main>
+
+    <!-- INTRO -->
+    <section class="screen show" id="screen-intro">
+      <div class="intro-card">
+        <div class="intro-heart">🎉</div>
+        <p>Sua opinião ajuda a organização a planejar as barracas, atrações e brincadeiras da próxima festa. É só apertar os botões do que você curte — sem precisar digitar nada.</p>
+        <button class="btn-big" id="btn-start">Começar 👉</button>
+      </div>
+    </section>
+
+    <!-- HUB -->
+    <section class="screen" id="screen-hub">
+      <div class="hub-grid">
+        <div class="hub-card" id="hub-entretenimento" data-done="false">
+          <div class="emoji">🎭</div>
+          <h2>Entretenimento</h2>
+          <div class="progress-txt" id="hub-progress-entretenimento">0 de 4 respondidas</div>
+        </div>
+        <div class="hub-card" id="hub-alimentacao" data-done="false">
+          <div class="emoji">🍝</div>
+          <h2>Alimentação</h2>
+          <div class="progress-txt" id="hub-progress-alimentacao">0 de 2 respondidas</div>
+        </div>
+      </div>
+
+      <div class="hub-nudge" id="hub-nudge" style="display:none;"></div>
+
+      <div class="submit-wrap">
+        <button class="btn-submit" id="btn-submit">Enviar minhas respostas 💚</button>
+        <div class="submit-hint">Pode enviar mesmo sem completar os dois blocos.</div>
+      </div>
+
+      <button class="admin-link" id="open-admin-link">⚙️ Área da organização</button>
+    </section>
+
+    <!-- BLOCO (wizard) -->
+    <section class="screen" id="screen-block">
+      <div class="block-header">
+        <button class="btn-back" id="btn-block-back">← Voltar pros blocos</button>
+        <div class="dots" id="block-dots"></div>
+      </div>
+      <div class="subcat-card">
+        <h3 id="subcat-title"></h3>
+        <p class="hint">Toque em quantas opções quiser.</p>
+        <div class="opt-grid" id="subcat-options"></div>
+        <div class="outro-field" id="outro-field" style="display:none;">
+          <label for="outro-input">Outro, qual? (opcional)</label>
+          <input type="text" id="outro-input" placeholder="Digite aqui...">
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-nav prev" id="btn-subcat-prev">← Anterior</button>
+        <button class="btn-nav next" id="btn-subcat-next">Próxima →</button>
+      </div>
+    </section>
+
+    <!-- THANKS -->
+    <section class="screen" id="screen-thanks">
+      <div class="thanks-card">
+        <div class="emoji">💚</div>
+        <h2>Obrigado por participar!</h2>
+        <p>Sua resposta já foi salva. Vamos usar isso pra planejar a próxima MoocAmor.</p>
+        <button class="btn-big" id="btn-thanks-again" style="display:none;">Nova resposta</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>Fraternidade do Amor · MoocAmor · Pesquisa do Futuro</footer>
+</div>
+
+<!-- PIN overlay -->
+<div class="pin-overlay" id="pin-overlay" style="display:none;">
+  <div class="pin-box">
+    <h2>Digite o PIN da organização</h2>
+    <input type="password" inputmode="numeric" id="pin-input" placeholder="PIN" maxlength="8">
+    <div class="pin-error" id="pin-error"></div>
+    <div class="row">
+      <button class="cancel" id="pin-cancel">Cancelar</button>
+      <button class="submit" id="pin-submit">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="sheet" id="admin-wrap" style="display:none;">
+  <div class="admin-panel">
+    <h2>⚙️ Editar opções e ver ranking</h2>
+    <div id="admin-content"></div>
+    <button class="btn-close-admin" id="btn-close-admin">Fechar</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
+    authDomain: "fraternidadedoamor-ef315.firebaseapp.com",
+    databaseURL: "https://fraternidadedoamor-ef315-default-rtdb.firebaseio.com",
+    projectId: "fraternidadedoamor-ef315",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const rootRef = db.ref("pesquisaMoocAmor");
+  const ADMIN_PIN = "1313";
+
+  const SEED_OPTIONS = {
+    entretenimento: {
+      apresentacoes: { label: "Apresentações", icon: "🎭", ordem: 1, itens: {
+        it1: "Grupo de teatro", it2: "Dança", it3: "Coral", it4: "Capoeira", it5: "Mágica/circo",
+      }},
+      brinquedos: { label: "Brinquedos e área infantil", icon: "🎈", ordem: 2, itens: {
+        it1: "Pula-pula", it2: "Tiro ao alvo", it3: "Canaletinha", it4: "Pintura facial",
+        it5: "Brinquedos infláveis", it6: "Cama elástica", it7: "Caça ao tesouro", it8: "Jogo da argola",
+        it9: "Pescaria (brincadeira)", it10: "Contação de histórias", it11: "Oficina de pintura/desenho",
+        it12: "Tatuagem de glitter",
+      }},
+      ativacoes: { label: "Ativações extras", icon: "🎁", ordem: 3, itens: {
+        it1: "Sorteios/brindes", it2: "Oficina de artesanato", it3: "Karaokê",
+      }},
+      pets: { label: "Pets", icon: "🐾", ordem: 4, itens: {
+        it1: "Concurso/desfile pet", it2: "Feira de adoção", it3: "Banho/spa pet solidário",
+        it4: "Petiscos e brinquedos pet", it5: "Espaço pet-friendly com água/sombra",
+      }},
+    },
+    alimentacao: {
+      salgados: { label: "Salgados", icon: "🥟", ordem: 1, itens: {
+        it1: "Nhoque", it2: "Antepasto/Bruschetta", it3: "Coxinha", it4: "Pastel salgado",
+        it5: "Bolinho de bacalhau", it6: "Pão de alho", it7: "Milho verde/pipoca salgada",
+      }},
+      doces: { label: "Doces", icon: "🍬", ordem: 2, itens: {
+        it1: "Sorvete", it2: "Churros", it3: "Pastel doce", it4: "Waffle/crepe",
+        it5: "Outros doces italianos (tiramisù, sfogliatella)", it6: "Algodão-doce", it7: "Maçã do amor",
+        it8: "Picolé", it9: "Paçoca", it10: "Pipoca doce", it11: "Bolo no pote", it12: "Milho doce (curau)",
+        it13: "Espetinho de uva e morango", it14: "Cascata de chocolate",
+      }},
+    },
+  };
+
+  const BLOCK_DEFS = {
+    entretenimento: ["apresentacoes", "brinquedos", "ativacoes", "pets"],
+    alimentacao: ["salgados", "doces"],
+  };
+
+  const params = new URLSearchParams(location.search);
+  const isKiosk = params.get("modo") === "kiosk";
+
+  let options = null;      // opcoes vindas do Firebase
+  let allResponses = null; // pra ranking
+  let seeded = false;
+
+  let respostaId = null;
+  let respostaRef = null;
+  let selections = { entretenimento: {}, alimentacao: {} };
+  let outros = { entretenimento: "", alimentacao: "" };
+  let blocosCompletos = { entretenimento: false, alimentacao: false };
+
+  let currentBlock = null;
+  let currentSubcatIdx = 0;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  }
+  function showScreen(id) {
+    document.querySelectorAll(".screen").forEach((s) => s.classList.remove("show"));
+    document.getElementById(id).classList.add("show");
+  }
+
+  function startResponse() {
+    respostaId = rootRef.child("respostas").push().key;
+    respostaRef = rootRef.child("respostas").child(respostaId);
+    selections = { entretenimento: {}, alimentacao: {} };
+    outros = { entretenimento: "", alimentacao: "" };
+    blocosCompletos = { entretenimento: false, alimentacao: false };
+    respostaRef.set({
+      ts: firebase.database.ServerValue.TIMESTAMP,
+      modo: isKiosk ? "kiosk" : "link",
+      finalizado: false,
+    });
+    renderHub();
+    showScreen("screen-hub");
+  }
+
+  document.getElementById("btn-start").addEventListener("click", startResponse);
+
+  function subcatKeys(blockKey) { return BLOCK_DEFS[blockKey]; }
+
+  function countAnswered(blockKey) {
+    let n = 0;
+    subcatKeys(blockKey).forEach((sc) => {
+      const sel = selections[blockKey][sc];
+      if (sel && Object.keys(sel).length > 0) n++;
+    });
+    return n;
+  }
+
+  function renderHub() {
+    ["entretenimento", "alimentacao"].forEach((blockKey) => {
+      const total = subcatKeys(blockKey).length;
+      const done = countAnswered(blockKey);
+      const complete = done === total;
+      blocosCompletos[blockKey] = complete;
+      document.getElementById(`hub-progress-${blockKey}`).textContent = `${done} de ${total} respondidas`;
+      document.getElementById(`hub-${blockKey}`).dataset.done = complete ? "true" : "false";
+    });
+    const nudge = document.getElementById("hub-nudge");
+    const missing = [];
+    if (!blocosCompletos.entretenimento) missing.push("Entretenimento");
+    if (!blocosCompletos.alimentacao) missing.push("Alimentação");
+    if (missing.length && (countAnswered("entretenimento") > 0 || countAnswered("alimentacao") > 0)) {
+      nudge.style.display = "block";
+      nudge.textContent = `💡 Você ainda não respondeu: ${missing.join(" e ")}. Que tal completar também?`;
+    } else {
+      nudge.style.display = "none";
+    }
+  }
+
+  document.getElementById("hub-entretenimento").addEventListener("click", () => enterBlock("entretenimento"));
+  document.getElementById("hub-alimentacao").addEventListener("click", () => enterBlock("alimentacao"));
+
+  function enterBlock(blockKey) {
+    currentBlock = blockKey;
+    currentSubcatIdx = 0;
+    renderSubcat();
+    showScreen("screen-block");
+  }
+
+  document.getElementById("btn-block-back").addEventListener("click", () => {
+    saveOutroField();
+    renderHub();
+    showScreen("screen-hub");
+  });
+
+  function renderSubcat() {
+    const keys = subcatKeys(currentBlock);
+    const scKey = keys[currentSubcatIdx];
+    const def = options[currentBlock][scKey];
+    if (!selections[currentBlock][scKey]) selections[currentBlock][scKey] = {};
+
+    document.getElementById("subcat-title").innerHTML = `${def.icon} ${esc(def.label)}`;
+
+    const grid = document.getElementById("subcat-options");
+    const itens = Object.entries(def.itens || {});
+    grid.innerHTML = itens.map(([id, label]) => {
+      const on = !!selections[currentBlock][scKey][id];
+      return `<button type="button" class="opt-btn" data-on="${on}" data-id="${id}">${esc(label)}</button>`;
+    }).join("");
+    grid.querySelectorAll(".opt-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.id;
+        const cur = selections[currentBlock][scKey];
+        if (cur[id]) delete cur[id]; else cur[id] = true;
+        btn.dataset.on = cur[id] ? "true" : "false";
+        respostaRef.child(currentBlock).child(scKey).set(Object.keys(cur));
+      });
+    });
+
+    const isLast = currentSubcatIdx === keys.length - 1;
+    const outroField = document.getElementById("outro-field");
+    const outroInput = document.getElementById("outro-input");
+    if (isLast) {
+      outroField.style.display = "block";
+      outroInput.value = outros[currentBlock] || "";
+    } else {
+      outroField.style.display = "none";
+    }
+
+    document.getElementById("btn-subcat-prev").disabled = currentSubcatIdx === 0;
+    document.getElementById("btn-subcat-prev").style.visibility = currentSubcatIdx === 0 ? "hidden" : "visible";
+    document.getElementById("btn-subcat-next").textContent = isLast ? "Concluir bloco ✓" : "Próxima →";
+
+    // dots
+    const dotsEl = document.getElementById("block-dots");
+    dotsEl.innerHTML = keys.map((k, i) => {
+      const filled = selections[currentBlock][k] && Object.keys(selections[currentBlock][k]).length > 0;
+      return `<div class="dot" data-active="${i === currentSubcatIdx}" data-filled="${!!filled}"></div>`;
+    }).join("");
+  }
+
+  function saveOutroField() {
+    if (!currentBlock) return;
+    const keys = subcatKeys(currentBlock);
+    const isLast = currentSubcatIdx === keys.length - 1;
+    if (isLast) {
+      const val = document.getElementById("outro-input").value.trim();
+      outros[currentBlock] = val;
+      respostaRef.child(currentBlock).child("outro").set(val);
+    }
+  }
+
+  document.getElementById("btn-subcat-prev").addEventListener("click", () => {
+    saveOutroField();
+    if (currentSubcatIdx > 0) { currentSubcatIdx--; renderSubcat(); }
+  });
+
+  document.getElementById("btn-subcat-next").addEventListener("click", () => {
+    saveOutroField();
+    const keys = subcatKeys(currentBlock);
+    if (currentSubcatIdx < keys.length - 1) {
+      currentSubcatIdx++;
+      renderSubcat();
+    } else {
+      renderHub();
+      showScreen("screen-hub");
+    }
+  });
+
+  document.getElementById("btn-submit").addEventListener("click", () => {
+    respostaRef.child("finalizado").set(true);
+    respostaRef.child("tsFinalizado").set(firebase.database.ServerValue.TIMESTAMP);
+    document.getElementById("btn-thanks-again").style.display = isKiosk ? "none" : "inline-block";
+    showScreen("screen-thanks");
+    if (isKiosk) {
+      setTimeout(() => { location.href = location.pathname + location.search; }, 7000);
+    }
+  });
+
+  document.getElementById("btn-thanks-again").addEventListener("click", () => {
+    startResponse();
+  });
+
+  // ---------- PIN / admin ----------
+  document.getElementById("open-admin-link").addEventListener("click", () => {
+    document.getElementById("pin-input").value = "";
+    document.getElementById("pin-error").textContent = "";
+    document.getElementById("pin-overlay").style.display = "flex";
+    document.getElementById("pin-input").focus();
+  });
+  document.getElementById("pin-cancel").addEventListener("click", () => {
+    document.getElementById("pin-overlay").style.display = "none";
+  });
+  document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
+  document.getElementById("pin-submit").addEventListener("click", checkPin);
+
+  function checkPin() {
+    const val = document.getElementById("pin-input").value;
+    if (val !== ADMIN_PIN) {
+      document.getElementById("pin-error").textContent = "PIN incorreto.";
+      return;
+    }
+    document.getElementById("pin-overlay").style.display = "none";
+    openAdmin();
+  }
+
+  function slugify(text) {
+    return "it_" + text.toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "_" + Math.random().toString(36).slice(2, 6);
+  }
+
+  function openAdmin() {
+    showScreen("screen-intro"); // esconde o wizard atras
+    document.querySelector(".sheet").style.display = "none";
+    document.getElementById("admin-wrap").style.display = "block";
+    renderAdmin();
+  }
+  document.getElementById("btn-close-admin").addEventListener("click", () => {
+    document.getElementById("admin-wrap").style.display = "none";
+    document.querySelector(".sheet").style.display = "block";
+    showScreen("screen-intro");
+  });
+
+  function tallyRanking() {
+    const counts = {}; // counts[blockKey][subcatKey][itemId] = n
+    ["entretenimento", "alimentacao"].forEach((bk) => {
+      counts[bk] = {};
+      subcatKeys(bk).forEach((sc) => { counts[bk][sc] = {}; });
+    });
+    const outroCounts = { entretenimento: [], alimentacao: [] };
+    const respostas = allResponses || {};
+    let totalRespostas = 0;
+    Object.values(respostas).forEach((r) => {
+      totalRespostas++;
+      ["entretenimento", "alimentacao"].forEach((bk) => {
+        if (!r[bk]) return;
+        subcatKeys(bk).forEach((sc) => {
+          const arr = r[bk][sc];
+          if (Array.isArray(arr)) {
+            arr.forEach((id) => { counts[bk][sc][id] = (counts[bk][sc][id] || 0) + 1; });
+          }
+        });
+        if (r[bk].outro) outroCounts[bk].push(r[bk].outro);
+      });
+    });
+    return { counts, outroCounts, totalRespostas };
+  }
+
+  function renderAdmin() {
+    const { counts, outroCounts, totalRespostas } = tallyRanking();
+    let html = `<p style="color:var(--ink-soft);font-size:0.85rem;">${totalRespostas} resposta(s) registrada(s) (inclui parciais).</p>`;
+
+    ["entretenimento", "alimentacao"].forEach((bk) => {
+      html += `<div class="admin-block"><h3>${bk === "entretenimento" ? "🎭 Entretenimento" : "🍝 Alimentação"}</h3>`;
+      subcatKeys(bk).forEach((sc) => {
+        const def = options[bk][sc];
+        const itens = Object.entries(def.itens || {});
+        const rankedItens = itens
+          .map(([id, label]) => ({ id, label, n: (counts[bk][sc] && counts[bk][sc][id]) || 0 }))
+          .sort((a, b) => b.n - a.n);
+
+        html += `<div class="admin-subcat" data-block="${bk}" data-sub="${sc}">
+          <div class="subcat-title">${def.icon} ${esc(def.label)}</div>
+          <div class="admin-item-list">
+            ${itens.map(([id, label]) => `<span class="admin-item">${esc(label)}<button data-remove-item data-block="${bk}" data-sub="${sc}" data-item="${id}">✕</button></span>`).join("")}
+          </div>
+          <div class="admin-add-row">
+            <input type="text" placeholder="Adicionar opção..." data-new-item data-block="${bk}" data-sub="${sc}">
+            <button data-add-item data-block="${bk}" data-sub="${sc}">+ Adicionar</button>
+          </div>
+          <ul class="rank-list">
+            ${rankedItens.map((it) => `<li><span>${esc(it.label)}</span><span class="count">${it.n}</span></li>`).join("")}
+          </ul>
+        </div>`;
+      });
+      if (outroCounts[bk].length) {
+        html += `<div class="admin-subcat"><div class="subcat-title">✍️ "Outro" que as pessoas escreveram</div>
+          <ul class="rank-list">${outroCounts[bk].map((t) => `<li><span>${esc(t)}</span></li>`).join("")}</ul></div>`;
+      }
+      html += `</div>`;
+    });
+
+    document.getElementById("admin-content").innerHTML = html;
+
+    document.querySelectorAll("[data-remove-item]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const { block, sub, item } = btn.dataset;
+        rootRef.child("opcoes").child(block).child(sub).child("itens").child(item).remove();
+      });
+    });
+    document.querySelectorAll("[data-add-item]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const { block, sub } = btn.dataset;
+        const input = document.querySelector(`[data-new-item][data-block="${block}"][data-sub="${sub}"]`);
+        const label = input.value.trim();
+        if (!label) return;
+        const newId = "it_" + Date.now().toString(36);
+        rootRef.child("opcoes").child(block).child(sub).child("itens").child(newId).set(label);
+        input.value = "";
+      });
+    });
+  }
+
+  // ---------- carregar opcoes + respostas ----------
+  rootRef.child("opcoes").on("value", (snap) => {
+    const data = snap.val();
+    if (!data && !seeded) {
+      seeded = true;
+      rootRef.child("opcoes").set(SEED_OPTIONS);
+      return;
+    }
+    options = data || SEED_OPTIONS;
+    if (document.getElementById("admin-wrap").style.display === "block") renderAdmin();
+  });
+
+  rootRef.child("respostas").on("value", (snap) => {
+    allResponses = snap.val() || {};
+    if (document.getElementById("admin-wrap").style.display === "block") renderAdmin();
+  });
+</script>
+</body>
+</html>
