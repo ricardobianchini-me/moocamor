@@ -199,6 +199,86 @@
     color: var(--ink-soft);
   }
 
+  .funcoes-card {
+    margin-top: 12px;
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .funcoes-card .funcoes-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    flex-wrap: wrap; margin-bottom: 6px;
+  }
+  .funcoes-card h3 {
+    margin: 0;
+    font-family: "Baloo 2", sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  .funcoes-card .funcoes-note {
+    font-size: 0.78rem; color: var(--ink-soft); margin: 0 0 12px;
+  }
+  .btn-lock {
+    font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 0.78rem;
+    background: var(--paper); border: 1px solid var(--paper-line); color: var(--ink-soft);
+    border-radius: 999px; padding: 6px 12px; cursor: pointer;
+  }
+  .btn-lock[data-unlocked="true"] {
+    background: var(--basil-soft); border-color: var(--basil); color: var(--basil);
+  }
+  .func-table-wrap { overflow-x: auto; }
+  .func-table { border-collapse: collapse; width: 100%; min-width: 640px; }
+  .func-table th, .func-table td {
+    border: 1px solid var(--paper-line);
+    padding: 8px 10px;
+    vertical-align: top;
+    font-size: 0.82rem;
+  }
+  .func-table thead th {
+    font-family: "Baloo 2", sans-serif; font-size: 0.78rem; text-align: center;
+    background: var(--paper); border-bottom: 2px solid var(--paper-line);
+  }
+  .func-table tbody th {
+    font-family: "Baloo 2", sans-serif; font-weight: 600; font-size: 0.82rem;
+    text-align: left; white-space: nowrap; background: var(--paper);
+  }
+  .func-chips { display: flex; flex-wrap: wrap; gap: 5px; min-height: 22px; }
+  .func-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--basil-soft); color: var(--basil);
+    border-radius: 999px; padding: 3px 4px 3px 10px;
+    font-size: 0.76rem; font-weight: 600; white-space: nowrap;
+  }
+  .func-chip button {
+    border: none; background: none; color: var(--sauce); cursor: pointer;
+    font-weight: 700; font-size: 0.8rem; line-height: 1; padding: 2px;
+  }
+  .func-add-row { margin-top: 6px; display: flex; gap: 4px; }
+  .func-add-row select {
+    flex: 1; font-size: 0.76rem; padding: 4px; border-radius: 6px;
+    border: 1px solid var(--paper-line); background: var(--card); color: var(--ink);
+  }
+
+  .pin-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  }
+  .pin-box {
+    background: var(--card); border-radius: 14px; padding: 26px 22px; max-width: 320px; width: 100%;
+    text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+  .pin-box h2 { font-family: "Baloo 2", sans-serif; font-size: 1.1rem; margin: 0 0 14px; }
+  .pin-box input {
+    width: 100%; text-align: center; font-size: 1.3rem; letter-spacing: 0.3em;
+    padding: 12px; border-radius: 10px; border: 1px solid var(--paper-line); margin-bottom: 10px;
+  }
+  .pin-error { color: var(--sauce); font-size: 0.82rem; min-height: 1.2em; margin-bottom: 6px; }
+  .pin-box .row { display: flex; gap: 8px; }
+  .pin-box button { flex: 1; font-family: "Baloo 2", sans-serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
+  .pin-box .cancel { background: var(--paper); border: 1px solid var(--paper-line); }
+  .pin-box .submit { background: var(--basil); color: #fff; }
+
   .board {
     margin-top: 22px;
     background: var(--card);
@@ -536,8 +616,63 @@
     v12: { name: "Maria", phone: "", order: 12 },
   };
 
-  let state = { volunteers: {}, availability: {} };
+  const ADMIN_PIN = "1313";
+  const FUNCOES_SEED = {
+    atendimento: { label: "Atendimento no balcão", icon: "🧾", ordem: 1 },
+    pesando: { label: "Pesando frango e polenta", icon: "🍗", ordem: 2 },
+    fritando: { label: "Fritando frango e polenta", icon: "🔥", ordem: 3 },
+    molho: { label: "Preparando o molho", icon: "🥣", ordem: 4 },
+    limpeza: { label: "Limpeza e organização", icon: "🧹", ordem: 5 },
+    servindo: { label: "Servindo macarrão", icon: "🍝", ordem: 6 },
+  };
+
+  let state = { volunteers: {}, availability: {}, funcoes: {}, atribuicoes: {} };
   let seeded = false;
+  let funcoesSeeded = false;
+  let funcEditUnlocked = false;
+
+  function funcaoList() {
+    return Object.entries(state.funcoes || {})
+      .map(([id, f]) => ({ id, ...f }))
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+  }
+
+  function volunteerName(id) {
+    const v = state.volunteers && state.volunteers[id];
+    return v ? v.name : null;
+  }
+
+  function renderFuncoesTable() {
+    const funcoes = funcaoList();
+    const vols = volunteerList();
+    const headCells = SHIFTS.map((s) => `<th><span class="day">${s.day}</span>${s.time}</th>`).join("");
+
+    const rows = funcoes.map((f) => {
+      const cells = SHIFTS.map((s) => {
+        const assigned = (state.atribuicoes[f.id] && state.atribuicoes[f.id][s.id]) || {};
+        const assignedIds = Object.keys(assigned).filter((id) => assigned[id]);
+        const chips = assignedIds.map((id) => {
+          const name = volunteerName(id);
+          if (!name) return "";
+          return `<span class="func-chip">${esc(name)}${funcEditUnlocked ? `<button type="button" data-func-remove data-func="${f.id}" data-shift="${s.id}" data-vol="${id}" aria-label="Remover ${esc(name)}">✕</button>` : ""}</span>`;
+        }).join("");
+        const addRow = funcEditUnlocked ? `
+          <div class="func-add-row">
+            <select data-func-add data-func="${f.id}" data-shift="${s.id}">
+              <option value="">+ adicionar…</option>
+              ${vols.filter((v) => !assignedIds.includes(v.id)).map((v) => `<option value="${v.id}">${esc(v.name)}</option>`).join("")}
+            </select>
+          </div>` : "";
+        return `<td><div class="func-chips">${chips}</div>${addRow}</td>`;
+      }).join("");
+      return `<tr><th>${f.icon || ""} ${esc(f.label)}</th>${cells}</tr>`;
+    }).join("");
+
+    return `<table class="func-table">
+      <thead><tr><th>Função</th>${headCells}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  }
 
   function formatPhone(raw) {
     const digits = String(raw).replace(/\D/g, "").slice(0, 11);
@@ -616,6 +751,17 @@
         <p class="roles-total">Somando tudo, dá os 17 voluntários por turno da meta acima.</p>
       </div>
 
+      <div class="funcoes-card">
+        <div class="funcoes-head">
+          <h3>Quem faz o quê em cada turno</h3>
+          <button class="btn-lock" id="btn-func-lock" data-unlocked="${funcEditUnlocked}">${funcEditUnlocked ? "🔓 Edição liberada" : "🔒 Só admin edita"}</button>
+        </div>
+        <p class="funcoes-note">${funcEditUnlocked ? "Edição liberada neste aparelho — toque em + Adicionar ou no ✕ dos nomes." : "Consulta liberada pra todo mundo. Só quem tem o PIN pode mudar quem faz o quê."}</p>
+        <div class="func-table-wrap">
+          ${renderFuncoesTable()}
+        </div>
+      </div>
+
       <div class="board">
         <table>
           <thead>
@@ -647,6 +793,18 @@
         <span class="status-pill" id="save-status">conectado</span>
         <span>19–20 de setembro · Barraca do Macarrão</span>
       </footer>
+
+      <div class="pin-overlay" id="pin-overlay" style="display:none;">
+        <div class="pin-box">
+          <h2>Digite o PIN da organização</h2>
+          <input type="password" inputmode="numeric" id="pin-input" placeholder="PIN" maxlength="8" />
+          <div class="pin-error" id="pin-error"></div>
+          <div class="row">
+            <button class="cancel" id="pin-cancel">Cancelar</button>
+            <button class="submit" id="pin-submit">Entrar</button>
+          </div>
+        </div>
+      </div>
     `;
     attach();
   }
@@ -711,6 +869,50 @@
       nameInput.value = "";
       newphone.value = "";
     });
+
+    document.getElementById("btn-func-lock").addEventListener("click", () => {
+      if (funcEditUnlocked) {
+        funcEditUnlocked = false;
+        render();
+        return;
+      }
+      const overlay = document.getElementById("pin-overlay");
+      document.getElementById("pin-input").value = "";
+      document.getElementById("pin-error").textContent = "";
+      overlay.style.display = "flex";
+      document.getElementById("pin-input").focus();
+    });
+    document.getElementById("pin-cancel").addEventListener("click", () => {
+      document.getElementById("pin-overlay").style.display = "none";
+    });
+    document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
+    document.getElementById("pin-submit").addEventListener("click", checkPin);
+
+    document.querySelectorAll("[data-func-remove]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const { func, shift, vol } = btn.dataset;
+        rootRef.child("atribuicoes").child(func).child(shift).child(vol).remove();
+      });
+    });
+    document.querySelectorAll("[data-func-add]").forEach((sel) => {
+      sel.addEventListener("change", () => {
+        const { func, shift } = sel.dataset;
+        const vol = sel.value;
+        if (!vol) return;
+        rootRef.child("atribuicoes").child(func).child(shift).child(vol).set(true);
+      });
+    });
+  }
+
+  function checkPin() {
+    const val = document.getElementById("pin-input").value;
+    if (val !== ADMIN_PIN) {
+      document.getElementById("pin-error").textContent = "PIN incorreto.";
+      return;
+    }
+    document.getElementById("pin-overlay").style.display = "none";
+    funcEditUnlocked = true;
+    render();
   }
 
   rootRef.on("value", (snap) => {
@@ -720,7 +922,16 @@
       rootRef.set({ volunteers: SEED_VOLUNTEERS, availability: {} });
       return;
     }
-    state = { volunteers: (data && data.volunteers) || {}, availability: (data && data.availability) || {} };
+    state = {
+      volunteers: (data && data.volunteers) || {},
+      availability: (data && data.availability) || {},
+      funcoes: (data && data.funcoes) || {},
+      atribuicoes: (data && data.atribuicoes) || {},
+    };
+    if (data && !data.funcoes && !funcoesSeeded) {
+      funcoesSeeded = true;
+      rootRef.child("funcoes").set(FUNCOES_SEED);
+    }
     render();
     setStatus("conectado", "ok");
   }, (err) => {
