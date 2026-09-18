@@ -498,6 +498,7 @@
           ${unlocked ? `
           <div class="book-toolbar">
             <button class="toolbtn" data-toggle-liberado="${livro.id}" data-cur="${livro.liberado ? "1" : "0"}">${livro.liberado ? "🔒 Bloquear inscrições" : "📖 Liberar para os alunos"}</button>
+            <button class="toolbtn" data-clear-nomes="${livro.id}">🧹 Limpar nomes (reutilizar p/ nova turma)</button>
             <button class="toolbtn danger" data-rm-livro="${livro.id}">🗑 Remover livro</button>
           </div>` : ""}
           <div class="cap-table-wrap">
@@ -804,6 +805,22 @@
       btn.addEventListener("click", () => {
         if (!confirm("Remover este livro e todos os grupos/capítulos dele?")) return;
         rootRef.child("livros").child(btn.dataset.rmLivro).remove();
+      });
+    });
+
+    document.querySelectorAll("[data-clear-nomes]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const livroId = btn.dataset.clearNomes;
+        const livro = state.livros[livroId];
+        if (!livro) return;
+        if (!confirm(`Apagar todos os nomes já inscritos em "${livro.titulo}"? Os grupos, capítulos e datas continuam — só os nomes somem. Use isso pra reaproveitar a mesma estrutura com uma turma nova.`)) return;
+        const updates = {};
+        grupoList(livro).forEach((g) => {
+          capituloList(g).forEach((c) => {
+            updates[`livros/${livroId}/grupos/${g.id}/capitulos/${c.id}/apresentadores`] = null;
+          });
+        });
+        rootRef.update(updates);
       });
     });
 
