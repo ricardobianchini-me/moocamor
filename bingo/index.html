@@ -301,6 +301,129 @@
     .bingo-text { animation: none; }
   }
 
+  /* regras */
+  .btn-rules {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 40;
+    background: var(--panel);
+    color: var(--text-soft);
+    border: 1px solid var(--panel-line);
+    font-size: 0.86rem;
+    padding: 10px 16px;
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-rules:hover { color: var(--text); border-color: var(--gold); }
+
+  .rules-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 6, 26, 0.82);
+    z-index: 900;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px 16px 40px;
+    overflow-y: auto;
+  }
+  .rules-overlay.open { display: flex; }
+
+  .rules-panel {
+    width: 100%;
+    max-width: 640px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 20px;
+    padding: 28px 26px 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    position: relative;
+  }
+
+  .rules-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: transparent;
+    color: var(--text-soft);
+    border: none;
+    font-size: 1.3rem;
+    line-height: 1;
+    padding: 6px;
+    cursor: pointer;
+  }
+  .rules-close:hover { color: var(--text); }
+
+  .rules-title {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 4vw, 1.7rem);
+    color: var(--gold);
+    text-align: center;
+    margin: 0 0 4px;
+    text-wrap: balance;
+  }
+  .rules-subtitle {
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 0.86rem;
+    margin: 0 0 22px;
+  }
+
+  .rules-section { margin-bottom: 20px; }
+  .rules-section:last-of-type { margin-bottom: 0; }
+  .rules-section h3 {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--text);
+    margin: 0 0 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--panel-line);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rules-section p, .rules-section li { font-size: 0.9rem; line-height: 1.55; color: var(--text-soft); }
+  .rules-section ol, .rules-section ul { margin: 0; padding-left: 22px; }
+  .rules-section li + li { margin-top: 4px; }
+  .rules-section li b, .rules-section p b { color: var(--text); }
+
+  .rules-check { list-style: none; padding-left: 0; }
+  .rules-check li { display: flex; align-items: baseline; gap: 8px; }
+  .rules-check li::before { content: "✓"; color: var(--ok); font-weight: 700; flex-shrink: 0; }
+
+  .rules-highlight {
+    background: rgba(255, 200, 74, 0.1);
+    border: 1px solid rgba(255, 200, 74, 0.3);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+  .rules-highlight + .rules-highlight { margin-top: 8px; }
+
+  .rules-schedule { width: 100%; border-collapse: collapse; }
+  .rules-schedule td { padding: 7px 0; font-size: 0.88rem; border-bottom: 1px dashed var(--panel-line); }
+  .rules-schedule tr:last-child td { border-bottom: none; }
+  .rules-schedule td:first-child { color: var(--text); font-family: "Archivo", sans-serif; font-weight: 600; white-space: nowrap; }
+  .rules-schedule td:last-child { color: var(--gold); text-align: right; white-space: nowrap; }
+
+  .rules-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--panel-line);
+    font-family: "Fredoka", sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
   /* board */
   .board {
     width: 100%;
@@ -441,6 +564,69 @@
   <canvas id="fireworks-canvas"></canvas>
   <div class="bingo-text" id="bingo-text">BINGO!</div>
   <button class="btn-new-round" id="new-round-btn">🔄 Nova partida</button>
+</div>
+
+<button class="btn-rules" id="rules-btn" type="button">📋 Regras do jogo</button>
+
+<div class="rules-overlay" id="rules-overlay">
+  <div class="rules-panel">
+    <button class="rules-close" id="rules-close" type="button" aria-label="Fechar regras">✕</button>
+    <h2 class="rules-title">🎉 Bingo — 75 números</h2>
+    <p class="rules-subtitle">Fraternidade do Amor · MoocAmor</p>
+
+    <div class="rules-section">
+      <h3>🎰 Como funciona</h3>
+      <p>Cartela: 5 colunas (B-I-N-G-O) × 5 linhas<br>
+      Números: 1 a 75, distribuídos por coluna<br>
+      Espaço livre: o centro já vem marcado</p>
+    </div>
+
+    <div class="rules-section">
+      <h3>📢 Dinâmica do jogo</h3>
+      <ol>
+        <li>Apresentador sorteia um número (ex: "B-7")</li>
+        <li>Você marca na sua cartela</li>
+        <li>Primeira pessoa a completar o padrão grita "BINGO!"</li>
+        <li>Cartela é validada</li>
+        <li>Prêmio é concedido</li>
+      </ol>
+    </div>
+
+    <div class="rules-section">
+      <h3>✅ Acertos válidos</h3>
+      <ul class="rules-check">
+        <li>Linha horizontal</li>
+        <li>Linha vertical</li>
+        <li>Linha diagonal</li>
+      </ul>
+    </div>
+
+    <div class="rules-section">
+      <h3>🏆 Em caso de empate</h3>
+      <p>Se 2 ou mais pessoas acertarem ao mesmo tempo:</p>
+      <div class="rules-highlight">Quem tirou o <b>número maior</b> sorteado naquela hora ganha o prêmio principal</div>
+      <div class="rules-highlight">Os demais ganham um <b>mimo de consolação</b></div>
+    </div>
+
+    <div class="rules-section">
+      <h3>📋 Após a vitória</h3>
+      <ul>
+        <li>Jogador <b>entrega a cartela</b></li>
+        <li><b>Não</b> concorre aos prêmios seguintes na mesma rodada</li>
+      </ul>
+    </div>
+
+    <div class="rules-section">
+      <h3>⏰ Horários das rodadas</h3>
+      <table class="rules-schedule">
+        <tr><td>15h às 16h30</td><td>1ª e 2ª rodada</td></tr>
+        <tr><td>17h30 às 19h</td><td>3ª e 4ª rodada</td></tr>
+        <tr><td>Após as 20h</td><td>5ª rodada</td></tr>
+      </table>
+    </div>
+
+    <div class="rules-footer">Boa sorte! 🍀</div>
+  </div>
 </div>
 
 <script>
@@ -734,6 +920,21 @@
     state = { called: [] };
     saveState();
     renderAll(false);
+  });
+
+  function openRules() {
+    document.getElementById("rules-overlay").classList.add("open");
+  }
+  function closeRules() {
+    document.getElementById("rules-overlay").classList.remove("open");
+  }
+  document.getElementById("rules-btn").addEventListener("click", openRules);
+  document.getElementById("rules-close").addEventListener("click", closeRules);
+  document.getElementById("rules-overlay").addEventListener("click", (ev) => {
+    if (ev.target.id === "rules-overlay") closeRules();
+  });
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape") closeRules();
   });
 
   renderAll(false);
