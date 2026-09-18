@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudo de Obras Espíritas — MoocAmor</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%93%96</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f1e3;
+    --paper-line: #e2d7bd;
+    --ink: #24302a;
+    --ink-soft: #5f6d63;
+    --accent: #2f6a5f;
+    --accent-dark: #1f4a41;
+    --accent-soft: #dcebe6;
+    --gold: #b8902f;
+    --gold-soft: #f3e6c4;
+    --card: #ffffff;
+    --shadow: rgba(36, 48, 42, 0.14);
+    --focus: #1c6ee0;
+    --danger: #b0402f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #161e1a;
+      --paper-line: #2c382f;
+      --ink: #ece7d8;
+      --ink-soft: #a3ac9f;
+      --accent: #6fb3a2;
+      --accent-dark: #8fcabb;
+      --accent-soft: #22332c;
+      --gold: #d8b559;
+      --gold-soft: #362c17;
+      --card: #1e2721;
+      --shadow: rgba(0, 0, 0, 0.45);
+      --focus: #6cb2ff;
+      --danger: #e2705a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #161e1a;
+    --paper-line: #2c382f;
+    --ink: #ece7d8;
+    --ink-soft: #a3ac9f;
+    --accent: #6fb3a2;
+    --accent-dark: #8fcabb;
+    --accent-soft: #22332c;
+    --gold: #d8b559;
+    --gold-soft: #362c17;
+    --card: #1e2721;
+    --shadow: rgba(0, 0, 0, 0.45);
+    --focus: #6cb2ff;
+    --danger: #e2705a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
+    padding: 28px 16px 64px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sheet { width: 100%; max-width: 1180px; }
+
+  header.ticket {
+    background: var(--accent-dark);
+    color: #f6f1e3;
+    border-radius: 14px;
+    padding: 22px 24px 20px;
+    box-shadow: 0 10px 24px var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header.ticket::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 10px;
+    background: repeating-linear-gradient(-45deg, transparent 0 8px, rgba(255,255,255,0.14) 8px 16px);
+  }
+
+  .ticket-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  .ticket .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin: 0 0 6px;
+  }
+
+  .ticket h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 4.6vw, 2.3rem);
+    line-height: 1.08;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+
+  .ticket p.sub { margin: 0; font-size: 0.98rem; opacity: 0.92; max-width: 62ch; }
+
+  .btn-lock {
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 0.8rem;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.35); color: #f6f1e3;
+    border-radius: 999px; padding: 7px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-lock[data-unlocked="true"] { background: var(--gold); border-color: var(--gold); color: #2b2107; }
+
+  .semestre-tabs {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 22px;
+  }
+  .sem-tab {
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 0.86rem;
+    background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
+    border-radius: 999px; padding: 7px 16px; cursor: pointer;
+  }
+  .sem-tab[data-active="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .turma-row {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 14px;
+  }
+  .turma-chip {
+    font-family: "Karla", sans-serif; font-weight: 700; font-size: 0.84rem;
+    background: var(--card); border: 1px solid var(--paper-line); color: var(--ink);
+    border-radius: 999px; padding: 6px 14px 6px 14px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .turma-chip[data-active="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-dark); }
+  .turma-chip .rm {
+    border: none; background: none; color: var(--ink-soft); cursor: pointer; font-size: 0.9rem; line-height: 1; padding: 0 2px;
+  }
+  .turma-chip .rm:hover { color: var(--danger); }
+
+  .add-inline {
+    display: flex; gap: 6px; align-items: center;
+  }
+  .add-inline input {
+    font-family: inherit; font-size: 0.84rem; padding: 6px 10px; border-radius: 999px;
+    border: 1px dashed var(--paper-line); background: var(--card); color: var(--ink); min-width: 140px;
+  }
+  .add-inline button {
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 0.8rem;
+    background: var(--accent); color: #fff; border: none; border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  }
+  .add-inline button:hover { background: var(--accent-dark); }
+
+  .empty-note {
+    margin-top: 16px; font-size: 0.9rem; color: var(--ink-soft);
+    background: var(--card); border: 1px dashed var(--paper-line); border-radius: 10px; padding: 14px 16px;
+  }
+
+  .book-card {
+    margin-top: 16px; background: var(--card); border-radius: 14px; box-shadow: 0 6px 18px var(--shadow);
+    overflow: hidden;
+  }
+  .book-head {
+    padding: 16px 18px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+    cursor: pointer; flex-wrap: wrap;
+  }
+  .book-title-wrap { min-width: 220px; flex: 1; }
+  .book-head h2 {
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 1.2rem; margin: 0 0 3px; color: var(--ink);
+  }
+  .book-head .autor { font-style: italic; color: var(--ink-soft); font-size: 0.88rem; }
+  .book-badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .badge {
+    font-family: "JetBrains Mono", monospace; font-size: 0.7rem; padding: 3px 10px; border-radius: 999px;
+    border: 1px solid var(--paper-line); color: var(--ink-soft);
+  }
+  .badge[data-tone="on"] { background: var(--accent-soft); color: var(--accent-dark); border-color: var(--accent); }
+  .badge[data-tone="off"] { background: var(--gold-soft); color: var(--gold); border-color: var(--gold); }
+  .chevron { font-size: 0.9rem; color: var(--ink-soft); transition: transform 0.15s ease; }
+  .book-card[data-open="true"] .chevron { transform: rotate(90deg); }
+
+  .book-body { display: none; padding: 0 18px 18px; }
+  .book-card[data-open="true"] .book-body { display: block; }
+
+  .book-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .toolbtn {
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 0.78rem;
+    background: var(--paper); border: 1px solid var(--paper-line); color: var(--ink-soft);
+    border-radius: 999px; padding: 6px 12px; cursor: pointer;
+  }
+  .toolbtn:hover { border-color: var(--accent); color: var(--accent-dark); }
+  .toolbtn.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+  .cap-table-wrap { overflow-x: auto; }
+  table.cap-table { border-collapse: collapse; width: 100%; min-width: 560px; }
+  .cap-table th, .cap-table td { border-bottom: 1px solid var(--paper-line); padding: 8px 10px; font-size: 0.86rem; text-align: left; vertical-align: middle; }
+  .cap-table thead th {
+    font-family: "Fraunces", serif; font-size: 0.78rem; color: var(--ink-soft); border-bottom: 2px solid var(--paper-line);
+  }
+  tr.intro-row td { background: var(--paper); font-style: italic; color: var(--ink-soft); }
+  tr.grupo-row td {
+    font-family: "Fraunces", serif; font-weight: 600; padding-top: 12px; padding-bottom: 8px;
+  }
+  tr.grupo-row[data-band="a"] td { background: var(--accent-soft); }
+  tr.grupo-row[data-band="b"] td { background: var(--gold-soft); }
+  .grupo-name-cell { display: flex; align-items: center; gap: 8px; }
+  .grupo-date { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; font-weight: 400; color: var(--ink-soft); }
+  .cap-num { font-family: "JetBrains Mono", monospace; color: var(--ink-soft); width: 34px; }
+  input.apresentador {
+    width: 100%; min-width: 160px; padding: 7px 9px; border-radius: 7px; border: 1px solid transparent;
+    background: transparent; color: var(--ink); font-family: inherit; font-size: 0.86rem;
+  }
+  input.apresentador:hover { border-color: var(--paper-line); }
+  input.apresentador:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; background: var(--paper); border-color: transparent; }
+  input.apresentador:disabled { color: var(--ink-soft); cursor: not-allowed; }
+  input.cap-titulo-edit, input.grupo-nome-edit, input.grupo-data-edit, input.livro-titulo-edit, input.livro-autor-edit {
+    font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit; background: var(--card);
+    border: 1px solid var(--paper-line); border-radius: 6px; padding: 4px 7px; width: 100%;
+  }
+  .rm-cap { border: none; background: none; color: var(--ink-soft); cursor: pointer; font-size: 0.85rem; padding: 2px 4px; }
+  .rm-cap:hover { color: var(--danger); }
+
+  .new-cap-row td { padding-top: 6px; }
+  .new-cap-row .add-inline input { min-width: 200px; }
+
+  .locked-note { font-size: 0.78rem; color: var(--gold); margin-top: 2px; }
+
+  .new-book-panel {
+    margin-top: 18px; background: var(--card); border: 1px solid var(--paper-line); border-radius: 14px; padding: 18px;
+  }
+  .new-book-panel h3 { font-family: "Fraunces", serif; margin: 0 0 14px; font-size: 1.05rem; }
+  .field-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .field { flex: 1 1 200px; display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 0.76rem; color: var(--ink-soft); font-family: "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: 0.04em; }
+  .field input, .field select {
+    font-family: inherit; font-size: 0.9rem; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--paper-line);
+    background: var(--paper); color: var(--ink);
+  }
+  .field input:focus-visible, .field select:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+  .draft-groups { display: flex; flex-direction: column; gap: 12px; margin: 10px 0 16px; }
+  .draft-group { border: 1px dashed var(--paper-line); border-radius: 10px; padding: 12px; background: var(--paper); }
+  .draft-group-head { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-end; flex-wrap: wrap; }
+  .draft-group textarea {
+    width: 100%; min-height: 74px; font-family: inherit; font-size: 0.86rem; padding: 8px 10px;
+    border-radius: 8px; border: 1px solid var(--paper-line); background: var(--card); color: var(--ink); resize: vertical;
+  }
+  .draft-group .rm-group { align-self: flex-start; }
+
+  .panel-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .btn-primary {
+    font-family: "Fraunces", serif; font-weight: 600; background: var(--accent); color: #fff; border: none;
+    border-radius: 999px; padding: 10px 20px; cursor: pointer; font-size: 0.9rem;
+  }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-secondary {
+    font-family: "Fraunces", serif; font-weight: 600; background: var(--card); color: var(--ink-soft); border: 1px solid var(--paper-line);
+    border-radius: 999px; padding: 10px 20px; cursor: pointer; font-size: 0.9rem;
+  }
+
+  .pin-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  }
+  .pin-box {
+    background: var(--card); border-radius: 14px; padding: 26px 22px; max-width: 320px; width: 100%;
+    text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+  .pin-box h2 { font-family: "Fraunces", serif; font-size: 1.1rem; margin: 0 0 14px; }
+  .pin-box input {
+    width: 100%; text-align: center; font-size: 1.3rem; letter-spacing: 0.3em;
+    padding: 12px; border-radius: 10px; border: 1px solid var(--paper-line); margin-bottom: 10px;
+  }
+  .pin-error { color: var(--danger); font-size: 0.82rem; min-height: 1.2em; margin-bottom: 6px; }
+  .pin-box .row { display: flex; gap: 8px; }
+  .pin-box button { flex: 1; font-family: "Fraunces", serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
+  .pin-box .cancel { background: var(--paper); border: 1px solid var(--paper-line); }
+  .pin-box .submit { background: var(--accent); color: #fff; }
+
+  footer.legend {
+    margin-top: 22px; font-size: 0.82rem; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .status-pill {
+    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; padding: 3px 9px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--paper-line);
+  }
+  .status-pill[data-tone="err"] { color: var(--danger); border-color: var(--danger); }
+  .status-pill[data-tone="ok"] { color: var(--accent); border-color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <p style="text-align:center;padding:40px 0;color:var(--ink-soft)">Carregando…</p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
+    authDomain: "fraternidadedoamor-ef315.firebaseapp.com",
+    databaseURL: "https://fraternidadedoamor-ef315-default-rtdb.firebaseio.com",
+    projectId: "fraternidadedoamor-ef315",
+    storageBucket: "fraternidadedoamor-ef315.firebasestorage.app",
+    messagingSenderId: "703575848763",
+    appId: "1:703575848763:web:52548e6124b8a0841c691e",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const rootRef = db.ref("livrosEspiritas");
+
+  const ADMIN_PIN = "111";
+  const SEMESTRES = [1, 2, 3, 4, 5, 6];
+
+  let state = { turmas: {}, livros: {} };
+  let unlocked = false;
+  let selectedSemestre = 1;
+  let selectedTurmaId = null;
+  let openBooks = new Set();
+  let showNewTurma = false;
+  let showNewBook = false;
+  let draftGroups = [];
+  let pinIntent = null; // callback to run after successful pin
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "";
+    const [y, m, d] = iso.split("-");
+    if (!y || !m || !d) return iso;
+    return `${d}/${m}/${y}`;
+  }
+
+  function turmaList(semestre) {
+    return Object.entries(state.turmas || {})
+      .map(([id, t]) => ({ id, ...t }))
+      .filter((t) => Number(t.semestre) === Number(semestre))
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0) || (a.nome || "").localeCompare(b.nome || "", "pt-BR"));
+  }
+
+  function livrosByTurma(turmaId) {
+    return Object.entries(state.livros || {})
+      .map(([id, l]) => ({ id, ...l }))
+      .filter((l) => l.turmaId === turmaId)
+      .sort((a, b) => (a.criadoEm ?? 0) - (b.criadoEm ?? 0));
+  }
+
+  function grupoList(livro) {
+    return Object.entries(livro.grupos || {})
+      .map(([id, g]) => ({ id, ...g }))
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+  }
+
+  function capituloList(grupo) {
+    return Object.entries(grupo.capitulos || {})
+      .map(([id, c]) => ({ id, ...c }))
+      .sort((a, b) => (a.numero ?? 0) - (b.numero ?? 0));
+  }
+
+  function renderTurmaChips() {
+    const turmas = turmaList(selectedSemestre);
+    if (selectedTurmaId && !turmas.some((t) => t.id === selectedTurmaId)) selectedTurmaId = null;
+    if (!selectedTurmaId && turmas.length) selectedTurmaId = turmas[0].id;
+
+    const chips = turmas.map((t) => `
+      <button class="turma-chip" data-turma="${t.id}" data-active="${t.id === selectedTurmaId}" type="button">
+        ${esc(t.nome)}
+        ${unlocked ? `<span class="rm" data-rm-turma="${t.id}" title="Remover turma">✕</span>` : ""}
+      </button>
+    `).join("");
+
+    const addForm = unlocked ? `
+      <form class="add-inline" id="form-new-turma">
+        <input type="text" id="new-turma-name" placeholder="Nova turma…" autocomplete="off" required />
+        <button type="submit">+ Turma</button>
+      </form>` : "";
+
+    return `<div class="turma-row">${chips}${addForm}</div>`;
+  }
+
+  function bandForIndex(i) { return i % 2 === 0 ? "a" : "b"; }
+
+  function renderBookRows(livro) {
+    const grupos = grupoList(livro);
+    let rows = "";
+
+    if (livro.introducao) {
+      rows += `<tr class="intro-row"><td></td><td>${esc(livro.introducao)}</td><td>Professores</td>${unlocked ? "<td></td>" : ""}</tr>`;
+    }
+
+    grupos.forEach((g, gi) => {
+      const band = bandForIndex(gi);
+      const caps = capituloList(g);
+      const groupNameCell = unlocked
+        ? `<input class="grupo-nome-edit" data-grupo-nome="${g.id}" value="${esc(g.nome)}" />`
+        : esc(g.nome);
+      const groupDateCell = unlocked
+        ? `<input class="grupo-data-edit" type="date" data-grupo-data="${g.id}" value="${esc(g.data || "")}" />`
+        : (g.data ? `<span class="grupo-date">📅 ${fmtDate(g.data)}</span>` : "");
+
+      rows += `<tr class="grupo-row" data-band="${band}">
+        <td colspan="2"><div class="grupo-name-cell">${groupNameCell}${!unlocked ? groupDateCell : ""}</div></td>
+        <td>${unlocked ? groupDateCell : ""}</td>
+        ${unlocked ? `<td><button class="rm-cap" data-rm-grupo="${g.id}" data-livro="${livro.id}" title="Remover grupo">✕ grupo</button></td>` : ""}
+      </tr>`;
+
+      caps.forEach((c) => {
+        const capTitleCell = unlocked
+          ? `<input class="cap-titulo-edit" data-cap-titulo="${c.id}" data-grupo="${g.id}" value="${esc(c.titulo)}" />`
+          : esc(c.titulo);
+        rows += `<tr>
+          <td class="cap-num">${esc(c.numero)}</td>
+          <td>${capTitleCell}</td>
+          <td><input class="apresentador" data-cap="${c.id}" data-grupo="${g.id}" data-livro="${livro.id}"
+                value="${esc(c.apresentador || "")}" placeholder="${livro.liberado || unlocked ? "seu nome…" : "aguardando liberação"}"
+                ${livro.liberado || unlocked ? "" : "disabled"} /></td>
+          ${unlocked ? `<td><button class="rm-cap" data-rm-cap="${c.id}" data-grupo="${g.id}" data-livro="${livro.id}" title="Remover capítulo">✕</button></td>` : ""}
+        </tr>`;
+      });
+
+      if (unlocked) {
+        rows += `<tr class="new-cap-row">
+          <td></td>
+          <td colspan="3">
+            <form class="add-inline form-new-cap" data-grupo="${g.id}" data-livro="${livro.id}">
+              <input type="text" placeholder="Título do novo capítulo…" required />
+              <button type="submit">+ Capítulo</button>
+            </form>
+          </td>
+        </tr>`;
+      }
+    });
+
+    return rows;
+  }
+
+  function renderBook(livro, index) {
+    const isOpen = openBooks.has(livro.id);
+    const titleCell = unlocked
+      ? `<input class="livro-titulo-edit" data-livro-titulo="${livro.id}" value="${esc(livro.titulo)}" style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;" />`
+      : esc(livro.titulo);
+    const autorCell = unlocked
+      ? `<input class="livro-autor-edit" data-livro-autor="${livro.id}" value="${esc(livro.autor || "")}" style="font-style:italic;font-size:0.86rem;margin-top:4px;" />`
+      : esc(livro.autor || "");
+
+    return `
+      <div class="book-card" data-open="${isOpen}" data-livro-id="${livro.id}">
+        <div class="book-head" data-toggle-book="${livro.id}">
+          <div class="book-title-wrap">
+            <h2>${titleCell}</h2>
+            <div class="autor">${autorCell}</div>
+          </div>
+          <div class="book-badges">
+            <span class="badge" data-tone="${livro.liberado ? "on" : "off"}">${livro.liberado ? "📖 Liberado p/ inscrição" : "🔒 Em preparação"}</span>
+            <span class="chevron">▸</span>
+          </div>
+        </div>
+        <div class="book-body">
+          ${unlocked ? `
+          <div class="book-toolbar">
+            <button class="toolbtn" data-toggle-liberado="${livro.id}" data-cur="${livro.liberado ? "1" : "0"}">${livro.liberado ? "🔒 Bloquear inscrições" : "📖 Liberar para os alunos"}</button>
+            <button class="toolbtn danger" data-rm-livro="${livro.id}">🗑 Remover livro</button>
+          </div>` : ""}
+          <div class="cap-table-wrap">
+            <table class="cap-table">
+              <thead><tr><th style="width:34px;">Cap.</th><th>Grupo / Capítulo</th><th>Apresentador</th>${unlocked ? "<th></th>" : ""}</tr></thead>
+              <tbody>${renderBookRows(livro)}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function renderDraftGroups() {
+    return draftGroups.map((g, i) => `
+      <div class="draft-group" data-draft-index="${i}">
+        <div class="draft-group-head">
+          <div class="field" style="flex:1 1 160px;">
+            <label>Nome do grupo</label>
+            <input type="text" class="draft-nome" value="${esc(g.nome)}" />
+          </div>
+          <div class="field" style="flex:0 1 170px;">
+            <label>Data de apresentação</label>
+            <input type="date" class="draft-data" value="${esc(g.data)}" />
+          </div>
+          <button type="button" class="toolbtn danger rm-group" data-rm-draft="${i}">✕ remover grupo</button>
+        </div>
+        <label style="font-size:0.76rem;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.04em;">Capítulos (um título por linha)</label>
+        <textarea class="draft-caps" placeholder="Ex.:&#10;O Psicógrafo&#10;A Epífise">${esc(g.capsText)}</textarea>
+      </div>
+    `).join("");
+  }
+
+  function renderNewBookPanel() {
+    if (!unlocked) return "";
+    if (!showNewBook) return `<div style="margin-top:16px;"><button class="toolbtn" id="btn-open-new-book">＋ Novo livro</button></div>`;
+    const turmaOptions = turmaList(selectedSemestre).map((t) => `<option value="${t.id}" ${t.id === selectedTurmaId ? "selected" : ""}>${esc(t.nome)}</option>`).join("");
+    return `
+      <div class="new-book-panel">
+        <h3>📚 Novo livro — ${selectedSemestre}º Semestre</h3>
+        <form id="form-new-book">
+          <div class="field-row">
+            <div class="field">
+              <label>Turma</label>
+              <select id="nb-turma">${turmaOptions || '<option value="">Nenhuma turma — crie uma primeiro</option>'}</select>
+            </div>
+            <div class="field">
+              <label>Título do livro</label>
+              <input type="text" id="nb-titulo" required placeholder="Ex.: Missionários da Luz" />
+            </div>
+            <div class="field">
+              <label>Autor</label>
+              <input type="text" id="nb-autor" placeholder="Ex.: Francisco Cândido Xavier" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Introdução (opcional, fica com os Professores)</label>
+              <input type="text" id="nb-intro" placeholder="Ex.: Antes os Tempos Novos" />
+            </div>
+          </div>
+          <div class="draft-groups" id="draft-groups-list">${renderDraftGroups()}</div>
+          <div class="panel-actions">
+            <button type="button" class="toolbtn" id="btn-add-draft-group">＋ Adicionar grupo</button>
+          </div>
+          <div class="panel-actions" style="margin-top:16px;">
+            <button type="submit" class="btn-primary">Salvar livro</button>
+            <button type="button" class="btn-secondary" id="btn-cancel-new-book">Cancelar</button>
+          </div>
+        </form>
+      </div>`;
+  }
+
+  function render() {
+    const turmas = turmaList(selectedSemestre);
+    const books = selectedTurmaId ? livrosByTurma(selectedTurmaId) : [];
+    const turmaAtual = turmas.find((t) => t.id === selectedTurmaId);
+
+    const semTabs = SEMESTRES.map((s) => `<button class="sem-tab" data-sem="${s}" data-active="${s === selectedSemestre}" type="button">${s}º Semestre</button>`).join("");
+
+    let bodyContent;
+    if (!turmas.length) {
+      bodyContent = `<div class="empty-note">Nenhuma turma cadastrada neste semestre ainda.${unlocked ? " Use o campo acima para criar a primeira turma." : ""}</div>`;
+    } else if (!books.length) {
+      bodyContent = `<div class="empty-note">A turma <b>${esc(turmaAtual ? turmaAtual.nome : "")}</b> ainda não tem livros cadastrados.${unlocked ? "" : ""}</div>${renderNewBookPanel()}`;
+    } else {
+      bodyContent = books.map((l, i) => renderBook(l, i)).join("") + renderNewBookPanel();
+    }
+
+    document.getElementById("sheet").innerHTML = `
+      <header class="ticket">
+        <div class="ticket-top">
+          <div>
+            <p class="eyebrow">Fraternidade do Amor · Escolinha</p>
+            <h1>Estudo de Obras Espíritas</h1>
+            <p class="sub">Leitura e apresentação de livros espíritas por turma. Escolha seu grupo e capítulo e coloque seu nome — atualiza na hora pra todo mundo ver.</p>
+          </div>
+          <button class="btn-lock" id="btn-lock" data-unlocked="${unlocked}">${unlocked ? "🔓 Modo professor" : "🔒 Sou professor(a)"}</button>
+        </div>
+        <div class="semestre-tabs">${semTabs}</div>
+      </header>
+
+      ${renderTurmaChips()}
+
+      ${bodyContent}
+
+      <footer class="legend">
+        <span class="status-pill" id="save-status">conectado</span>
+        <span>Estudo de obras espíritas · MoocAmor</span>
+      </footer>
+
+      <div class="pin-overlay" id="pin-overlay" style="display:none;">
+        <div class="pin-box">
+          <h2>Digite o PIN de professor(a)</h2>
+          <input type="password" inputmode="numeric" id="pin-input" placeholder="PIN" maxlength="8" />
+          <div class="pin-error" id="pin-error"></div>
+          <div class="row">
+            <button class="cancel" id="pin-cancel">Cancelar</button>
+            <button class="submit" id="pin-submit">Entrar</button>
+          </div>
+        </div>
+      </div>
+    `;
+    attach();
+  }
+
+  function setStatus(text, tone) {
+    const pill = document.getElementById("save-status");
+    if (!pill) return;
+    pill.textContent = text;
+    if (tone) pill.dataset.tone = tone; else delete pill.dataset.tone;
+  }
+
+  function requirePin(action) {
+    pinIntent = action;
+    const overlay = document.getElementById("pin-overlay");
+    document.getElementById("pin-input").value = "";
+    document.getElementById("pin-error").textContent = "";
+    overlay.style.display = "flex";
+    document.getElementById("pin-input").focus();
+  }
+
+  function checkPin() {
+    const val = document.getElementById("pin-input").value;
+    if (val !== ADMIN_PIN) {
+      document.getElementById("pin-error").textContent = "PIN incorreto.";
+      return;
+    }
+    document.getElementById("pin-overlay").style.display = "none";
+    unlocked = true;
+    const intent = pinIntent;
+    pinIntent = null;
+    render();
+    if (typeof intent === "function") intent();
+  }
+
+  function newEmptyDraftGroup() {
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const nextLetter = letras[draftGroups.length] || `${draftGroups.length + 1}`;
+    return { nome: `Grupo ${nextLetter}`, data: "", capsText: "" };
+  }
+
+  function attach() {
+    document.querySelectorAll(".sem-tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedSemestre = Number(btn.dataset.sem);
+        selectedTurmaId = null;
+        showNewBook = false;
+        render();
+      });
+    });
+
+    document.querySelectorAll(".turma-chip").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        if (ev.target.closest("[data-rm-turma]")) return;
+        selectedTurmaId = btn.dataset.turma;
+        showNewBook = false;
+        render();
+      });
+    });
+
+    document.querySelectorAll("[data-rm-turma]").forEach((el) => {
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = el.dataset.rmTurma;
+        if (!confirm("Remover esta turma? Os livros cadastrados nela também serão removidos.")) return;
+        rootRef.child("turmas").child(id).remove();
+        Object.entries(state.livros || {}).forEach(([lid, l]) => {
+          if (l.turmaId === id) rootRef.child("livros").child(lid).remove();
+        });
+        if (selectedTurmaId === id) selectedTurmaId = null;
+      });
+    });
+
+    const formNewTurma = document.getElementById("form-new-turma");
+    if (formNewTurma) {
+      formNewTurma.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        const input = document.getElementById("new-turma-name");
+        const nome = input.value.trim();
+        if (!nome) return;
+        const maxOrder = turmaList(selectedSemestre).reduce((m, t) => Math.max(m, t.ordem ?? 0), 0);
+        const id = rootRef.child("turmas").push().key;
+        rootRef.child("turmas").child(id).set({ semestre: selectedSemestre, nome, ordem: maxOrder + 1 });
+        selectedTurmaId = id;
+        input.value = "";
+      });
+    }
+
+    document.getElementById("btn-lock").addEventListener("click", () => {
+      if (unlocked) { unlocked = false; render(); return; }
+      requirePin(null);
+    });
+    document.getElementById("pin-cancel").addEventListener("click", () => {
+      document.getElementById("pin-overlay").style.display = "none";
+    });
+    document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
+    document.getElementById("pin-submit").addEventListener("click", checkPin);
+
+    document.querySelectorAll("[data-toggle-book]").forEach((el) => {
+      el.addEventListener("click", () => {
+        const id = el.dataset.toggleBook;
+        if (openBooks.has(id)) openBooks.delete(id); else openBooks.add(id);
+        render();
+      });
+    });
+
+    document.querySelectorAll("input.apresentador").forEach((inp) => {
+      inp.addEventListener("blur", () => {
+        rootRef.child("livros").child(inp.dataset.livro).child("grupos").child(inp.dataset.grupo)
+          .child("capitulos").child(inp.dataset.cap).child("apresentador").set(inp.value.trim());
+      });
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") inp.blur(); });
+    });
+
+    document.querySelectorAll(".livro-titulo-edit").forEach((inp) => {
+      inp.addEventListener("blur", () => {
+        const v = inp.value.trim();
+        if (v) rootRef.child("livros").child(inp.dataset.livroTitulo).child("titulo").set(v);
+      });
+    });
+    document.querySelectorAll(".livro-autor-edit").forEach((inp) => {
+      inp.addEventListener("blur", () => {
+        rootRef.child("livros").child(inp.dataset.livroAutor).child("autor").set(inp.value.trim());
+      });
+    });
+    document.querySelectorAll(".grupo-nome-edit").forEach((inp) => {
+      inp.addEventListener("click", (e) => e.stopPropagation());
+      inp.addEventListener("blur", () => {
+        const bookEl = inp.closest(".book-card");
+        const v = inp.value.trim();
+        if (v) rootRef.child("livros").child(bookEl.dataset.livroId).child("grupos").child(inp.dataset.grupoNome).child("nome").set(v);
+      });
+    });
+    document.querySelectorAll(".grupo-data-edit").forEach((inp) => {
+      inp.addEventListener("click", (e) => e.stopPropagation());
+      inp.addEventListener("change", () => {
+        const bookEl = inp.closest(".book-card");
+        rootRef.child("livros").child(bookEl.dataset.livroId).child("grupos").child(inp.dataset.grupoData).child("data").set(inp.value);
+      });
+    });
+    document.querySelectorAll(".cap-titulo-edit").forEach((inp) => {
+      inp.addEventListener("blur", () => {
+        const bookEl = inp.closest(".book-card");
+        const v = inp.value.trim();
+        if (v) rootRef.child("livros").child(bookEl.dataset.livroId).child("grupos").child(inp.dataset.grupo)
+          .child("capitulos").child(inp.dataset.capTitulo).child("titulo").set(v);
+      });
+    });
+
+    document.querySelectorAll("[data-toggle-liberado]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.toggleLiberado;
+        rootRef.child("livros").child(id).child("liberado").set(btn.dataset.cur !== "1");
+      });
+    });
+
+    document.querySelectorAll("[data-rm-livro]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!confirm("Remover este livro e todos os grupos/capítulos dele?")) return;
+        rootRef.child("livros").child(btn.dataset.rmLivro).remove();
+      });
+    });
+
+    document.querySelectorAll("[data-rm-grupo]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        if (!confirm("Remover este grupo e seus capítulos?")) return;
+        rootRef.child("livros").child(btn.dataset.livro).child("grupos").child(btn.dataset.rmGrupo).remove();
+      });
+    });
+
+    document.querySelectorAll("[data-rm-cap]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        rootRef.child("livros").child(btn.dataset.livro).child("grupos").child(btn.dataset.grupo)
+          .child("capitulos").child(btn.dataset.rmCap).remove();
+      });
+    });
+
+    document.querySelectorAll(".form-new-cap").forEach((form) => {
+      form.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        const input = form.querySelector("input");
+        const titulo = input.value.trim();
+        if (!titulo) return;
+        const livroId = form.dataset.livro, grupoId = form.dataset.grupo;
+        const livro = state.livros[livroId];
+        let maxNum = 0;
+        grupoList(livro).forEach((g) => capituloList(g).forEach((c) => { maxNum = Math.max(maxNum, c.numero || 0); }));
+        const existingCaps = capituloList(livro.grupos[grupoId] || {});
+        const maxOrder = existingCaps.reduce((m, c) => Math.max(m, c.ordem ?? 0), 0);
+        const capId = rootRef.child("livros").child(livroId).child("grupos").child(grupoId).child("capitulos").push().key;
+        rootRef.child("livros").child(livroId).child("grupos").child(grupoId).child("capitulos").child(capId)
+          .set({ numero: maxNum + 1, titulo, apresentador: "", ordem: maxOrder + 1 });
+        input.value = "";
+      });
+    });
+
+    const btnOpenNewBook = document.getElementById("btn-open-new-book");
+    if (btnOpenNewBook) {
+      btnOpenNewBook.addEventListener("click", () => {
+        showNewBook = true;
+        draftGroups = [newEmptyDraftGroup()];
+        render();
+      });
+    }
+    const btnCancelNewBook = document.getElementById("btn-cancel-new-book");
+    if (btnCancelNewBook) {
+      btnCancelNewBook.addEventListener("click", () => {
+        showNewBook = false;
+        draftGroups = [];
+        render();
+      });
+    }
+    const btnAddDraftGroup = document.getElementById("btn-add-draft-group");
+    if (btnAddDraftGroup) {
+      btnAddDraftGroup.addEventListener("click", () => {
+        syncDraftFromDom();
+        draftGroups.push(newEmptyDraftGroup());
+        render();
+      });
+    }
+    document.querySelectorAll("[data-rm-draft]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        syncDraftFromDom();
+        draftGroups.splice(Number(btn.dataset.rmDraft), 1);
+        render();
+      });
+    });
+
+    const formNewBook = document.getElementById("form-new-book");
+    if (formNewBook) {
+      formNewBook.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        syncDraftFromDom();
+        const turmaId = document.getElementById("nb-turma").value;
+        const titulo = document.getElementById("nb-titulo").value.trim();
+        const autor = document.getElementById("nb-autor").value.trim();
+        const introducao = document.getElementById("nb-intro").value.trim();
+        if (!turmaId) { alert("Crie uma turma antes de cadastrar o livro."); return; }
+        if (!titulo) return;
+
+        const grupos = {};
+        let numero = 1;
+        draftGroups.forEach((g, gi) => {
+          const linhas = g.capsText.split("\n").map((s) => s.trim()).filter(Boolean);
+          if (!linhas.length) return;
+          const grupoId = rootRef.child("livros").push().key + "_g" + gi;
+          const capitulos = {};
+          linhas.forEach((tituloCap, ci) => {
+            const capId = grupoId + "_c" + ci;
+            capitulos[capId] = { numero: numero++, titulo: tituloCap, apresentador: "", ordem: ci };
+          });
+          grupos[grupoId] = { nome: g.nome || `Grupo ${gi + 1}`, data: g.data || "", ordem: gi, capitulos };
+        });
+
+        const novoLivro = {
+          turmaId, titulo, autor, introducao,
+          liberado: false,
+          criadoEm: Date.now(),
+          grupos,
+        };
+        const livroId = rootRef.child("livros").push().key;
+        rootRef.child("livros").child(livroId).set(novoLivro);
+
+        showNewBook = false;
+        draftGroups = [];
+        openBooks.add(livroId);
+        render();
+      });
+    }
+  }
+
+  function syncDraftFromDom() {
+    const items = document.querySelectorAll("#draft-groups-list .draft-group");
+    items.forEach((el, i) => {
+      if (!draftGroups[i]) return;
+      draftGroups[i].nome = el.querySelector(".draft-nome").value;
+      draftGroups[i].data = el.querySelector(".draft-data").value;
+      draftGroups[i].capsText = el.querySelector(".draft-caps").value;
+    });
+  }
+
+  rootRef.on("value", (snap) => {
+    const data = snap.val();
+    state = { turmas: (data && data.turmas) || {}, livros: (data && data.livros) || {} };
+    render();
+    setStatus("conectado", "ok");
+  }, (err) => {
+    setStatus("erro de conexão", "err");
+    console.error(err);
+  });
+</script>
+</body>
+</html>
