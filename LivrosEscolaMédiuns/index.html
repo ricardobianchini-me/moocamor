@@ -372,8 +372,6 @@
 
   function renderTurmaChips() {
     const turmas = turmaList(selectedSemestre);
-    if (selectedTurmaId && !turmas.some((t) => t.id === selectedTurmaId)) selectedTurmaId = null;
-    if (!selectedTurmaId && turmas.length) selectedTurmaId = turmas[0].id;
 
     const chips = turmas.map((t) => `
       <button class="turma-chip" data-turma="${t.id}" data-active="${t.id === selectedTurmaId}" type="button">
@@ -546,6 +544,9 @@
 
   function render() {
     const turmas = turmaList(selectedSemestre);
+    if (selectedTurmaId && !turmas.some((t) => t.id === selectedTurmaId)) selectedTurmaId = null;
+    if (!selectedTurmaId && turmas.length) selectedTurmaId = turmas[0].id;
+
     const books = selectedTurmaId ? livrosByTurma(selectedTurmaId) : [];
     const turmaAtual = turmas.find((t) => t.id === selectedTurmaId);
 
