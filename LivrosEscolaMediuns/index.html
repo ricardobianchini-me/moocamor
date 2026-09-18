@@ -219,6 +219,14 @@
   input.apresentador:hover { border-color: var(--paper-line); }
   input.apresentador:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; background: var(--paper); border-color: transparent; }
   input.apresentador:disabled { color: var(--ink-soft); cursor: not-allowed; }
+
+  .apr-list { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
+  .apr-line { display: flex; align-items: center; gap: 2px; }
+  .apr-line input.apresentador { flex: 1; }
+  .apr-line .rm-apr { border: none; background: none; color: var(--ink-soft); cursor: pointer; font-size: 0.78rem; padding: 2px 5px; flex-shrink: 0; }
+  .apr-line .rm-apr:hover { color: var(--danger); }
+  input.apresentador.apr-add { border: 1px dashed var(--paper-line); }
+  input.apresentador.apr-add:hover { border-color: var(--accent); }
   input.cap-titulo-edit, input.grupo-nome-edit, input.grupo-data-edit, input.livro-titulo-edit, input.livro-autor-edit {
     font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit; background: var(--card);
     border: 1px solid var(--paper-line); border-radius: 6px; padding: 4px 7px; width: 100%;
@@ -370,6 +378,28 @@
       .sort((a, b) => (a.numero ?? 0) - (b.numero ?? 0));
   }
 
+  function apresentadorList(cap) {
+    return Object.entries(cap.apresentadores || {})
+      .map(([id, a]) => ({ id, nome: typeof a === "string" ? a : (a && a.nome) || "" }))
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+  }
+
+  function renderApresentadoresCell(livro, g, c) {
+    const podeEditar = livro.liberado || unlocked;
+    const linhas = apresentadorList(c).map((a) => `
+      <div class="apr-line">
+        <input class="apresentador" data-apr-edit="${a.id}" data-cap="${c.id}" data-grupo="${g.id}" data-livro="${livro.id}"
+              value="${esc(a.nome)}" ${podeEditar ? "" : "disabled"} />
+        ${podeEditar ? `<button type="button" class="rm-apr" data-apr-rm="${a.id}" data-cap="${c.id}" data-grupo="${g.id}" data-livro="${livro.id}" title="Remover nome">✕</button>` : ""}
+      </div>`).join("");
+    const addLine = podeEditar ? `
+      <div class="apr-line">
+        <input class="apresentador apr-add" data-apr-add data-cap="${c.id}" data-grupo="${g.id}" data-livro="${livro.id}"
+              value="" placeholder="+ adicionar nome…" />
+      </div>` : (linhas ? "" : `<div class="apr-line"><input class="apresentador" value="" placeholder="aguardando liberação" disabled /></div>`);
+    return `<div class="apr-list">${linhas}${addLine}</div>`;
+  }
+
   function renderTurmaChips() {
     const turmas = turmaList(selectedSemestre);
 
@@ -422,9 +452,7 @@
         rows += `<tr>
           <td class="cap-num">${esc(c.numero)}</td>
           <td>${capTitleCell}</td>
-          <td><input class="apresentador" data-cap="${c.id}" data-grupo="${g.id}" data-livro="${livro.id}"
-                value="${esc(c.apresentador || "")}" placeholder="${livro.liberado || unlocked ? "seu nome…" : "aguardando liberação"}"
-                ${livro.liberado || unlocked ? "" : "disabled"} /></td>
+          <td>${renderApresentadoresCell(livro, g, c)}</td>
           ${unlocked ? `<td><button class="rm-cap" data-rm-cap="${c.id}" data-grupo="${g.id}" data-livro="${livro.id}" title="Remover capítulo">✕</button></td>` : ""}
         </tr>`;
       });
@@ -699,12 +727,35 @@
       });
     });
 
-    document.querySelectorAll("input.apresentador").forEach((inp) => {
+    document.querySelectorAll("input[data-apr-edit]").forEach((inp) => {
       inp.addEventListener("blur", () => {
-        rootRef.child("livros").child(inp.dataset.livro).child("grupos").child(inp.dataset.grupo)
-          .child("capitulos").child(inp.dataset.cap).child("apresentador").set(inp.value.trim());
+        const ref = rootRef.child("livros").child(inp.dataset.livro).child("grupos").child(inp.dataset.grupo)
+          .child("capitulos").child(inp.dataset.cap).child("apresentadores").child(inp.dataset.aprEdit);
+        const val = inp.value.trim();
+        if (val) ref.child("nome").set(val);
+        else ref.remove();
       });
       inp.addEventListener("keydown", (e) => { if (e.key === "Enter") inp.blur(); });
+    });
+    document.querySelectorAll("[data-apr-rm]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        rootRef.child("livros").child(btn.dataset.livro).child("grupos").child(btn.dataset.grupo)
+          .child("capitulos").child(btn.dataset.cap).child("apresentadores").child(btn.dataset.aprRm).remove();
+      });
+    });
+    document.querySelectorAll("input[data-apr-add]").forEach((inp) => {
+      const commit = () => {
+        const val = inp.value.trim();
+        if (!val) return;
+        const ref = rootRef.child("livros").child(inp.dataset.livro).child("grupos").child(inp.dataset.grupo)
+          .child("capitulos").child(inp.dataset.cap).child("apresentadores");
+        const newId = ref.push().key;
+        const existentes = apresentadorList((state.livros[inp.dataset.livro].grupos[inp.dataset.grupo].capitulos || {})[inp.dataset.cap] || {});
+        ref.child(newId).set({ nome: val, ordem: existentes.length });
+        inp.value = "";
+      };
+      inp.addEventListener("blur", commit);
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); commit(); inp.blur(); } });
     });
 
     document.querySelectorAll(".livro-titulo-edit").forEach((inp) => {
@@ -785,7 +836,7 @@
         const maxOrder = existingCaps.reduce((m, c) => Math.max(m, c.ordem ?? 0), 0);
         const capId = rootRef.child("livros").child(livroId).child("grupos").child(grupoId).child("capitulos").push().key;
         rootRef.child("livros").child(livroId).child("grupos").child(grupoId).child("capitulos").child(capId)
-          .set({ numero: maxNum + 1, titulo, apresentador: "", ordem: maxOrder + 1 });
+          .set({ numero: maxNum + 1, titulo, apresentadores: {}, ordem: maxOrder + 1 });
         input.value = "";
       });
     });
@@ -843,7 +894,7 @@
           const capitulos = {};
           linhas.forEach((tituloCap, ci) => {
             const capId = grupoId + "_c" + ci;
-            capitulos[capId] = { numero: numero++, titulo: tituloCap, apresentador: "", ordem: ci };
+            capitulos[capId] = { numero: numero++, titulo: tituloCap, apresentadores: {}, ordem: ci };
           });
           grupos[grupoId] = { nome: g.nome || `Grupo ${gi + 1}`, data: g.data || "", ordem: gi, capitulos };
         });
