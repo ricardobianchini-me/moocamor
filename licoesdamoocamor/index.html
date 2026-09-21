@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lições Aprendidas — MoocAmor</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%93%8C</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: #e3d9bf;
+    --ink: #2b2418;
+    --ink-soft: #6b6250;
+    --card: #ffffff;
+    --shadow: rgba(43, 36, 24, 0.14);
+    --focus: #1c6ee0;
+
+    --good: #2f9e58;
+    --good-deep: #227a42;
+    --good-soft: #e4f5ea;
+    --bad: #d9971f;
+    --bad-deep: #b3780e;
+    --bad-soft: #fbf0da;
+    --ugly: #d1432f;
+    --ugly-deep: #a92f1f;
+    --ugly-soft: #fbe4df;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1c1811;
+      --paper-line: #3a3020;
+      --ink: #f2ead9;
+      --ink-soft: #b6ab90;
+      --card: #262019;
+      --shadow: rgba(0, 0, 0, 0.45);
+      --focus: #6cb2ff;
+
+      --good: #4fbb76;
+      --good-deep: #6fd393;
+      --good-soft: #1e3327;
+      --bad: #e8b04a;
+      --bad-deep: #f0c46f;
+      --bad-soft: #362a14;
+      --ugly: #e46a54;
+      --ugly-deep: #ef8b76;
+      --ugly-soft: #391f18;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1c1811;
+    --paper-line: #3a3020;
+    --ink: #f2ead9;
+    --ink-soft: #b6ab90;
+    --card: #262019;
+    --shadow: rgba(0, 0, 0, 0.45);
+    --focus: #6cb2ff;
+
+    --good: #4fbb76;
+    --good-deep: #6fd393;
+    --good-soft: #1e3327;
+    --bad: #e8b04a;
+    --bad-deep: #f0c46f;
+    --bad-soft: #362a14;
+    --ugly: #e46a54;
+    --ugly-deep: #ef8b76;
+    --ugly-soft: #391f18;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
+    padding: 28px 16px 64px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sheet { width: 100%; max-width: 1180px; }
+
+  header.ticket {
+    background: linear-gradient(135deg, var(--ugly-deep) 0%, var(--bad-deep) 52%, var(--good-deep) 100%);
+    color: #fff8ee;
+    border-radius: 14px;
+    padding: 24px 26px 22px;
+    box-shadow: 0 10px 24px var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  header.ticket::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 10px;
+    background: repeating-linear-gradient(-45deg, transparent 0 8px, rgba(255,255,255,0.16) 8px 16px);
+  }
+  .ticket-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .ticket .eyebrow {
+    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; opacity: 0.85; margin: 0 0 6px;
+  }
+  .ticket h1 {
+    font-family: "Fredoka", "Segoe UI", sans-serif; font-weight: 600;
+    font-size: clamp(1.6rem, 4.6vw, 2.3rem); line-height: 1.08; margin: 0 0 10px; text-wrap: balance;
+  }
+  .ticket p.sub { margin: 0 0 14px; font-size: 0.98rem; opacity: 0.94; max-width: 68ch; line-height: 1.55; }
+  .ticket .legend-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .legend-chip {
+    font-family: "JetBrains Mono", monospace; font-size: 0.74rem;
+    background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.32);
+    border-radius: 999px; padding: 5px 12px;
+  }
+
+  .btn-lock {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.8rem;
+    background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.36); color: #fff8ee;
+    border-radius: 999px; padding: 7px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-lock[data-unlocked="true"] { background: #fff; border-color: #fff; color: var(--ink); }
+
+  .summary {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .summary-card {
+    background: var(--card); border: 1px solid var(--paper-line); border-radius: 14px;
+    padding: 16px 18px; box-shadow: 0 6px 16px var(--shadow); text-align: center;
+  }
+  .summary-card .emoji { font-size: 1.5rem; }
+  .summary-card .count {
+    font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 2rem; line-height: 1.1; margin-top: 2px;
+  }
+  .summary-card[data-grupo="good"] .count { color: var(--good); }
+  .summary-card[data-grupo="bad"] .count { color: var(--bad); }
+  .summary-card[data-grupo="ugly"] .count { color: var(--ugly); }
+  .summary-card .lbl { font-size: 0.8rem; color: var(--ink-soft); margin-top: 2px; }
+  .summary-card.total .count { color: var(--ink); }
+
+  .columns {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .col {
+    background: var(--card); border-radius: 16px; box-shadow: 0 6px 18px var(--shadow);
+    overflow: hidden; display: flex; flex-direction: column;
+    border-top: 6px solid var(--col-color);
+  }
+  .col[data-grupo="good"] { --col-color: var(--good); }
+  .col[data-grupo="bad"] { --col-color: var(--bad); }
+  .col[data-grupo="ugly"] { --col-color: var(--ugly); }
+
+  .col-head { padding: 16px 18px 12px; }
+  .col-head h2 {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.15rem; margin: 0 0 3px; color: var(--col-color);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .col-head p { margin: 0; font-size: 0.82rem; color: var(--ink-soft); }
+
+  .col-form { padding: 0 18px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .col-form input, .col-form textarea {
+    font-family: inherit; font-size: 0.88rem; padding: 9px 11px; border-radius: 9px;
+    border: 1px solid var(--paper-line); background: var(--paper); color: var(--ink); resize: vertical;
+  }
+  .col-form textarea { min-height: 56px; }
+  .col-form input:focus-visible, .col-form textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+  .col-form button {
+    align-self: flex-start; font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.86rem;
+    background: var(--col-color); color: #fff; border: none; border-radius: 999px; padding: 9px 18px; cursor: pointer;
+  }
+  .col-form button:hover { filter: brightness(0.94); }
+
+  .col-list { padding: 4px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .item-card {
+    background: var(--col-soft); border: 1px solid var(--paper-line); border-radius: 12px; padding: 12px 14px;
+    position: relative;
+  }
+  .col[data-grupo="good"] .item-card { background: var(--good-soft); }
+  .col[data-grupo="bad"] .item-card { background: var(--bad-soft); }
+  .col[data-grupo="ugly"] .item-card { background: var(--ugly-soft); }
+
+  .item-ponto {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.94rem; color: var(--ink); margin: 0 0 4px;
+    padding-right: 22px;
+  }
+  .item-desc { font-size: 0.85rem; color: var(--ink-soft); margin: 0; line-height: 1.5; white-space: pre-wrap; }
+  .item-empty { font-size: 0.84rem; color: var(--ink-soft); font-style: italic; padding: 6px 2px; }
+
+  .item-rm {
+    position: absolute; top: 8px; right: 8px; border: none; background: none; color: var(--ink-soft);
+    cursor: pointer; font-size: 0.9rem; padding: 3px 5px; border-radius: 6px; line-height: 1;
+  }
+  .item-rm:hover { color: var(--ugly-deep); }
+
+  .item-edit input, .item-edit textarea {
+    width: 100%; font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit; background: var(--card);
+    border: 1px solid var(--paper-line); border-radius: 7px; padding: 5px 8px; resize: vertical;
+  }
+  .item-edit input { margin-bottom: 6px; }
+  .item-edit textarea { min-height: 50px; }
+
+  .pin-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  }
+  .pin-box {
+    background: var(--card); border-radius: 14px; padding: 26px 22px; max-width: 320px; width: 100%;
+    text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+  .pin-box h2 { font-family: "Fredoka", sans-serif; font-size: 1.1rem; margin: 0 0 14px; }
+  .pin-box input {
+    width: 100%; text-align: center; font-size: 1.3rem; letter-spacing: 0.3em;
+    padding: 12px; border-radius: 10px; border: 1px solid var(--paper-line); margin-bottom: 10px;
+  }
+  .pin-error { color: var(--ugly); font-size: 0.82rem; min-height: 1.2em; margin-bottom: 6px; }
+  .pin-box .row { display: flex; gap: 8px; }
+  .pin-box button { flex: 1; font-family: "Fredoka", sans-serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
+  .pin-box .cancel { background: var(--paper); border: 1px solid var(--paper-line); }
+  .pin-box .submit { background: var(--good); color: #fff; }
+
+  footer.legend {
+    margin-top: 22px; font-size: 0.82rem; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .status-pill {
+    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; padding: 3px 9px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--paper-line);
+  }
+  .status-pill[data-tone="err"] { color: var(--ugly); border-color: var(--ugly); }
+  .status-pill[data-tone="ok"] { color: var(--good); border-color: var(--good); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <p style="text-align:center;padding:40px 0;color:var(--ink-soft)">Carregando…</p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
+    authDomain: "fraternidadedoamor-ef315.firebaseapp.com",
+    databaseURL: "https://fraternidadedoamor-ef315-default-rtdb.firebaseio.com",
+    projectId: "fraternidadedoamor-ef315",
+    storageBucket: "fraternidadedoamor-ef315.firebasestorage.app",
+    messagingSenderId: "703575848763",
+    appId: "1:703575848763:web:52548e6124b8a0841c691e",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const rootRef = db.ref("licoesMoocamor");
+
+  const ADMIN_PIN = "1313";
+  const GRUPOS = [
+    { id: "good", label: "Good — o que funcionou bem", emoji: "✅", sub: "Manter na próxima edição" },
+    { id: "bad", label: "Bad — o que não funcionou", emoji: "⚠️", sub: "Corrigir na próxima edição" },
+    { id: "ugly", label: "Ugly — o que foi crítico", emoji: "🛑", sub: "Eliminar ou repensar" },
+  ];
+
+  let state = { itens: {} };
+  let unlocked = false;
+  let editingId = null;
+  let pinIntent = null;
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function itensDoGrupo(grupoId) {
+    return Object.entries(state.itens || {})
+      .map(([id, it]) => ({ id, ...it }))
+      .filter((it) => it.grupo === grupoId)
+      .sort((a, b) => (b.criadoEm ?? 0) - (a.criadoEm ?? 0));
+  }
+
+  function renderSummary() {
+    const cards = GRUPOS.map((g) => {
+      const n = itensDoGrupo(g.id).length;
+      return `<div class="summary-card" data-grupo="${g.id}">
+        <div class="emoji">${g.emoji}</div>
+        <div class="count">${n}</div>
+        <div class="lbl">${g.id === "good" ? "Good" : g.id === "bad" ? "Bad" : "Ugly"}</div>
+      </div>`;
+    }).join("");
+    const total = Object.keys(state.itens || {}).length;
+    return `<div class="summary">
+      ${cards}
+      <div class="summary-card total">
+        <div class="emoji">📌</div>
+        <div class="count">${total}</div>
+        <div class="lbl">Total de pontos</div>
+      </div>
+    </div>`;
+  }
+
+  function renderItemCard(it) {
+    if (editingId === it.id) {
+      return `<div class="item-card">
+        <div class="item-edit">
+          <input type="text" data-edit-ponto="${it.id}" value="${esc(it.ponto)}" placeholder="Ponto" />
+          <textarea data-edit-desc="${it.id}" placeholder="Descrição">${esc(it.descricao || "")}</textarea>
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <button type="button" class="col-form-save" data-save-item="${it.id}" style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.82rem;background:var(--good);color:#fff;border:none;border-radius:999px;padding:7px 14px;cursor:pointer;">Salvar</button>
+            <button type="button" data-cancel-edit style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.82rem;background:var(--paper);border:1px solid var(--paper-line);border-radius:999px;padding:7px 14px;cursor:pointer;">Cancelar</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    return `<div class="item-card">
+      ${unlocked ? `<button class="item-rm" data-rm-item="${it.id}" title="Remover">✕</button>` : ""}
+      <p class="item-ponto" ${unlocked ? `data-edit-open="${it.id}" style="cursor:pointer;"` : ""}>${esc(it.ponto)}</p>
+      ${it.descricao ? `<p class="item-desc">${esc(it.descricao)}</p>` : ""}
+    </div>`;
+  }
+
+  function renderColumn(g) {
+    const itens = itensDoGrupo(g.id);
+    const list = itens.length
+      ? itens.map(renderItemCard).join("")
+      : `<div class="item-empty">Nenhum ponto registrado ainda.</div>`;
+    return `<div class="col" data-grupo="${g.id}">
+      <div class="col-head">
+        <h2>${g.emoji} ${g.label.split(" — ")[0]}</h2>
+        <p>${g.sub}</p>
+      </div>
+      <form class="col-form" data-form-grupo="${g.id}">
+        <input type="text" placeholder="Seu ponto…" required />
+        <textarea placeholder="Descreva (opcional)"></textarea>
+        <button type="submit">+ Adicionar</button>
+      </form>
+      <div class="col-list">${list}</div>
+    </div>`;
+  }
+
+  function render() {
+    document.getElementById("sheet").innerHTML = `
+      <header class="ticket">
+        <div class="ticket-top">
+          <div>
+            <p class="eyebrow">Fraternidade do Amor · MoocAmor</p>
+            <h1>Lições Aprendidas — Good, Bad and Ugly</h1>
+            <p class="sub">Como manda o PMBOK, ao final de um projeto fazemos a retrospectiva "Good, Bad and Ugly": o que funcionou bem, o que não funcionou e o que foi crítico. O objetivo aqui é reunir os pontos da festa MoocAmor deste ano pra corrigir, manter ou melhorar na próxima edição. Qualquer pessoa pode adicionar um ponto — é só escolher a coluna certa, escrever o ponto e, se quiser, detalhar na descrição.</p>
+            <div class="legend-row">
+              <span class="legend-chip">✅ Good = manter</span>
+              <span class="legend-chip">⚠️ Bad = corrigir</span>
+              <span class="legend-chip">🛑 Ugly = eliminar</span>
+            </div>
+          </div>
+          <button class="btn-lock" id="btn-lock" data-unlocked="${unlocked}">${unlocked ? "🔓 Modo administrador" : "🔒 Sou administrador(a)"}</button>
+        </div>
+      </header>
+
+      ${renderSummary()}
+
+      <div class="columns">
+        ${GRUPOS.map(renderColumn).join("")}
+      </div>
+
+      <footer class="legend">
+        <span class="status-pill" id="save-status">conectado</span>
+        <span>Lições Aprendidas · MoocAmor</span>
+      </footer>
+
+      <div class="pin-overlay" id="pin-overlay" style="display:none;">
+        <div class="pin-box">
+          <h2>Digite o PIN de administrador(a)</h2>
+          <input type="password" inputmode="numeric" id="pin-input" placeholder="PIN" maxlength="8" />
+          <div class="pin-error" id="pin-error"></div>
+          <div class="row">
+            <button class="cancel" id="pin-cancel">Cancelar</button>
+            <button class="submit" id="pin-submit">Entrar</button>
+          </div>
+        </div>
+      </div>
+    `;
+    attach();
+  }
+
+  function setStatus(text, tone) {
+    const pill = document.getElementById("save-status");
+    if (!pill) return;
+    pill.textContent = text;
+    if (tone) pill.dataset.tone = tone; else delete pill.dataset.tone;
+  }
+
+  function requirePin(action) {
+    pinIntent = action;
+    const overlay = document.getElementById("pin-overlay");
+    document.getElementById("pin-input").value = "";
+    document.getElementById("pin-error").textContent = "";
+    overlay.style.display = "flex";
+    document.getElementById("pin-input").focus();
+  }
+
+  function checkPin() {
+    const val = document.getElementById("pin-input").value;
+    if (val !== ADMIN_PIN) {
+      document.getElementById("pin-error").textContent = "PIN incorreto.";
+      return;
+    }
+    document.getElementById("pin-overlay").style.display = "none";
+    unlocked = true;
+    const intent = pinIntent;
+    pinIntent = null;
+    render();
+    if (typeof intent === "function") intent();
+  }
+
+  function attach() {
+    document.getElementById("btn-lock").addEventListener("click", () => {
+      if (unlocked) { unlocked = false; editingId = null; render(); return; }
+      requirePin(null);
+    });
+    document.getElementById("pin-cancel").addEventListener("click", () => {
+      document.getElementById("pin-overlay").style.display = "none";
+    });
+    document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
+    document.getElementById("pin-submit").addEventListener("click", checkPin);
+
+    document.querySelectorAll("[data-form-grupo]").forEach((form) => {
+      form.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        const ponto = form.querySelector("input").value.trim();
+        const descricao = form.querySelector("textarea").value.trim();
+        if (!ponto) return;
+        const id = rootRef.child("itens").push().key;
+        rootRef.child("itens").child(id).set({
+          grupo: form.dataset.formGrupo, ponto, descricao, criadoEm: Date.now(),
+        });
+        form.querySelector("input").value = "";
+        form.querySelector("textarea").value = "";
+      });
+    });
+
+    document.querySelectorAll("[data-rm-item]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!confirm("Remover este ponto?")) return;
+        rootRef.child("itens").child(btn.dataset.rmItem).remove();
+      });
+    });
+
+    document.querySelectorAll("[data-edit-open]").forEach((el) => {
+      el.addEventListener("click", () => {
+        editingId = el.dataset.editOpen;
+        render();
+      });
+    });
+    document.querySelectorAll("[data-cancel-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => { editingId = null; render(); });
+    });
+    document.querySelectorAll("[data-save-item]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.saveItem;
+        const ponto = document.querySelector(`[data-edit-ponto="${id}"]`).value.trim();
+        const descricao = document.querySelector(`[data-edit-desc="${id}"]`).value.trim();
+        if (!ponto) return;
+        rootRef.child("itens").child(id).update({ ponto, descricao });
+        editingId = null;
+        render();
+      });
+    });
+  }
+
+  rootRef.on("value", (snap) => {
+    const data = snap.val();
+    state = { itens: (data && data.itens) || {} };
+    render();
+    setStatus("conectado", "ok");
+  }, (err) => {
+    setStatus("erro de conexão", "err");
+    console.error(err);
+  });
+</script>
+</body>
+</html>
