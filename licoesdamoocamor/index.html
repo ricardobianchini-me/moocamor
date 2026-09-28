@@ -242,6 +242,13 @@
     display: flex; align-items: center; gap: 8px;
   }
   .cat-card .cat-sub { margin: 0 0 10px; font-size: 0.8rem; color: var(--ink-soft); }
+  .cat-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .cat-total {
+    flex-shrink: 0; text-align: center; min-width: 74px; padding: 8px 12px 7px; border-radius: 14px;
+    background: var(--ink); color: var(--paper);
+  }
+  .cat-total .n { font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 2.1rem; line-height: 1; }
+  .cat-total .l { font-family: "JetBrains Mono", monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; opacity: 0.85; }
   .cat-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--paper-line); margin-bottom: 8px; }
   .cat-bar span { display: block; height: 100%; }
   .cat-bar .b-good { background: var(--good); }
@@ -438,9 +445,18 @@
           ${it.descricao ? `<details><summary>ver detalhes</summary><p>${esc(it.descricao)}</p></details>` : ""}
         </div>`).join("");
       const pct = (v) => (v / itens.length) * 100;
+      const share = todos.length ? Math.round((itens.length / todos.length) * 100) : 0;
       return `<div class="cat-card">
-        <h3>${c.emoji} ${esc(c.label)}</h3>
-        <p class="cat-sub">${esc(c.sub)} · ${itens.length} ${itens.length === 1 ? "ponto" : "pontos"}</p>
+        <div class="cat-head">
+          <div>
+            <h3>${c.emoji} ${esc(c.label)}</h3>
+            <p class="cat-sub">${esc(c.sub)}</p>
+          </div>
+          <div class="cat-total" title="${itens.length} de ${todos.length} pontos">
+            <div class="n">${itens.length}</div>
+            <div class="l">${itens.length === 1 ? "ponto" : "pontos"} · ${share}%</div>
+          </div>
+        </div>
         <div class="cat-bar" aria-hidden="true">
           <span class="b-good" style="width:${pct(n.good)}%"></span>
           <span class="b-bad" style="width:${pct(n.bad)}%"></span>
