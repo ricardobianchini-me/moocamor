@@ -209,6 +209,82 @@
   .item-edit input { margin-bottom: 6px; }
   .item-edit textarea { min-height: 50px; }
 
+  .view-bar {
+    margin-top: 22px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  }
+  .view-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .view-tab, .toolbtn {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.84rem;
+    background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
+    border-radius: 999px; padding: 8px 16px; cursor: pointer;
+  }
+  .view-tab[data-active="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .toolbtn:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .toolbtn.danger { color: var(--ugly-deep); }
+  .view-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .closed-note {
+    margin: 0 18px 14px; padding: 10px 12px; border-radius: 10px; font-size: 0.82rem;
+    background: var(--paper); border: 1px dashed var(--paper-line); color: var(--ink-soft);
+  }
+  .status-banner {
+    margin-top: 18px; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem;
+    background: var(--bad-soft); border: 1px solid var(--bad); color: var(--ink);
+  }
+
+  .cat-grid { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .cat-card {
+    background: var(--card); border-radius: 16px; box-shadow: 0 6px 18px var(--shadow);
+    padding: 16px 18px 18px; break-inside: avoid;
+  }
+  .cat-card h3 {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.1rem; margin: 0 0 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cat-card .cat-sub { margin: 0 0 10px; font-size: 0.8rem; color: var(--ink-soft); }
+  .cat-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--paper-line); margin-bottom: 8px; }
+  .cat-bar span { display: block; height: 100%; }
+  .cat-bar .b-good { background: var(--good); }
+  .cat-bar .b-bad { background: var(--bad); }
+  .cat-bar .b-ugly { background: var(--ugly); }
+  .cat-counts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .cat-count {
+    font-family: "JetBrains Mono", monospace; font-size: 0.74rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--paper-line);
+  }
+  .cat-count.good { color: var(--good); border-color: var(--good); }
+  .cat-count.bad { color: var(--bad-deep); border-color: var(--bad); }
+  .cat-count.ugly { color: var(--ugly); border-color: var(--ugly); }
+  .cat-items { display: flex; flex-direction: column; gap: 8px; }
+  .cat-item {
+    border-radius: 10px; padding: 8px 10px; background: var(--bg-c);
+    font-size: 0.84rem;
+  }
+  .cat-item.good { --c: var(--good-deep); --bg-c: var(--good-soft); }
+  .cat-item.bad { --c: var(--bad-deep); --bg-c: var(--bad-soft); }
+  .cat-item.ugly { --c: var(--ugly-deep); --bg-c: var(--ugly-soft); }
+  .cat-item b { font-family: "Fredoka", sans-serif; font-weight: 600; }
+  .cat-item .tag {
+    font-family: "JetBrains Mono", monospace; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--c); margin-right: 6px;
+  }
+  .cat-item p { margin: 3px 0 0; color: var(--ink-soft); line-height: 1.45; white-space: pre-wrap; }
+  .cat-item details summary { cursor: pointer; color: var(--ink-soft); font-size: 0.78rem; margin-top: 3px; }
+
+  .edit-cat { width: 100%; margin-bottom: 6px; font-family: inherit; font-size: 0.85rem; padding: 6px 8px; border-radius: 7px; border: 1px solid var(--paper-line); background: var(--card); color: var(--ink); }
+  .cat-badge {
+    display: inline-block; font-size: 0.68rem; font-family: "JetBrains Mono", monospace; margin-top: 6px;
+    padding: 2px 8px; border-radius: 999px; background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
+  }
+
+  @media print {
+    body { padding: 0; background: #fff; color: #000; }
+    .btn-lock, .view-bar, .col-form, .item-rm, footer.legend, .pin-overlay, .status-banner { display: none !important; }
+    header.ticket { box-shadow: none; }
+    .summary-card, .col, .cat-card { box-shadow: none; border: 1px solid #ccc; }
+    .cat-item details[open] summary, .cat-item details summary { display: none; }
+    .cat-item details > p { display: block; }
+  }
+
   .pin-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.5);
     display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
@@ -270,10 +346,25 @@
     { id: "ugly", label: "Ugly — o que foi crítico", emoji: "🛑", sub: "Eliminar ou repensar" },
   ];
 
-  let state = { itens: {} };
+  const CATEGORIAS = [
+    { id: "seguranca", emoji: "🛡️", label: "Segurança e Treinamento", sub: "Riscos, capacitação e cuidados com quem trabalha" },
+    { id: "equipamentos", emoji: "🔧", label: "Equipamentos e Utensílios", sub: "O que precisamos ter, testar e documentar" },
+    { id: "cardapio", emoji: "🍝", label: "Cardápio e Qualidade dos Pratos", sub: "Sabor, ponto, ingredientes e escolhas do menu" },
+    { id: "planejamento", emoji: "📋", label: "Planejamento, Processos e Logística", sub: "Antecedência, estoque, padronização e organização" },
+    { id: "voluntarios", emoji: "👥", label: "Voluntários e Equipe", sub: "Compromisso, apoio, integração e clima" },
+    { id: "", emoji: "🗂️", label: "A classificar", sub: "Itens ainda sem categoria" },
+  ];
+  const GRUPO_LABEL = { good: "Good", bad: "Bad", ugly: "Ugly" };
+
+  let state = { itens: {}, config: {} };
   let unlocked = false;
   let editingId = null;
   let pinIntent = null;
+  let viewMode = "grupo";
+
+  function coletaAberta() {
+    return !(state.config && state.config.aberta === false);
+  }
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
@@ -312,6 +403,9 @@
     if (editingId === it.id) {
       return `<div class="item-card">
         <div class="item-edit">
+          <select class="edit-cat" data-edit-cat="${it.id}">
+            ${CATEGORIAS.map((c) => `<option value="${c.id}" ${c.id === (it.categoria || "") ? "selected" : ""}>${c.emoji} ${c.label}</option>`).join("")}
+          </select>
           <input type="text" data-edit-ponto="${it.id}" value="${esc(it.ponto)}" placeholder="Ponto" />
           <textarea data-edit-desc="${it.id}" placeholder="Descrição">${esc(it.descricao || "")}</textarea>
           <div style="display:flex;gap:6px;margin-top:6px;">
@@ -325,7 +419,42 @@
       ${unlocked ? `<button class="item-rm" data-rm-item="${it.id}" title="Remover">✕</button>` : ""}
       <p class="item-ponto" ${unlocked ? `data-edit-open="${it.id}" style="cursor:pointer;"` : ""}>${esc(it.ponto)}</p>
       ${it.descricao ? `<p class="item-desc">${esc(it.descricao)}</p>` : ""}
+      ${unlocked ? `<span class="cat-badge">${esc((CATEGORIAS.find((c) => c.id === (it.categoria || "")) || CATEGORIAS[5]).label)}</span>` : ""}
     </div>`;
+  }
+
+  function renderCategoryView() {
+    const todos = Object.entries(state.itens || {}).map(([id, it]) => ({ id, ...it }));
+    const cards = CATEGORIAS.map((c) => {
+      const itens = todos.filter((it) => (it.categoria || "") === c.id);
+      if (!itens.length) return "";
+      const n = { good: 0, bad: 0, ugly: 0 };
+      itens.forEach((it) => { n[it.grupo] = (n[it.grupo] || 0) + 1; });
+      const ordenados = ["ugly", "bad", "good"].flatMap((g) =>
+        itens.filter((it) => it.grupo === g).sort((a, b) => (a.criadoEm ?? 0) - (b.criadoEm ?? 0)));
+      const linhas = ordenados.map((it) => `
+        <div class="cat-item ${it.grupo}">
+          <span class="tag">${GRUPO_LABEL[it.grupo]}</span><b>${esc(it.ponto)}</b>
+          ${it.descricao ? `<details><summary>ver detalhes</summary><p>${esc(it.descricao)}</p></details>` : ""}
+        </div>`).join("");
+      const pct = (v) => (v / itens.length) * 100;
+      return `<div class="cat-card">
+        <h3>${c.emoji} ${esc(c.label)}</h3>
+        <p class="cat-sub">${esc(c.sub)} · ${itens.length} ${itens.length === 1 ? "ponto" : "pontos"}</p>
+        <div class="cat-bar" aria-hidden="true">
+          <span class="b-good" style="width:${pct(n.good)}%"></span>
+          <span class="b-bad" style="width:${pct(n.bad)}%"></span>
+          <span class="b-ugly" style="width:${pct(n.ugly)}%"></span>
+        </div>
+        <div class="cat-counts">
+          <span class="cat-count good">✅ ${n.good} good</span>
+          <span class="cat-count bad">⚠️ ${n.bad} bad</span>
+          <span class="cat-count ugly">🛑 ${n.ugly} ugly</span>
+        </div>
+        <div class="cat-items">${linhas}</div>
+      </div>`;
+    }).join("");
+    return `<div class="cat-grid">${cards}</div>`;
   }
 
   function renderColumn(g) {
@@ -338,11 +467,11 @@
         <h2>${g.emoji} ${g.label.split(" — ")[0]}</h2>
         <p>${g.sub}</p>
       </div>
-      <form class="col-form" data-form-grupo="${g.id}">
+      ${coletaAberta() || unlocked ? `<form class="col-form" data-form-grupo="${g.id}">
         <input type="text" placeholder="Seu ponto…" required />
         <textarea placeholder="Descreva (opcional)"></textarea>
         <button type="submit">+ Adicionar</button>
-      </form>
+      </form>` : `<p class="closed-note">🔒 Coleta encerrada — obrigado por contribuir!</p>`}
       <div class="col-list">${list}</div>
     </div>`;
   }
@@ -367,9 +496,22 @@
 
       ${renderSummary()}
 
-      <div class="columns">
-        ${GRUPOS.map(renderColumn).join("")}
+      ${coletaAberta() ? "" : `<div class="status-banner">🔒 <b>Coleta encerrada.</b> Não estamos mais recebendo novos pontos — abaixo está o resultado consolidado.</div>`}
+
+      <div class="view-bar">
+        <div class="view-tabs">
+          <button class="view-tab" data-view="grupo" data-active="${viewMode === "grupo"}">Por Good / Bad / Ugly</button>
+          <button class="view-tab" data-view="categoria" data-active="${viewMode === "categoria"}">Por categoria (apresentação)</button>
+        </div>
+        <div class="view-actions">
+          <button class="toolbtn" id="btn-print">🖨️ Imprimir / salvar PDF</button>
+          ${unlocked ? `<button class="toolbtn ${coletaAberta() ? "danger" : ""}" id="btn-toggle-coleta">${coletaAberta() ? "🔒 Encerrar coleta" : "🔓 Reabrir coleta"}</button>` : ""}
+        </div>
       </div>
+
+      ${viewMode === "categoria" ? renderCategoryView() : `<div class="columns">
+        ${GRUPOS.map(renderColumn).join("")}
+      </div>`}
 
       <footer class="legend">
         <span class="status-pill" id="save-status">conectado</span>
@@ -432,6 +574,21 @@
     document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
     document.getElementById("pin-submit").addEventListener("click", checkPin);
 
+    document.querySelectorAll("[data-view]").forEach((btn) => {
+      btn.addEventListener("click", () => { viewMode = btn.dataset.view; render(); });
+    });
+    document.getElementById("btn-print").addEventListener("click", () => window.print());
+    const btnColeta = document.getElementById("btn-toggle-coleta");
+    if (btnColeta) {
+      btnColeta.addEventListener("click", () => {
+        const msg = coletaAberta()
+          ? "Encerrar a coleta? Ninguém (além dos administradores) poderá adicionar novos pontos."
+          : "Reabrir a coleta para novos pontos?";
+        if (!confirm(msg)) return;
+        rootRef.child("config").child("aberta").set(!coletaAberta());
+      });
+    }
+
     document.querySelectorAll("[data-form-grupo]").forEach((form) => {
       form.addEventListener("submit", (ev) => {
         ev.preventDefault();
@@ -468,8 +625,9 @@
         const id = btn.dataset.saveItem;
         const ponto = document.querySelector(`[data-edit-ponto="${id}"]`).value.trim();
         const descricao = document.querySelector(`[data-edit-desc="${id}"]`).value.trim();
+        const categoria = document.querySelector(`[data-edit-cat="${id}"]`).value;
         if (!ponto) return;
-        rootRef.child("itens").child(id).update({ ponto, descricao });
+        rootRef.child("itens").child(id).update({ ponto, descricao, categoria });
         editingId = null;
         render();
       });
@@ -478,7 +636,7 @@
 
   rootRef.on("value", (snap) => {
     const data = snap.val();
-    state = { itens: (data && data.itens) || {} };
+    state = { itens: (data && data.itens) || {}, config: (data && data.config) || {} };
     render();
     setStatus("conectado", "ok");
   }, (err) => {
