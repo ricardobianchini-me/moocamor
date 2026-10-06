@@ -483,6 +483,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+<script src="/db-service.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
@@ -495,9 +496,7 @@
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
-  const rootRef = db.ref("arrecadacaoMacarrao");
-
-  const ADMIN_PIN = "1313";
+  const rootRef = SvcRef.wrap(db.ref("arrecadacaoMacarrao"), "arrecadacaoMacarrao");
 
   const SEED = {
     supplies: {
@@ -651,10 +650,10 @@
     document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
   }
 
-  function checkPin() {
+  async function checkPin() {
     const val = document.getElementById("pin-input").value;
     const err = document.getElementById("pin-error");
-    if (val !== ADMIN_PIN) {
+    if (!(await SvcAuth.verify(val))) {
       err.style.display = "block";
       return;
     }
