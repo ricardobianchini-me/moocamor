@@ -312,6 +312,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+<script src="../db-service.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
@@ -324,9 +325,7 @@
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
-  const rootRef = db.ref("livrosEspiritas");
-
-  const ADMIN_PIN = "1111";
+  const rootRef = SvcRef.wrap(db.ref("livrosEspiritas"), "livrosEspiritas");
   const SEMESTRES = [1, 2, 3, 4, 5, 6];
 
   let state = { turmas: {}, livros: {} };
@@ -643,9 +642,9 @@
     document.getElementById("pin-input").focus();
   }
 
-  function checkPin() {
+  async function checkPin() {
     const val = document.getElementById("pin-input").value;
-    if (val !== ADMIN_PIN) {
+    if (!(await SvcAuth.verify(val))) {
       document.getElementById("pin-error").textContent = "PIN incorreto.";
       return;
     }
