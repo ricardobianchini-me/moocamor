@@ -1,0 +1,9 @@
+{
+  "_leia": "Caminhos do Firebase que aceitam escrita SEM PIN pelo serviço /moocamor-api (hlera_bot, VM-1). Todo o resto exige o PIN administrativo. Cada prefixo precisa ter pelo menos 2 níveis (pagina/colecao/). O serviço relê este arquivo sozinho depois do git pull da VM (até 5 min).",
+  "prefixos": [
+    "pesquisaMoocAmor/respostas/",
+    "arrecadacaoMacarrao/supplies/",
+    "escolaJovens/ideias/",
+    "escolaJovens/apoios/"
+  ]
+}

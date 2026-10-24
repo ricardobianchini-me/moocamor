@@ -1,0 +1,12 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "escalaMacarrao":      { ".read": true },
+    "arrecadacaoMacarrao": { ".read": true },
+    "pesquisaMoocAmor":    { ".read": true },
+    "licoesMoocamor":      { ".read": true },
+    "livrosEspiritas":     { ".read": true },
+    "escolaJovens":        { ".read": true }
+  }
+}
