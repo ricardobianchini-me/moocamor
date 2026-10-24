@@ -1,0 +1,8 @@
+# Mídia bruta da festa (vídeos e fotos originais, centenas de MB): fica só no Google Drive.
+# Arquivo usado por página vai dentro da pasta da página (ex.: assista/festa-video.mp4).
+molho/
+video/
+*.zip
+
+# Metadados do Windows / Google Drive
+desktop.ini
