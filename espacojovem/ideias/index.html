@@ -17,7 +17,8 @@
 <link rel="icon" type="image/png" href="../icone-espaco-jovem.png">
 <link rel="apple-touch-icon" href="../icone-espaco-jovem.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* Paleta do logo do Espaço Jovem: petróleo, laranja, roxo e âmbar sobre creme. */
   :root {
@@ -109,19 +110,27 @@
     margin: 0;
     background: var(--paper);
     color: var(--ink);
-    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
-    padding: 28px 16px 64px;
-    display: flex;
-    justify-content: center;
+    font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+    padding: 0;
   }
 
-  .sheet { width: 100%; max-width: 1240px; }
+  .sheet { width: 100%; max-width: 1240px; margin: 28px auto 64px; padding: 0 16px; }
+
+  .topo { position: sticky; top: 0; z-index: 30; background: var(--card); border-bottom: 1px solid var(--paper-line); }
+  .topo-in { max-width: 1240px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; min-height: 62px; }
+  .wordmark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .wordmark img { width: 34px; height: 34px; border-radius: 50%; }
+  .wordmark span { font-family: "Roboto Mono", monospace; font-weight: 700; letter-spacing: 0.12em; font-size: 0.92rem; text-transform: uppercase; }
+  .menu-simples { margin-left: auto; display: flex; gap: 2px; }
+  .menu-simples a { font-family: "Roboto Mono", monospace; font-size: 0.85rem; color: var(--ink-soft); text-decoration: none; padding: 8px 10px; }
+  .menu-simples a:hover { color: var(--ink); }
+  .purpose a { color: var(--brand); font-weight: 700; }
+  @media (max-width: 480px) { .wordmark span { display: none; } .menu-simples a { padding: 8px 7px; } }
 
   header.ticket {
-    background: var(--hero-bg);
-    color: var(--ink);
-    border: 1px solid var(--hero-line);
-    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(18, 60, 63, 0.94) 0%, rgba(29, 107, 110, 0.88) 50%, rgba(118, 82, 168, 0.90) 100%), url("../padrao-espaco-jovem.jpg") center / 480px auto repeat;
+    color: #fff;
+    border-radius: 24px;
     padding: 24px 26px;
     box-shadow: 0 10px 24px var(--shadow);
   }
@@ -132,29 +141,29 @@
     box-shadow: 0 6px 20px rgba(214, 140, 60, 0.28);
   }
   .ticket .eyebrow {
-    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ink-soft); margin: 0 0 6px;
+    font-family: "Roboto Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #bfe0dd; margin: 0 0 6px;
   }
   .ticket h1 {
-    font-family: "Fredoka", "Segoe UI", sans-serif; font-weight: 600; color: var(--brand);
+    font-family: "Poppins", "Segoe UI", sans-serif; font-weight: 700; color: #fff;
     font-size: clamp(1.6rem, 4.6vw, 2.4rem); line-height: 1.08; margin: 0 0 10px; text-wrap: balance;
   }
-  .ticket p.sub { margin: 0; font-size: 1rem; color: var(--ink-soft); max-width: 70ch; line-height: 1.55; }
+  .ticket p.sub { margin: 0; font-size: 1rem; color: rgba(255, 255, 255, 0.9); max-width: 70ch; line-height: 1.55; }
   @media (max-width: 560px) {
     .ticket-brand { flex-direction: column; align-items: flex-start; gap: 14px; }
     .ticket-logo { width: 96px; height: 96px; }
   }
 
   .btn-lock {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.8rem;
-    background: var(--card); border: 1px solid var(--paper-line); color: var(--brand);
+    font-family: "Poppins", sans-serif; font-weight: 600; font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.55); color: #fff;
     border-radius: 999px; padding: 7px 14px; cursor: pointer; white-space: nowrap;
   }
-  .btn-lock[data-unlocked="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-c); }
+  .btn-lock[data-unlocked="true"] { background: #fff; border-color: #fff; color: #123c3f; }
 
   section.intro { margin-top: 26px; }
   section.intro h2 {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.3rem; margin: 0 0 4px;
+    font-family: "Poppins", sans-serif; font-weight: 600; font-size: 1.3rem; margin: 0 0 4px;
   }
   section.intro > p.lead { margin: 0 0 14px; color: var(--ink-soft); max-width: 75ch; line-height: 1.55; }
 
@@ -164,9 +173,9 @@
     box-shadow: 0 4px 12px var(--shadow);
   }
   .goal .n {
-    font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); letter-spacing: 0.08em;
+    font-family: "Roboto Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); letter-spacing: 0.08em;
   }
-  .goal h3 { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.02rem; margin: 4px 0 6px; }
+  .goal h3 { font-family: "Poppins", sans-serif; font-weight: 600; font-size: 1.02rem; margin: 4px 0 6px; }
   .goal p { margin: 0; font-size: 0.88rem; line-height: 1.55; color: var(--ink-soft); }
   .goal cite { display: block; margin-top: 8px; font-size: 0.78rem; font-style: italic; color: var(--ink-soft); }
 
@@ -177,8 +186,8 @@
   .purpose p { margin: 0 0 12px; line-height: 1.6; max-width: 80ch; }
   .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
   .step { background: var(--paper); border-radius: 12px; padding: 12px 14px; font-size: 0.88rem; line-height: 1.5; }
-  .step b { font-family: "Fredoka", sans-serif; font-weight: 600; display: block; margin-bottom: 2px; }
-  .step .k { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); }
+  .step b { font-family: "Poppins", sans-serif; font-weight: 600; display: block; margin-bottom: 2px; }
+  .step .k { font-family: "Roboto Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); }
 
   .summary {
     margin-top: 26px;
@@ -192,7 +201,7 @@
   }
   .summary-card .emoji { font-size: 1.4rem; }
   .summary-card .count {
-    font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 2rem; line-height: 1.1; margin-top: 2px;
+    font-family: "Poppins", sans-serif; font-weight: 700; font-size: 2rem; line-height: 1.1; margin-top: 2px;
     color: var(--c, var(--ink));
   }
   .summary-card .lbl { font-size: 0.8rem; color: var(--ink-soft); margin-top: 2px; }
@@ -207,7 +216,7 @@
   }
   .view-tabs, .view-actions { display: flex; gap: 6px; flex-wrap: wrap; }
   .view-tab, .toolbtn {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.84rem;
+    font-family: "Poppins", sans-serif; font-weight: 600; font-size: 0.84rem;
     background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
     border-radius: 999px; padding: 8px 16px; cursor: pointer;
   }
@@ -235,7 +244,7 @@
   }
   .col-head { padding: 16px 18px 10px; }
   .col-head h2 {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.12rem; margin: 0 0 3px; color: var(--c);
+    font-family: "Poppins", sans-serif; font-weight: 600; font-size: 1.12rem; margin: 0 0 3px; color: var(--c);
     display: flex; align-items: center; gap: 8px;
   }
   .col-head p { margin: 0; font-size: 0.84rem; color: var(--ink-soft); line-height: 1.45; }
@@ -249,7 +258,7 @@
   .col-form textarea { min-height: 56px; }
   .col-form input:focus-visible, .col-form textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
   .col-form button {
-    align-self: flex-start; font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.86rem;
+    align-self: flex-start; font-family: "Poppins", sans-serif; font-weight: 600; font-size: 0.86rem;
     background: var(--c); color: var(--on-c); border: none; border-radius: 999px; padding: 9px 18px; cursor: pointer;
   }
   .col-form button:hover { filter: brightness(0.94); }
@@ -264,7 +273,7 @@
     position: relative;
   }
   .item-ponto {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--ink); margin: 0 0 4px;
+    font-family: "Poppins", sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--ink); margin: 0 0 4px;
     padding-right: 22px; overflow-wrap: anywhere;
   }
   .item-desc { font-size: 0.85rem; color: var(--ink-soft); margin: 0; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -272,7 +281,7 @@
   .item-autor { font-size: 0.76rem; color: var(--ink-soft); overflow-wrap: anywhere; }
   .item-empty { font-size: 0.84rem; color: var(--ink-soft); font-style: italic; padding: 6px 2px; }
   .apoio {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.78rem;
+    font-family: "Poppins", sans-serif; font-weight: 600; font-size: 0.78rem;
     background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
     border-radius: 999px; padding: 4px 11px; cursor: pointer; white-space: nowrap;
   }
@@ -293,7 +302,7 @@
   .item-edit textarea { min-height: 50px; }
   .edit-btns { display: flex; gap: 6px; }
   .edit-btns button {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.82rem; border-radius: 999px; padding: 7px 14px; cursor: pointer;
+    font-family: "Poppins", sans-serif; font-weight: 600; font-size: 0.82rem; border-radius: 999px; padding: 7px 14px; cursor: pointer;
   }
   .edit-btns .save { background: var(--ok); color: #fff; border: none; }
   .edit-btns .cancel { background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); }
@@ -306,14 +315,14 @@
     background: var(--card); border-radius: 14px; padding: 26px 22px; max-width: 320px; width: 100%;
     text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
   }
-  .pin-box h2 { font-family: "Fredoka", sans-serif; font-size: 1.1rem; margin: 0 0 14px; }
+  .pin-box h2 { font-family: "Poppins", sans-serif; font-size: 1.1rem; margin: 0 0 14px; }
   .pin-box input {
     width: 100%; text-align: center; font-size: 1.3rem; letter-spacing: 0.3em; color: var(--ink); background: var(--paper);
     padding: 12px; border-radius: 10px; border: 1px solid var(--paper-line); margin-bottom: 10px;
   }
   .pin-error { color: var(--danger); font-size: 0.82rem; min-height: 1.2em; margin-bottom: 6px; }
   .pin-box .row { display: flex; gap: 8px; }
-  .pin-box button { flex: 1; font-family: "Fredoka", sans-serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
+  .pin-box button { flex: 1; font-family: "Poppins", sans-serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
   .pin-box .cancel { background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); }
   .pin-box .submit { background: var(--ok); color: #fff; }
 
@@ -322,7 +331,7 @@
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   }
   .status-pill {
-    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; padding: 3px 9px; border-radius: 999px;
+    font-family: "Roboto Mono", monospace; font-size: 0.72rem; padding: 3px 9px; border-radius: 999px;
     background: var(--card); border: 1px solid var(--paper-line);
   }
   .status-pill[data-tone="err"] { color: var(--danger); border-color: var(--danger); }
@@ -339,6 +348,10 @@
 </style>
 </head>
 <body>
+<header class="topo"><div class="topo-in">
+  <a class="wordmark" href="../"><img src="../logo-espaco-jovem.jpg" width="34" height="34" alt=""><span>Espaço Jovem</span></a>
+  <nav class="menu-simples" aria-label="Navegação"><a href="../">Site</a><a href="../#missao">Objetivos</a><a href="../professores/">Professores</a></nav>
+</div></header>
 <div class="sheet" id="sheet">
   <p style="text-align:center;padding:40px 0;color:var(--ink-soft)">Carregando…</p>
 </div>
@@ -383,36 +396,6 @@
       id: "organizacao", emoji: "🗓️", label: "Organização",
       sub: "Como o Espaço Jovem funciona: dia, horário, idade, turmas, monitores e comunicação.",
       ex: "Ex.: sábado à tarde; turmas de 14 a 17 e de 18 a 25 anos; grupo de WhatsApp dos pais; encontro mensal dos monitores.",
-    },
-  ];
-
-  const OBJETIVOS = [
-    {
-      titulo: "Estudar antes de praticar",
-      texto: "Conhecer a Doutrina Espírita de forma séria, contínua e organizada, a partir das obras de Allan Kardec. O estudo vem antes de qualquer prática mediúnica.",
-      cite: "Kardec, O Livro dos Médiuns, 1ª parte, cap. III: Do método",
-    },
-    {
-      titulo: "Entender a mediunidade sem medo",
-      texto: "Mostrar que a mediunidade é uma faculdade natural do ser humano, sem misticismo nem fantasia, para que o jovem entenda o que sente e saiba lidar com isso com tranquilidade.",
-    },
-    {
-      titulo: "Educação moral e reforma íntima",
-      texto: "A mediunidade tem valor quando acompanha a melhora de quem a tem. O Espaço Jovem ajuda o jovem a se conhecer, a cuidar das próprias atitudes e a crescer como pessoa.",
-      cite: "“Reconhece-se o verdadeiro espírita pela sua transformação moral…” (O Evangelho segundo o Espiritismo, cap. XVII)",
-    },
-    {
-      titulo: "Equilíbrio e segurança",
-      texto: "Ensinar a oração, a vigilância e a disciplina como proteção, e respeitar o tempo de cada um. Questões de saúde física ou emocional também pedem acompanhamento médico e psicológico.",
-    },
-    {
-      titulo: "Servir ao bem, de graça",
-      texto: "Formar médiuns que entendam a mediunidade como instrumento de caridade, com Jesus como modelo, sem vaidade e sem nenhum tipo de cobrança.",
-      cite: "“Dai gratuitamente o que gratuitamente recebestes.” (O Evangelho segundo o Espiritismo, cap. XXVI)",
-    },
-    {
-      titulo: "Convivência fraterna e protagonismo",
-      texto: "Criar um grupo onde o jovem se sinta acolhido, tenha voz e assuma responsabilidades, preparando os futuros trabalhadores da casa espírita.",
     },
   ];
 
@@ -469,24 +452,11 @@
   }
 
   function renderIntro() {
-    const goals = OBJETIVOS.map((o, i) => `
-      <div class="goal">
-        <div class="n">OBJETIVO ${String(i + 1).padStart(2, "0")}</div>
-        <h3>${esc(o.titulo)}</h3>
-        <p>${esc(o.texto)}</p>
-        ${o.cite ? `<cite>${esc(o.cite)}</cite>` : ""}
-      </div>`).join("");
     return `
-      <section class="intro">
-        <h2>O que buscamos no Espaço Jovem</h2>
-        <p class="lead">O Espaço Jovem é o lugar dos jovens na Fraternidade do Amor: estudo da Doutrina Espírita, educação da mediunidade e convivência fraterna, no ritmo de cada um. De base kardecista, ele não “forma videntes”: educa, unindo estudo, valores e prática responsável. Estes são os objetivos que vão guiar o projeto:</p>
-        <div class="goals">${goals}</div>
-      </section>
-
       <section class="intro">
         <h2>Para que serve esta página</h2>
         <div class="purpose">
-          <p>Queremos montar o Espaço Jovem <b>junto com quem vai viver ele</b>: jovens, pais, médiuns, evangelizadores e trabalhadores da casa. Por isso, antes de fechar qualquer programa, abrimos este <b>painel de ideias</b>. Qualquer pessoa pode sugerir, sem cadastro e sem ideia certa ou errada.</p>
+          <p>Os objetivos, a organização e o conteúdo do Espaço Jovem estão no <a href="../">site da proposta</a>. Queremos fechar tudo <b>junto com quem vai viver o Espaço Jovem</b>: crianças, jovens, pais, evangelizadores e trabalhadores da casa. Por isso, antes de fechar qualquer programa, abrimos este <b>painel de ideias</b>. Qualquer pessoa pode sugerir, sem cadastro e sem ideia certa ou errada.</p>
           <p>As ideias estão separadas em quatro categorias: <b>conteúdo programático</b>, <b>atividades extras</b>, <b>tarefas</b> e <b>organização</b>. Escolha a coluna que combina com sua sugestão, escreva a ideia e, se quiser, explique melhor e coloque seu nome. Gostou da ideia de outra pessoa? Clique em <b>🙌 Apoiar</b>: isso ajuda a coordenação a ver o que é prioridade.</p>
           <div class="steps">
             <div class="step"><span class="k">PASSO 1</span><b>Coleta aberta</b>Todo mundo envia e apoia ideias. A página atualiza na hora para todos.</div>
@@ -581,9 +551,9 @@
           <div class="ticket-brand">
             <a href="../" title="Ir para o site do Espaço Jovem"><img class="ticket-logo" src="../logo-espaco-jovem.jpg" width="128" height="128" alt="Logo do Espaço Jovem — Fraternidade do Amor"></a>
             <div>
-              <p class="eyebrow"><a href="../" style="color:inherit">← Site do Espaço Jovem</a> · Fraternidade do Amor</p>
+              <p class="eyebrow">Fraternidade do Amor · painel de ideias</p>
               <h1>Espaço Jovem: vamos construir juntos</h1>
-              <p class="sub">Um painel aberto para reunir ideias sobre o que estudar, que atividades fazer, que tarefas propor e como organizar o Espaço Jovem. Leia os objetivos, escolha a categoria e deixe sua contribuição.</p>
+              <p class="sub">Um painel aberto para reunir ideias sobre o que estudar, que atividades fazer, que tarefas propor e como organizar o Espaço Jovem. Escolha a categoria e deixe sua contribuição.</p>
             </div>
           </div>
           <button class="btn-lock" id="btn-lock" data-unlocked="${unlocked}">${unlocked ? "🔓 Modo administrador" : "🔒 Sou administrador(a)"}</button>
