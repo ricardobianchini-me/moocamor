@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espaço Jovem — Fraternidade do Amor</title>
+<meta name="description" content="Ajude a construir o Espaço Jovem da Fraternidade do Amor: deixe suas ideias de conteúdo, atividades, tarefas e organização.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fraternidade do Amor">
+<meta property="og:title" content="Espaço Jovem — Fraternidade do Amor">
+<meta property="og:description" content="Vamos construir juntos o Espaço Jovem. Deixe sua ideia e apoie as dos outros.">
+<meta property="og:url" content="https://moocamor.duckdns.org/espacojovem/ideias/">
+<meta property="og:image" content="https://moocamor.duckdns.org/espacojovem/og-espaco-jovem.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta name="theme-color" content="#1d5f63">
+<link rel="icon" type="image/png" href="../icone-espaco-jovem.png">
+<link rel="apple-touch-icon" href="../icone-espaco-jovem.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* Paleta do logo do Espaço Jovem: petróleo, laranja, roxo e âmbar sobre creme. */
+  :root {
+    --paper: #fbf7ef;
+    --paper-line: #e8dcc6;
+    --ink: #1f2f30;
+    --ink-soft: #586866;
+    --card: #ffffff;
+    --shadow: rgba(31, 47, 48, 0.12);
+    --focus: #1c6ee0;
+    --brand: #1d5f63;
+    --hero-bg: linear-gradient(135deg, #fffaf1 0%, #fdeedd 55%, #f2e9f8 100%);
+    --hero-line: #eedcc0;
+    --on-c: #ffffff;
+
+    --conteudo: #1d6b6e;
+    --conteudo-soft: #e2f0ef;
+    --atividades: #b85d16;
+    --atividades-soft: #fbebdc;
+    --tarefas: #7652a8;
+    --tarefas-soft: #efe7f8;
+    --organizacao: #94650e;
+    --organizacao-soft: #f8eed6;
+    --danger: #c23b2a;
+    --ok: #2f8f58;
+    --warn-soft: #fbf0da;
+    --warn: #d9971f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #131b1b;
+      --paper-line: #33403f;
+      --ink: #ecf1ef;
+      --ink-soft: #a5b3b0;
+      --card: #1c2625;
+      --shadow: rgba(0, 0, 0, 0.45);
+      --focus: #6cb2ff;
+      --brand: #72c7c1;
+      --hero-bg: linear-gradient(135deg, #1c2625 0%, #2a2219 55%, #262033 100%);
+      --hero-line: #3a3a33;
+      --on-c: #12201f;
+
+      --conteudo: #62c2bd;
+      --conteudo-soft: #16302f;
+      --atividades: #f0a465;
+      --atividades-soft: #3a2615;
+      --tarefas: #b79ae2;
+      --tarefas-soft: #2c2340;
+      --organizacao: #e2b65e;
+      --organizacao-soft: #352a12;
+      --danger: #ef7b69;
+      --ok: #4fbb76;
+      --warn-soft: #362a14;
+      --warn: #e8b04a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #131b1b;
+    --paper-line: #33403f;
+    --ink: #ecf1ef;
+    --ink-soft: #a5b3b0;
+    --card: #1c2625;
+    --shadow: rgba(0, 0, 0, 0.45);
+    --focus: #6cb2ff;
+    --brand: #72c7c1;
+    --hero-bg: linear-gradient(135deg, #1c2625 0%, #2a2219 55%, #262033 100%);
+    --hero-line: #3a3a33;
+    --on-c: #12201f;
+
+    --conteudo: #62c2bd;
+    --conteudo-soft: #16302f;
+    --atividades: #f0a465;
+    --atividades-soft: #3a2615;
+    --tarefas: #b79ae2;
+    --tarefas-soft: #2c2340;
+    --organizacao: #e2b65e;
+    --organizacao-soft: #352a12;
+    --danger: #ef7b69;
+    --ok: #4fbb76;
+    --warn-soft: #362a14;
+    --warn: #e8b04a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
+    padding: 28px 16px 64px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sheet { width: 100%; max-width: 1240px; }
+
+  header.ticket {
+    background: var(--hero-bg);
+    color: var(--ink);
+    border: 1px solid var(--hero-line);
+    border-radius: 20px;
+    padding: 24px 26px;
+    box-shadow: 0 10px 24px var(--shadow);
+  }
+  .ticket-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .ticket-brand { display: flex; align-items: center; gap: 22px; flex: 1 1 520px; min-width: 0; }
+  .ticket-logo {
+    width: 128px; height: 128px; flex-shrink: 0; border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(214, 140, 60, 0.28);
+  }
+  .ticket .eyebrow {
+    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft); margin: 0 0 6px;
+  }
+  .ticket h1 {
+    font-family: "Fredoka", "Segoe UI", sans-serif; font-weight: 600; color: var(--brand);
+    font-size: clamp(1.6rem, 4.6vw, 2.4rem); line-height: 1.08; margin: 0 0 10px; text-wrap: balance;
+  }
+  .ticket p.sub { margin: 0; font-size: 1rem; color: var(--ink-soft); max-width: 70ch; line-height: 1.55; }
+  @media (max-width: 560px) {
+    .ticket-brand { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .ticket-logo { width: 96px; height: 96px; }
+  }
+
+  .btn-lock {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.8rem;
+    background: var(--card); border: 1px solid var(--paper-line); color: var(--brand);
+    border-radius: 999px; padding: 7px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-lock[data-unlocked="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-c); }
+
+  section.intro { margin-top: 26px; }
+  section.intro h2 {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.3rem; margin: 0 0 4px;
+  }
+  section.intro > p.lead { margin: 0 0 14px; color: var(--ink-soft); max-width: 75ch; line-height: 1.55; }
+
+  .goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 12px; }
+  .goal {
+    background: var(--card); border: 1px solid var(--paper-line); border-radius: 14px; padding: 16px 18px;
+    box-shadow: 0 4px 12px var(--shadow);
+  }
+  .goal .n {
+    font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); letter-spacing: 0.08em;
+  }
+  .goal h3 { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.02rem; margin: 4px 0 6px; }
+  .goal p { margin: 0; font-size: 0.88rem; line-height: 1.55; color: var(--ink-soft); }
+  .goal cite { display: block; margin-top: 8px; font-size: 0.78rem; font-style: italic; color: var(--ink-soft); }
+
+  .purpose {
+    background: var(--card); border: 1px solid var(--paper-line); border-radius: 16px; padding: 20px 22px;
+    box-shadow: 0 4px 12px var(--shadow);
+  }
+  .purpose p { margin: 0 0 12px; line-height: 1.6; max-width: 80ch; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
+  .step { background: var(--paper); border-radius: 12px; padding: 12px 14px; font-size: 0.88rem; line-height: 1.5; }
+  .step b { font-family: "Fredoka", sans-serif; font-weight: 600; display: block; margin-bottom: 2px; }
+  .step .k { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); }
+
+  .summary {
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .summary-card {
+    background: var(--card); border: 1px solid var(--paper-line); border-radius: 14px;
+    padding: 14px 16px; box-shadow: 0 6px 16px var(--shadow); text-align: center;
+  }
+  .summary-card .emoji { font-size: 1.4rem; }
+  .summary-card .count {
+    font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 2rem; line-height: 1.1; margin-top: 2px;
+    color: var(--c, var(--ink));
+  }
+  .summary-card .lbl { font-size: 0.8rem; color: var(--ink-soft); margin-top: 2px; }
+
+  [data-cat="conteudo"] { --c: var(--conteudo); --c-soft: var(--conteudo-soft); }
+  [data-cat="atividades"] { --c: var(--atividades); --c-soft: var(--atividades-soft); }
+  [data-cat="tarefas"] { --c: var(--tarefas); --c-soft: var(--tarefas-soft); }
+  [data-cat="organizacao"] { --c: var(--organizacao); --c-soft: var(--organizacao-soft); }
+
+  .view-bar {
+    margin-top: 22px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  }
+  .view-tabs, .view-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .view-tab, .toolbtn {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.84rem;
+    background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
+    border-radius: 999px; padding: 8px 16px; cursor: pointer;
+  }
+  .view-tab[data-active="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .toolbtn:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .toolbtn.danger { color: var(--danger); }
+
+  .status-banner {
+    margin-top: 18px; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem;
+    background: var(--warn-soft); border: 1px solid var(--warn); color: var(--ink);
+  }
+
+  .columns {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+
+  .col {
+    background: var(--card); border-radius: 16px; box-shadow: 0 6px 18px var(--shadow);
+    overflow: hidden; display: flex; flex-direction: column;
+    border-top: 6px solid var(--c);
+  }
+  .col-head { padding: 16px 18px 10px; }
+  .col-head h2 {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.12rem; margin: 0 0 3px; color: var(--c);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .col-head p { margin: 0; font-size: 0.84rem; color: var(--ink-soft); line-height: 1.45; }
+  .col-head .ex { margin-top: 6px; font-size: 0.78rem; font-style: italic; }
+
+  .col-form { padding: 0 18px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .col-form input, .col-form textarea {
+    font-family: inherit; font-size: 0.88rem; padding: 9px 11px; border-radius: 9px;
+    border: 1px solid var(--paper-line); background: var(--paper); color: var(--ink); resize: vertical; width: 100%;
+  }
+  .col-form textarea { min-height: 56px; }
+  .col-form input:focus-visible, .col-form textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+  .col-form button {
+    align-self: flex-start; font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.86rem;
+    background: var(--c); color: var(--on-c); border: none; border-radius: 999px; padding: 9px 18px; cursor: pointer;
+  }
+  .col-form button:hover { filter: brightness(0.94); }
+  .closed-note {
+    margin: 0 18px 14px; padding: 10px 12px; border-radius: 10px; font-size: 0.82rem;
+    background: var(--paper); border: 1px dashed var(--paper-line); color: var(--ink-soft);
+  }
+
+  .col-list { padding: 4px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+  .item-card {
+    background: var(--c-soft); border: 1px solid var(--paper-line); border-radius: 12px; padding: 12px 14px;
+    position: relative;
+  }
+  .item-ponto {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--ink); margin: 0 0 4px;
+    padding-right: 22px; overflow-wrap: anywhere;
+  }
+  .item-desc { font-size: 0.85rem; color: var(--ink-soft); margin: 0; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .item-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .item-autor { font-size: 0.76rem; color: var(--ink-soft); overflow-wrap: anywhere; }
+  .item-empty { font-size: 0.84rem; color: var(--ink-soft); font-style: italic; padding: 6px 2px; }
+  .apoio {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.78rem;
+    background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
+    border-radius: 999px; padding: 4px 11px; cursor: pointer; white-space: nowrap;
+  }
+  .apoio:hover:not(:disabled) { border-color: var(--c); color: var(--c); }
+  .apoio[data-done="true"] { background: var(--c); border-color: var(--c); color: var(--on-c); }
+  .apoio:disabled { cursor: default; }
+
+  .item-rm {
+    position: absolute; top: 8px; right: 8px; border: none; background: none; color: var(--ink-soft);
+    cursor: pointer; font-size: 0.9rem; padding: 3px 5px; border-radius: 6px; line-height: 1;
+  }
+  .item-rm:hover { color: var(--danger); }
+
+  .item-edit input, .item-edit textarea, .item-edit select {
+    width: 100%; font-family: inherit; font-size: 0.86rem; color: var(--ink); background: var(--card);
+    border: 1px solid var(--paper-line); border-radius: 7px; padding: 6px 8px; resize: vertical; margin-bottom: 6px;
+  }
+  .item-edit textarea { min-height: 50px; }
+  .edit-btns { display: flex; gap: 6px; }
+  .edit-btns button {
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.82rem; border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  }
+  .edit-btns .save { background: var(--ok); color: #fff; border: none; }
+  .edit-btns .cancel { background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); }
+
+  .pin-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  }
+  .pin-box {
+    background: var(--card); border-radius: 14px; padding: 26px 22px; max-width: 320px; width: 100%;
+    text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+  .pin-box h2 { font-family: "Fredoka", sans-serif; font-size: 1.1rem; margin: 0 0 14px; }
+  .pin-box input {
+    width: 100%; text-align: center; font-size: 1.3rem; letter-spacing: 0.3em; color: var(--ink); background: var(--paper);
+    padding: 12px; border-radius: 10px; border: 1px solid var(--paper-line); margin-bottom: 10px;
+  }
+  .pin-error { color: var(--danger); font-size: 0.82rem; min-height: 1.2em; margin-bottom: 6px; }
+  .pin-box .row { display: flex; gap: 8px; }
+  .pin-box button { flex: 1; font-family: "Fredoka", sans-serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
+  .pin-box .cancel { background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); }
+  .pin-box .submit { background: var(--ok); color: #fff; }
+
+  footer.legend {
+    margin-top: 22px; font-size: 0.82rem; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .status-pill {
+    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; padding: 3px 9px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--paper-line);
+  }
+  .status-pill[data-tone="err"] { color: var(--danger); border-color: var(--danger); }
+  .status-pill[data-tone="ok"] { color: var(--ok); border-color: var(--ok); }
+
+  @media print {
+    body { padding: 0; background: #fff; color: #000; }
+    .btn-lock, .view-bar, .col-form, .item-rm, .apoio, footer.legend, .pin-overlay, .status-banner, section.intro { display: none !important; }
+    header.ticket { box-shadow: none; }
+    .summary-card, .col { box-shadow: none; border: 1px solid #ccc; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <p style="text-align:center;padding:40px 0;color:var(--ink-soft)">Carregando…</p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+<script src="../../db-service.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
+    authDomain: "fraternidadedoamor-ef315.firebaseapp.com",
+    databaseURL: "https://fraternidadedoamor-ef315-default-rtdb.firebaseio.com",
+    projectId: "fraternidadedoamor-ef315",
+    storageBucket: "fraternidadedoamor-ef315.firebasestorage.app",
+    messagingSenderId: "703575848763",
+    appId: "1:703575848763:web:52548e6124b8a0841c691e",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const rootRef = SvcRef.wrap(db.ref("escolaJovens"), "escolaJovens");
+
+  const APOIOS_KEY = "escolaJovens.apoios";
+  const VOTANTE_KEY = "escolaJovens.votante";
+
+  const CATEGORIAS = [
+    {
+      id: "conteudo", emoji: "📚", label: "Conteúdo programático",
+      sub: "O que estudar: temas, livros, módulos e em que ordem.",
+      ex: "Ex.: começar por O Livro dos Espíritos; um módulo sobre ansiedade e mediunidade; estudar os tipos de médiuns.",
+    },
+    {
+      id: "atividades", emoji: "🎨", label: "Atividades extras",
+      sub: "O que acontece além da aula: vivências, arte, passeios e serviço.",
+      ex: "Ex.: visita a um lar de idosos; sarau com música espírita; retiro de fim de semana; campanha do agasalho.",
+    },
+    {
+      id: "tarefas", emoji: "✍️", label: "Tarefas",
+      sub: "O que o jovem leva para casa entre um encontro e outro.",
+      ex: "Ex.: diário de autoconhecimento; ler um capítulo e trazer uma pergunta; Evangelho no Lar com a família.",
+    },
+    {
+      id: "organizacao", emoji: "🗓️", label: "Organização",
+      sub: "Como o Espaço Jovem funciona: dia, horário, idade, turmas, monitores e comunicação.",
+      ex: "Ex.: sábado à tarde; turmas de 14 a 17 e de 18 a 25 anos; grupo de WhatsApp dos pais; encontro mensal dos monitores.",
+    },
+  ];
+
+  const OBJETIVOS = [
+    {
+      titulo: "Estudar antes de praticar",
+      texto: "Conhecer a Doutrina Espírita de forma séria, contínua e organizada, a partir das obras de Allan Kardec. O estudo vem antes de qualquer prática mediúnica.",
+      cite: "Kardec, O Livro dos Médiuns, 1ª parte, cap. III: Do método",
+    },
+    {
+      titulo: "Entender a mediunidade sem medo",
+      texto: "Mostrar que a mediunidade é uma faculdade natural do ser humano, sem misticismo nem fantasia, para que o jovem entenda o que sente e saiba lidar com isso com tranquilidade.",
+    },
+    {
+      titulo: "Educação moral e reforma íntima",
+      texto: "A mediunidade tem valor quando acompanha a melhora de quem a tem. O Espaço Jovem ajuda o jovem a se conhecer, a cuidar das próprias atitudes e a crescer como pessoa.",
+      cite: "“Reconhece-se o verdadeiro espírita pela sua transformação moral…” (O Evangelho segundo o Espiritismo, cap. XVII)",
+    },
+    {
+      titulo: "Equilíbrio e segurança",
+      texto: "Ensinar a oração, a vigilância e a disciplina como proteção, e respeitar o tempo de cada um. Questões de saúde física ou emocional também pedem acompanhamento médico e psicológico.",
+    },
+    {
+      titulo: "Servir ao bem, de graça",
+      texto: "Formar médiuns que entendam a mediunidade como instrumento de caridade, com Jesus como modelo, sem vaidade e sem nenhum tipo de cobrança.",
+      cite: "“Dai gratuitamente o que gratuitamente recebestes.” (O Evangelho segundo o Espiritismo, cap. XXVI)",
+    },
+    {
+      titulo: "Convivência fraterna e protagonismo",
+      texto: "Criar um grupo onde o jovem se sinta acolhido, tenha voz e assuma responsabilidades, preparando os futuros trabalhadores da casa espírita.",
+    },
+  ];
+
+  let state = { ideias: {}, apoios: {}, config: {} };
+  let unlocked = false;
+  let editingId = null;
+  let pinIntent = null;
+  let ordem = "recentes";
+  const rascunhos = {};
+
+  // Identificador anônimo deste navegador, usado como chave do apoio (1 apoio por ideia).
+  const votanteId = (() => {
+    let v = null;
+    try { v = localStorage.getItem(VOTANTE_KEY); } catch (e) {}
+    if (!v) {
+      v = Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+      try { localStorage.setItem(VOTANTE_KEY, v); } catch (e) {}
+    }
+    return v;
+  })();
+
+  function lerApoios() {
+    try { return JSON.parse(localStorage.getItem(APOIOS_KEY) || "{}"); } catch (e) { return {}; }
+  }
+  function gravarApoio(id) {
+    const a = lerApoios();
+    a[id] = true;
+    try { localStorage.setItem(APOIOS_KEY, JSON.stringify(a)); } catch (e) {}
+  }
+  function jaApoiou(id) {
+    return !!lerApoios()[id] || !!(state.apoios[id] && state.apoios[id][votanteId]);
+  }
+  function totalApoios(id) {
+    return Object.keys(state.apoios[id] || {}).length;
+  }
+
+  function coletaAberta() {
+    return !(state.config && state.config.aberta === false);
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function ideiasDaCategoria(catId) {
+    return Object.entries(state.ideias || {})
+      .map(([id, it]) => ({ id, ...it, apoios: totalApoios(id) }))
+      .filter((it) => it.categoria === catId)
+      .sort((a, b) => ordem === "apoiadas"
+        ? b.apoios - a.apoios || (b.criadoEm ?? 0) - (a.criadoEm ?? 0)
+        : (b.criadoEm ?? 0) - (a.criadoEm ?? 0));
+  }
+
+  function renderIntro() {
+    const goals = OBJETIVOS.map((o, i) => `
+      <div class="goal">
+        <div class="n">OBJETIVO ${String(i + 1).padStart(2, "0")}</div>
+        <h3>${esc(o.titulo)}</h3>
+        <p>${esc(o.texto)}</p>
+        ${o.cite ? `<cite>${esc(o.cite)}</cite>` : ""}
+      </div>`).join("");
+    return `
+      <section class="intro">
+        <h2>O que buscamos no Espaço Jovem</h2>
+        <p class="lead">O Espaço Jovem é o lugar dos jovens na Fraternidade do Amor: estudo da Doutrina Espírita, educação da mediunidade e convivência fraterna, no ritmo de cada um. De base kardecista, ele não “forma videntes”: educa, unindo estudo, valores e prática responsável. Estes são os objetivos que vão guiar o projeto:</p>
+        <div class="goals">${goals}</div>
+      </section>
+
+      <section class="intro">
+        <h2>Para que serve esta página</h2>
+        <div class="purpose">
+          <p>Queremos montar o Espaço Jovem <b>junto com quem vai viver ele</b>: jovens, pais, médiuns, evangelizadores e trabalhadores da casa. Por isso, antes de fechar qualquer programa, abrimos este <b>painel de ideias</b>. Qualquer pessoa pode sugerir, sem cadastro e sem ideia certa ou errada.</p>
+          <p>As ideias estão separadas em quatro categorias: <b>conteúdo programático</b>, <b>atividades extras</b>, <b>tarefas</b> e <b>organização</b>. Escolha a coluna que combina com sua sugestão, escreva a ideia e, se quiser, explique melhor e coloque seu nome. Gostou da ideia de outra pessoa? Clique em <b>🙌 Apoiar</b>: isso ajuda a coordenação a ver o que é prioridade.</p>
+          <div class="steps">
+            <div class="step"><span class="k">PASSO 1</span><b>Coleta aberta</b>Todo mundo envia e apoia ideias. A página atualiza na hora para todos.</div>
+            <div class="step"><span class="k">PASSO 2</span><b>Encerramento</b>A coordenação encerra a coleta. As ideias continuam visíveis, mas não entram novas.</div>
+            <div class="step"><span class="k">PASSO 3</span><b>Organização</b>A coordenação agrupa, prioriza e transforma as ideias na proposta do Espaço Jovem, que depois volta para o grupo.</div>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  function renderSummary() {
+    const cards = CATEGORIAS.map((c) => `
+      <div class="summary-card" data-cat="${c.id}">
+        <div class="emoji">${c.emoji}</div>
+        <div class="count">${ideiasDaCategoria(c.id).length}</div>
+        <div class="lbl">${esc(c.label)}</div>
+      </div>`).join("");
+    const total = Object.keys(state.ideias || {}).length;
+    return `<div class="summary">
+      ${cards}
+      <div class="summary-card">
+        <div class="emoji">💡</div>
+        <div class="count">${total}</div>
+        <div class="lbl">Total de ideias</div>
+      </div>
+    </div>`;
+  }
+
+  function renderItemCard(it) {
+    if (editingId === it.id) {
+      return `<div class="item-card">
+        <div class="item-edit">
+          <select data-edit-cat="${it.id}" aria-label="Categoria">
+            ${CATEGORIAS.map((c) => `<option value="${c.id}" ${c.id === it.categoria ? "selected" : ""}>${c.emoji} ${esc(c.label)}</option>`).join("")}
+          </select>
+          <input type="text" data-edit-ponto="${it.id}" value="${esc(it.ponto)}" placeholder="Ideia" maxlength="160" />
+          <textarea data-edit-desc="${it.id}" placeholder="Detalhes" maxlength="1200">${esc(it.descricao || "")}</textarea>
+          <input type="text" data-edit-autor="${it.id}" value="${esc(it.autor || "")}" placeholder="Nome" maxlength="60" />
+          <div class="edit-btns">
+            <button type="button" class="save" data-save-item="${it.id}">Salvar</button>
+            <button type="button" class="cancel" data-cancel-edit>Cancelar</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    const apoiada = jaApoiou(it.id);
+    const n = it.apoios;
+    return `<div class="item-card">
+      ${unlocked ? `<button class="item-rm" data-rm-item="${it.id}" title="Remover ideia" aria-label="Remover ideia">✕</button>` : ""}
+      <p class="item-ponto" ${unlocked ? `data-edit-open="${it.id}" style="cursor:pointer;" title="Clique para editar ou mudar de categoria"` : ""}>${esc(it.ponto)}</p>
+      ${it.descricao ? `<p class="item-desc">${esc(it.descricao)}</p>` : ""}
+      <div class="item-foot">
+        <span class="item-autor">${it.autor ? `por ${esc(it.autor)}` : ""}</span>
+        <button class="apoio" data-apoio="${it.id}" data-done="${apoiada}" ${apoiada || !coletaAberta() ? "disabled" : ""}
+          title="${apoiada ? "Você já apoiou esta ideia" : "Apoiar esta ideia"}">🙌 ${apoiada ? "Apoiada" : "Apoiar"} · ${n}</button>
+      </div>
+    </div>`;
+  }
+
+  function renderColumn(c) {
+    const itens = ideiasDaCategoria(c.id);
+    const r = rascunhos[c.id] || {};
+    const list = itens.length
+      ? itens.map(renderItemCard).join("")
+      : `<div class="item-empty">Nenhuma ideia ainda. Que tal ser a primeira pessoa?</div>`;
+    return `<div class="col" data-cat="${c.id}">
+      <div class="col-head">
+        <h2>${c.emoji} ${esc(c.label)}</h2>
+        <p>${esc(c.sub)}</p>
+        <p class="ex">${esc(c.ex)}</p>
+      </div>
+      ${coletaAberta() || unlocked ? `<form class="col-form" data-form-cat="${c.id}">
+        <input type="text" name="ponto" placeholder="Sua ideia…" maxlength="160" required value="${esc(r.ponto || "")}" />
+        <textarea name="descricao" placeholder="Explique melhor (opcional)" maxlength="1200">${esc(r.descricao || "")}</textarea>
+        <input type="text" name="autor" placeholder="Seu nome (opcional)" maxlength="60" value="${esc(r.autor || "")}" />
+        <button type="submit">+ Enviar ideia</button>
+      </form>` : `<p class="closed-note">🔒 Coleta encerrada. Obrigado por contribuir!</p>`}
+      <div class="col-list">${list}</div>
+    </div>`;
+  }
+
+  function render() {
+    const ativo = document.activeElement;
+    let foco = null;
+    if (ativo && ativo.form && ativo.form.dataset.formCat) {
+      foco = { cat: ativo.form.dataset.formCat, name: ativo.name, start: ativo.selectionStart, end: ativo.selectionEnd };
+    }
+
+    document.getElementById("sheet").innerHTML = `
+      <header class="ticket">
+        <div class="ticket-top">
+          <div class="ticket-brand">
+            <a href="../" title="Ir para o site do Espaço Jovem"><img class="ticket-logo" src="../logo-espaco-jovem.jpg" width="128" height="128" alt="Logo do Espaço Jovem — Fraternidade do Amor"></a>
+            <div>
+              <p class="eyebrow"><a href="../" style="color:inherit">← Site do Espaço Jovem</a> · Fraternidade do Amor</p>
+              <h1>Espaço Jovem: vamos construir juntos</h1>
+              <p class="sub">Um painel aberto para reunir ideias sobre o que estudar, que atividades fazer, que tarefas propor e como organizar o Espaço Jovem. Leia os objetivos, escolha a categoria e deixe sua contribuição.</p>
+            </div>
+          </div>
+          <button class="btn-lock" id="btn-lock" data-unlocked="${unlocked}">${unlocked ? "🔓 Modo administrador" : "🔒 Sou administrador(a)"}</button>
+        </div>
+      </header>
+
+      ${renderIntro()}
+
+      ${renderSummary()}
+
+      ${coletaAberta() ? "" : `<div class="status-banner">🔒 <b>Coleta encerrada.</b> Não estamos mais recebendo ideias. Abaixo está tudo o que foi enviado, e a coordenação já está organizando a proposta.</div>`}
+
+      <div class="view-bar">
+        <div class="view-tabs">
+          <button class="view-tab" data-ordem="recentes" data-active="${ordem === "recentes"}">Mais recentes</button>
+          <button class="view-tab" data-ordem="apoiadas" data-active="${ordem === "apoiadas"}">Mais apoiadas</button>
+        </div>
+        <div class="view-actions">
+          <button class="toolbtn" id="btn-print">🖨️ Imprimir / salvar PDF</button>
+          ${unlocked ? `<button class="toolbtn ${coletaAberta() ? "danger" : ""}" id="btn-toggle-coleta">${coletaAberta() ? "🔒 Encerrar coleta" : "🔓 Reabrir coleta"}</button>` : ""}
+        </div>
+      </div>
+
+      <div class="columns">${CATEGORIAS.map(renderColumn).join("")}</div>
+
+      <footer class="legend">
+        <span class="status-pill" id="save-status">conectando…</span>
+        <span>Espaço Jovem · Fraternidade do Amor</span>
+      </footer>
+
+      <div class="pin-overlay" id="pin-overlay" style="display:none;">
+        <div class="pin-box">
+          <h2>Digite o PIN de administrador(a)</h2>
+          <input type="password" inputmode="numeric" id="pin-input" placeholder="PIN" maxlength="8" />
+          <div class="pin-error" id="pin-error"></div>
+          <div class="row">
+            <button class="cancel" id="pin-cancel">Cancelar</button>
+            <button class="submit" id="pin-submit">Entrar</button>
+          </div>
+        </div>
+      </div>
+    `;
+    attach();
+
+    if (foco) {
+      const el = document.querySelector(`[data-form-cat="${foco.cat}"] [name="${foco.name}"]`);
+      if (el) {
+        el.focus();
+        try { el.setSelectionRange(foco.start, foco.end); } catch (e) {}
+      }
+    }
+  }
+
+  function setStatus(text, tone) {
+    const pill = document.getElementById("save-status");
+    if (!pill) return;
+    pill.textContent = text;
+    if (tone) pill.dataset.tone = tone; else delete pill.dataset.tone;
+  }
+
+  function requirePin(action) {
+    pinIntent = action;
+    const overlay = document.getElementById("pin-overlay");
+    document.getElementById("pin-input").value = "";
+    document.getElementById("pin-error").textContent = "";
+    overlay.style.display = "flex";
+    document.getElementById("pin-input").focus();
+  }
+
+  async function checkPin() {
+    const val = document.getElementById("pin-input").value;
+    if (!(await SvcAuth.verify(val))) {
+      document.getElementById("pin-error").textContent = "PIN incorreto.";
+      return;
+    }
+    document.getElementById("pin-overlay").style.display = "none";
+    unlocked = true;
+    const intent = pinIntent;
+    pinIntent = null;
+    render();
+    if (typeof intent === "function") intent();
+  }
+
+  function attach() {
+    document.getElementById("btn-lock").addEventListener("click", () => {
+      if (unlocked) { unlocked = false; editingId = null; render(); return; }
+      requirePin(null);
+    });
+    document.getElementById("pin-cancel").addEventListener("click", () => {
+      document.getElementById("pin-overlay").style.display = "none";
+    });
+    document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
+    document.getElementById("pin-submit").addEventListener("click", checkPin);
+
+    document.querySelectorAll("[data-ordem]").forEach((btn) => {
+      btn.addEventListener("click", () => { ordem = btn.dataset.ordem; render(); });
+    });
+    document.getElementById("btn-print").addEventListener("click", () => window.print());
+    const btnColeta = document.getElementById("btn-toggle-coleta");
+    if (btnColeta) {
+      btnColeta.addEventListener("click", () => {
+        const msg = coletaAberta()
+          ? "Encerrar a coleta? Ninguém (além dos administradores) poderá enviar ou apoiar ideias."
+          : "Reabrir a coleta para novas ideias?";
+        if (!confirm(msg)) return;
+        rootRef.child("config").child("aberta").set(!coletaAberta());
+      });
+    }
+
+    document.querySelectorAll("[data-form-cat]").forEach((form) => {
+      const cat = form.dataset.formCat;
+      form.addEventListener("input", (ev) => {
+        rascunhos[cat] = rascunhos[cat] || {};
+        rascunhos[cat][ev.target.name] = ev.target.value;
+      });
+      form.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        const ponto = form.elements.ponto.value.trim();
+        const descricao = form.elements.descricao.value.trim();
+        const autor = form.elements.autor.value.trim();
+        if (!ponto) return;
+        const ref = rootRef.child("ideias").push();
+        setStatus("enviando…");
+        ref.set({ categoria: cat, ponto, descricao, autor, criadoEm: Date.now() })
+          .then(() => setStatus("ideia enviada ✓", "ok"))
+          .catch((err) => { setStatus("erro ao enviar", "err"); console.error(err); });
+        rascunhos[cat] = { autor };
+        form.elements.ponto.value = "";
+        form.elements.descricao.value = "";
+      });
+    });
+
+    document.querySelectorAll("[data-apoio]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.apoio;
+        if (jaApoiou(id) || !coletaAberta()) return;
+        gravarApoio(id);
+        rootRef.child("apoios").child(id).child(votanteId).set(true)
+          .catch((err) => { setStatus("erro ao apoiar", "err"); console.error(err); });
+        render();
+      });
+    });
+
+    document.querySelectorAll("[data-rm-item]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!confirm("Remover esta ideia?")) return;
+        const id = btn.dataset.rmItem;
+        rootRef.child("ideias").child(id).remove();
+        rootRef.child("apoios").child(id).remove();
+      });
+    });
+
+    document.querySelectorAll("[data-edit-open]").forEach((el) => {
+      el.addEventListener("click", () => { editingId = el.dataset.editOpen; render(); });
+    });
+    document.querySelectorAll("[data-cancel-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => { editingId = null; render(); });
+    });
+    document.querySelectorAll("[data-save-item]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.saveItem;
+        const ponto = document.querySelector(`[data-edit-ponto="${id}"]`).value.trim();
+        const descricao = document.querySelector(`[data-edit-desc="${id}"]`).value.trim();
+        const autor = document.querySelector(`[data-edit-autor="${id}"]`).value.trim();
+        const categoria = document.querySelector(`[data-edit-cat="${id}"]`).value;
+        if (!ponto) return;
+        rootRef.child("ideias").child(id).update({ ponto, descricao, autor, categoria });
+        editingId = null;
+        render();
+      });
+    });
+  }
+
+  render();
+  rootRef.on("value", (snap) => {
+    const data = snap.val();
+    state = {
+      ideias: (data && data.ideias) || {},
+      apoios: (data && data.apoios) || {},
+      config: (data && data.config) || {},
+    };
+    render();
+    setStatus("conectado", "ok");
+  }, (err) => {
+    render();
+    setStatus("erro de conexão", "err");
+    console.error(err);
+  });
+</script>
+</body>
+</html>

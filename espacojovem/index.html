@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Espaço Jovem — Fraternidade do Amor</title>
-<meta name="description" content="Ajude a construir o Espaço Jovem da Fraternidade do Amor: deixe suas ideias de conteúdo, atividades, tarefas e organização.">
+<meta name="description" content="Espaço Jovem: evangelização espírita para crianças e jovens até 16 anos na Fraternidade do Amor. Objetivo, missão, visão, valores, organização e conteúdo programático.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Fraternidade do Amor">
 <meta property="og:title" content="Espaço Jovem — Fraternidade do Amor">
-<meta property="og:description" content="Vamos construir juntos o Espaço Jovem. Deixe sua ideia e apoie as dos outros.">
+<meta property="og:description" content="Evangelização espírita para crianças e jovens até 16 anos. Conheça a proposta e deixe sua ideia.">
 <meta property="og:url" content="https://moocamor.duckdns.org/espacojovem/">
 <meta property="og:image" content="https://moocamor.duckdns.org/espacojovem/og-espaco-jovem.jpg">
 <meta property="og:image:width" content="1200">
@@ -18,760 +18,302 @@
 <link rel="apple-touch-icon" href="icone-espaco-jovem.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  /* Paleta do logo do Espaço Jovem: petróleo, laranja, roxo e âmbar sobre creme. */
-  :root {
-    --paper: #fbf7ef;
-    --paper-line: #e8dcc6;
-    --ink: #1f2f30;
-    --ink-soft: #586866;
-    --card: #ffffff;
-    --shadow: rgba(31, 47, 48, 0.12);
-    --focus: #1c6ee0;
-    --brand: #1d5f63;
-    --hero-bg: linear-gradient(135deg, #fffaf1 0%, #fdeedd 55%, #f2e9f8 100%);
-    --hero-line: #eedcc0;
-    --on-c: #ffffff;
-
-    --conteudo: #1d6b6e;
-    --conteudo-soft: #e2f0ef;
-    --atividades: #b85d16;
-    --atividades-soft: #fbebdc;
-    --tarefas: #7652a8;
-    --tarefas-soft: #efe7f8;
-    --organizacao: #94650e;
-    --organizacao-soft: #f8eed6;
-    --danger: #c23b2a;
-    --ok: #2f8f58;
-    --warn-soft: #fbf0da;
-    --warn: #d9971f;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #131b1b;
-      --paper-line: #33403f;
-      --ink: #ecf1ef;
-      --ink-soft: #a5b3b0;
-      --card: #1c2625;
-      --shadow: rgba(0, 0, 0, 0.45);
-      --focus: #6cb2ff;
-      --brand: #72c7c1;
-      --hero-bg: linear-gradient(135deg, #1c2625 0%, #2a2219 55%, #262033 100%);
-      --hero-line: #3a3a33;
-      --on-c: #12201f;
-
-      --conteudo: #62c2bd;
-      --conteudo-soft: #16302f;
-      --atividades: #f0a465;
-      --atividades-soft: #3a2615;
-      --tarefas: #b79ae2;
-      --tarefas-soft: #2c2340;
-      --organizacao: #e2b65e;
-      --organizacao-soft: #352a12;
-      --danger: #ef7b69;
-      --ok: #4fbb76;
-      --warn-soft: #362a14;
-      --warn: #e8b04a;
-    }
-  }
-
-  :root[data-theme="dark"] {
-    --paper: #131b1b;
-    --paper-line: #33403f;
-    --ink: #ecf1ef;
-    --ink-soft: #a5b3b0;
-    --card: #1c2625;
-    --shadow: rgba(0, 0, 0, 0.45);
-    --focus: #6cb2ff;
-    --brand: #72c7c1;
-    --hero-bg: linear-gradient(135deg, #1c2625 0%, #2a2219 55%, #262033 100%);
-    --hero-line: #3a3a33;
-    --on-c: #12201f;
-
-    --conteudo: #62c2bd;
-    --conteudo-soft: #16302f;
-    --atividades: #f0a465;
-    --atividades-soft: #3a2615;
-    --tarefas: #b79ae2;
-    --tarefas-soft: #2c2340;
-    --organizacao: #e2b65e;
-    --organizacao-soft: #352a12;
-    --danger: #ef7b69;
-    --ok: #4fbb76;
-    --warn-soft: #362a14;
-    --warn: #e8b04a;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
-    padding: 28px 16px 64px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .sheet { width: 100%; max-width: 1240px; }
-
-  header.ticket {
-    background: var(--hero-bg);
-    color: var(--ink);
-    border: 1px solid var(--hero-line);
-    border-radius: 20px;
-    padding: 24px 26px;
-    box-shadow: 0 10px 24px var(--shadow);
-  }
-  .ticket-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .ticket-brand { display: flex; align-items: center; gap: 22px; flex: 1 1 520px; min-width: 0; }
-  .ticket-logo {
-    width: 128px; height: 128px; flex-shrink: 0; border-radius: 50%;
-    box-shadow: 0 6px 20px rgba(214, 140, 60, 0.28);
-  }
-  .ticket .eyebrow {
-    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ink-soft); margin: 0 0 6px;
-  }
-  .ticket h1 {
-    font-family: "Fredoka", "Segoe UI", sans-serif; font-weight: 600; color: var(--brand);
-    font-size: clamp(1.6rem, 4.6vw, 2.4rem); line-height: 1.08; margin: 0 0 10px; text-wrap: balance;
-  }
-  .ticket p.sub { margin: 0; font-size: 1rem; color: var(--ink-soft); max-width: 70ch; line-height: 1.55; }
-  @media (max-width: 560px) {
-    .ticket-brand { flex-direction: column; align-items: flex-start; gap: 14px; }
-    .ticket-logo { width: 96px; height: 96px; }
-  }
-
-  .btn-lock {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.8rem;
-    background: var(--card); border: 1px solid var(--paper-line); color: var(--brand);
-    border-radius: 999px; padding: 7px 14px; cursor: pointer; white-space: nowrap;
-  }
-  .btn-lock[data-unlocked="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-c); }
-
-  section.intro { margin-top: 26px; }
-  section.intro h2 {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.3rem; margin: 0 0 4px;
-  }
-  section.intro > p.lead { margin: 0 0 14px; color: var(--ink-soft); max-width: 75ch; line-height: 1.55; }
-
-  .goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 12px; }
-  .goal {
-    background: var(--card); border: 1px solid var(--paper-line); border-radius: 14px; padding: 16px 18px;
-    box-shadow: 0 4px 12px var(--shadow);
-  }
-  .goal .n {
-    font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); letter-spacing: 0.08em;
-  }
-  .goal h3 { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.02rem; margin: 4px 0 6px; }
-  .goal p { margin: 0; font-size: 0.88rem; line-height: 1.55; color: var(--ink-soft); }
-  .goal cite { display: block; margin-top: 8px; font-size: 0.78rem; font-style: italic; color: var(--ink-soft); }
-
-  .purpose {
-    background: var(--card); border: 1px solid var(--paper-line); border-radius: 16px; padding: 20px 22px;
-    box-shadow: 0 4px 12px var(--shadow);
-  }
-  .purpose p { margin: 0 0 12px; line-height: 1.6; max-width: 80ch; }
-  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
-  .step { background: var(--paper); border-radius: 12px; padding: 12px 14px; font-size: 0.88rem; line-height: 1.5; }
-  .step b { font-family: "Fredoka", sans-serif; font-weight: 600; display: block; margin-bottom: 2px; }
-  .step .k { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--ink-soft); }
-
-  .summary {
-    margin-top: 26px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-  }
-  .summary-card {
-    background: var(--card); border: 1px solid var(--paper-line); border-radius: 14px;
-    padding: 14px 16px; box-shadow: 0 6px 16px var(--shadow); text-align: center;
-  }
-  .summary-card .emoji { font-size: 1.4rem; }
-  .summary-card .count {
-    font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 2rem; line-height: 1.1; margin-top: 2px;
-    color: var(--c, var(--ink));
-  }
-  .summary-card .lbl { font-size: 0.8rem; color: var(--ink-soft); margin-top: 2px; }
-
-  [data-cat="conteudo"] { --c: var(--conteudo); --c-soft: var(--conteudo-soft); }
-  [data-cat="atividades"] { --c: var(--atividades); --c-soft: var(--atividades-soft); }
-  [data-cat="tarefas"] { --c: var(--tarefas); --c-soft: var(--tarefas-soft); }
-  [data-cat="organizacao"] { --c: var(--organizacao); --c-soft: var(--organizacao-soft); }
-
-  .view-bar {
-    margin-top: 22px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  }
-  .view-tabs, .view-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-  .view-tab, .toolbtn {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.84rem;
-    background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
-    border-radius: 999px; padding: 8px 16px; cursor: pointer;
-  }
-  .view-tab[data-active="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-  .toolbtn:hover { border-color: var(--ink-soft); color: var(--ink); }
-  .toolbtn.danger { color: var(--danger); }
-
-  .status-banner {
-    margin-top: 18px; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem;
-    background: var(--warn-soft); border: 1px solid var(--warn); color: var(--ink);
-  }
-
-  .columns {
-    margin-top: 18px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 16px;
-    align-items: start;
-  }
-
-  .col {
-    background: var(--card); border-radius: 16px; box-shadow: 0 6px 18px var(--shadow);
-    overflow: hidden; display: flex; flex-direction: column;
-    border-top: 6px solid var(--c);
-  }
-  .col-head { padding: 16px 18px 10px; }
-  .col-head h2 {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.12rem; margin: 0 0 3px; color: var(--c);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .col-head p { margin: 0; font-size: 0.84rem; color: var(--ink-soft); line-height: 1.45; }
-  .col-head .ex { margin-top: 6px; font-size: 0.78rem; font-style: italic; }
-
-  .col-form { padding: 0 18px 14px; display: flex; flex-direction: column; gap: 8px; }
-  .col-form input, .col-form textarea {
-    font-family: inherit; font-size: 0.88rem; padding: 9px 11px; border-radius: 9px;
-    border: 1px solid var(--paper-line); background: var(--paper); color: var(--ink); resize: vertical; width: 100%;
-  }
-  .col-form textarea { min-height: 56px; }
-  .col-form input:focus-visible, .col-form textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
-  .col-form button {
-    align-self: flex-start; font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.86rem;
-    background: var(--c); color: var(--on-c); border: none; border-radius: 999px; padding: 9px 18px; cursor: pointer;
-  }
-  .col-form button:hover { filter: brightness(0.94); }
-  .closed-note {
-    margin: 0 18px 14px; padding: 10px 12px; border-radius: 10px; font-size: 0.82rem;
-    background: var(--paper); border: 1px dashed var(--paper-line); color: var(--ink-soft);
-  }
-
-  .col-list { padding: 4px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
-  .item-card {
-    background: var(--c-soft); border: 1px solid var(--paper-line); border-radius: 12px; padding: 12px 14px;
-    position: relative;
-  }
-  .item-ponto {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--ink); margin: 0 0 4px;
-    padding-right: 22px; overflow-wrap: anywhere;
-  }
-  .item-desc { font-size: 0.85rem; color: var(--ink-soft); margin: 0; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .item-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-  .item-autor { font-size: 0.76rem; color: var(--ink-soft); overflow-wrap: anywhere; }
-  .item-empty { font-size: 0.84rem; color: var(--ink-soft); font-style: italic; padding: 6px 2px; }
-  .apoio {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.78rem;
-    background: var(--card); border: 1px solid var(--paper-line); color: var(--ink-soft);
-    border-radius: 999px; padding: 4px 11px; cursor: pointer; white-space: nowrap;
-  }
-  .apoio:hover:not(:disabled) { border-color: var(--c); color: var(--c); }
-  .apoio[data-done="true"] { background: var(--c); border-color: var(--c); color: var(--on-c); }
-  .apoio:disabled { cursor: default; }
-
-  .item-rm {
-    position: absolute; top: 8px; right: 8px; border: none; background: none; color: var(--ink-soft);
-    cursor: pointer; font-size: 0.9rem; padding: 3px 5px; border-radius: 6px; line-height: 1;
-  }
-  .item-rm:hover { color: var(--danger); }
-
-  .item-edit input, .item-edit textarea, .item-edit select {
-    width: 100%; font-family: inherit; font-size: 0.86rem; color: var(--ink); background: var(--card);
-    border: 1px solid var(--paper-line); border-radius: 7px; padding: 6px 8px; resize: vertical; margin-bottom: 6px;
-  }
-  .item-edit textarea { min-height: 50px; }
-  .edit-btns { display: flex; gap: 6px; }
-  .edit-btns button {
-    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 0.82rem; border-radius: 999px; padding: 7px 14px; cursor: pointer;
-  }
-  .edit-btns .save { background: var(--ok); color: #fff; border: none; }
-  .edit-btns .cancel { background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); }
-
-  .pin-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-    display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
-  }
-  .pin-box {
-    background: var(--card); border-radius: 14px; padding: 26px 22px; max-width: 320px; width: 100%;
-    text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-  }
-  .pin-box h2 { font-family: "Fredoka", sans-serif; font-size: 1.1rem; margin: 0 0 14px; }
-  .pin-box input {
-    width: 100%; text-align: center; font-size: 1.3rem; letter-spacing: 0.3em; color: var(--ink); background: var(--paper);
-    padding: 12px; border-radius: 10px; border: 1px solid var(--paper-line); margin-bottom: 10px;
-  }
-  .pin-error { color: var(--danger); font-size: 0.82rem; min-height: 1.2em; margin-bottom: 6px; }
-  .pin-box .row { display: flex; gap: 8px; }
-  .pin-box button { flex: 1; font-family: "Fredoka", sans-serif; font-weight: 700; padding: 10px; border-radius: 999px; border: none; cursor: pointer; }
-  .pin-box .cancel { background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); }
-  .pin-box .submit { background: var(--ok); color: #fff; }
-
-  footer.legend {
-    margin-top: 22px; font-size: 0.82rem; color: var(--ink-soft);
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  }
-  .status-pill {
-    font-family: "JetBrains Mono", monospace; font-size: 0.72rem; padding: 3px 9px; border-radius: 999px;
-    background: var(--card); border: 1px solid var(--paper-line);
-  }
-  .status-pill[data-tone="err"] { color: var(--danger); border-color: var(--danger); }
-  .status-pill[data-tone="ok"] { color: var(--ok); border-color: var(--ok); }
-
-  @media print {
-    body { padding: 0; background: #fff; color: #000; }
-    .btn-lock, .view-bar, .col-form, .item-rm, .apoio, footer.legend, .pin-overlay, .status-banner, section.intro { display: none !important; }
-    header.ticket { box-shadow: none; }
-    .summary-card, .col { box-shadow: none; border: 1px solid #ccc; }
-  }
-
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
-</style>
+<link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-<div class="sheet" id="sheet">
-  <p style="text-align:center;padding:40px 0;color:var(--ink-soft)">Carregando…</p>
-</div>
 
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
-<script src="../db-service.js"></script>
+<header class="topbar">
+  <div class="wrap">
+    <a class="marca" href="#inicio"><img src="logo-espaco-jovem.jpg" width="38" height="38" alt=""><span>Espaço Jovem</span></a>
+    <nav class="menu" aria-label="Seções">
+      <a href="#mvv">Missão e valores</a>
+      <a href="#publico">Para quem</a>
+      <a href="#funcionamento">Como funciona</a>
+      <a href="#conteudo">Conteúdo</a>
+      <a href="#equipe">Equipe</a>
+      <a href="#fontes">Fontes</a>
+      <a href="professores/">Professores</a>
+      <a class="destaque" href="ideias/">Deixe sua ideia</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+
+<section class="hero">
+  <div class="wrap">
+    <img class="hero-logo" src="logo-espaco-jovem.jpg" width="220" height="220" alt="Logo do Espaço Jovem — Fraternidade do Amor">
+    <div>
+      <span class="selo">Proposta para as dirigentes · outubro de 2026</span>
+      <h1>Espaço Jovem</h1>
+      <p class="lema">Crescer com o Evangelho, a Doutrina Espírita e muito amor fraterno: um espaço para crianças e jovens de até 16 anos na Fraternidade do Amor.</p>
+      <div class="acoes">
+        <a class="btn principal" href="#sobre">Conhecer a proposta</a>
+        <a class="btn secundario" href="ideias/">💡 Deixe sua ideia</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="sobre">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">O Espaço Jovem</p>
+      <h2>Um lugar para os pequenos e os jovens da casa</h2>
+      <p>A Fraternidade do Amor acolhe, desde 1994, quem procura amparo e conhecimento, sempre à luz do Evangelho de Jesus e dos ensinamentos de Allan Kardec. O Espaço Jovem estende esse cuidado às famílias: é a evangelização espírita infantojuvenil da casa, presencial e gratuita, para crianças e jovens de 3 a 16 anos.</p>
+    </div>
+    <div class="grade">
+      <div class="cartao" data-cor="petroleo"><span class="icone">📖</span><h3>Estudo com leveza</h3><p>O Evangelho e a Doutrina Espírita ensinados com histórias, música, arte e conversa, no ritmo de cada idade.</p></div>
+      <div class="cartao" data-cor="laranja"><span class="icone">💛</span><h3>Valores para a vida</h3><p>Autoconhecimento, cuidado com as emoções, respeito e caridade vividos na prática, não só falados.</p></div>
+      <div class="cartao" data-cor="roxo"><span class="icone">🤝</span><h3>Convivência fraterna</h3><p>Um grupo onde cada um é acolhido, tem voz e faz amigos. Os jovens ajudam a construir o próprio espaço.</p></div>
+      <div class="cartao" data-cor="ambar"><span class="icone">🏡</span><h3>Junto com as famílias</h3><p>Pais e responsáveis são parceiros: recebem orientação e participam dos momentos especiais.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco alt" id="mvv">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">Definições gerais</p>
+      <h2>Objetivo, missão, visão e valores</h2>
+      <p>Proposta construída a partir das ideias do grupo, para aprovação das dirigentes.</p>
+    </div>
+    <div class="grade duas">
+      <div class="cartao" data-cor="petroleo">
+        <span class="etiqueta">Objetivo</span>
+        <p class="destaque-mvv">Oferecer às crianças e jovens de 3 a 16 anos um espaço de evangelização espírita onde aprendam o Evangelho de Jesus e a Doutrina Espírita de forma alegre e adequada a cada idade, e cresçam em valores, autoconhecimento e convivência fraterna.</p>
+      </div>
+      <div class="cartao" data-cor="laranja">
+        <span class="etiqueta">Missão</span>
+        <p class="destaque-mvv">Educar o espírito em fase de infância e juventude à luz do Evangelho e da Doutrina Espírita, com acolhimento, alegria e amor fraterno, apoiando as famílias e preparando os futuros trabalhadores da casa.</p>
+      </div>
+      <div class="cartao" data-cor="roxo">
+        <span class="etiqueta">Visão</span>
+        <p class="destaque-mvv">Ser, para as famílias da Fraternidade do Amor, a referência em evangelização infantojuvenil: um lugar onde crianças e jovens gostam de estar, se sentem ouvidos e levam para a vida o “amar a Deus sobre todas as coisas e ao próximo como a si mesmo”.</p>
+      </div>
+      <div class="cartao" data-cor="ambar">
+        <span class="etiqueta">Valores</span>
+        <div class="valores" style="margin-top:6px">
+          <span class="valor"><b>Amor fraterno</b></span>
+          <span class="valor"><b>Acolhimento</b></span>
+          <span class="valor"><b>Estudo</b> antes da prática</span>
+          <span class="valor"><b>Respeito</b> ao tempo de cada um</span>
+          <span class="valor"><b>Escuta</b>: os jovens têm voz</span>
+          <span class="valor"><b>Alegria</b></span>
+          <span class="valor"><b>Caridade</b> gratuita</span>
+          <span class="valor"><b>Parceria</b> com as famílias</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="objetivos">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">O que buscamos</p>
+      <h2>Objetivos de uma evangelização kardecista</h2>
+      <p>De base kardecista, o Espaço Jovem não “forma videntes”: educa, unindo estudo, valores e prática responsável.</p>
+    </div>
+    <div class="grade tres">
+      <div class="cartao"><span class="etiqueta">01</span><h3>Estudar antes de praticar</h3><p>Conhecer a Doutrina Espírita de forma séria e organizada, a partir das obras de Allan Kardec.</p><cite>Kardec, O Livro dos Médiuns, 1ª parte, cap. III: Do método</cite></div>
+      <div class="cartao"><span class="etiqueta">02</span><h3>Entender a vida espiritual sem medo</h3><p>Mostrar, de acordo com cada idade, que a vida espiritual e a mediunidade são naturais, sem misticismo nem fantasia.</p></div>
+      <div class="cartao"><span class="etiqueta">03</span><h3>Educação moral</h3><p>Ajudar cada um a se conhecer, cuidar das próprias atitudes e crescer como pessoa.</p><cite>“Reconhece-se o verdadeiro espírita pela sua transformação moral…” (ESE, cap. XVII)</cite></div>
+      <div class="cartao"><span class="etiqueta">04</span><h3>Equilíbrio e segurança</h3><p>Ensinar a prece, a vigilância e o cuidado com as emoções, respeitando o tempo de cada um.</p></div>
+      <div class="cartao"><span class="etiqueta">05</span><h3>Servir ao bem, de graça</h3><p>Viver a caridade na prática, com Jesus como modelo.</p><cite>“Dai gratuitamente o que gratuitamente recebestes.” (ESE, cap. XXVI)</cite></div>
+      <div class="cartao"><span class="etiqueta">06</span><h3>Protagonismo</h3><p>Dar voz e responsabilidade aos jovens, preparando os futuros trabalhadores da casa.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco alt" id="publico">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">Para quem</p>
+      <h2>Quatro ciclos, de 3 a 16 anos</h2>
+      <p>Cada idade aprende de um jeito. A proposta é dividir em ciclos, com conteúdo e atividades próprios.</p>
+    </div>
+    <div class="grade">
+      <div class="cartao" data-cor="laranja"><span class="etiqueta">3 a 6 anos</span><h3>Fraterninhos</h3><p>Histórias, música, desenho, brincadeiras, jogos de convivência e teatro de fantoches, em roda e com prece. Inspirado no clima acolhedor do PET Fraterno.</p></div>
+      <div class="cartao" data-cor="roxo"><span class="etiqueta">7 a 10 anos</span><h3>Aprendizes do Bem</h3><p>Histórias com fundo moral, primeiras noções de Deus, Jesus, prece e espírito, emoções e jogos cooperativos.</p></div>
+      <div class="cartao" data-cor="ambar"><span class="etiqueta">11 a 13 anos</span><h3>Pré-juventude</h3><p>Dúvidas da idade, autoconhecimento e inteligência emocional, reencarnação e lei de causa e efeito, caridade em ação.</p></div>
+      <div class="cartao" data-cor="petroleo"><span class="etiqueta">14 a 16 anos</span><h3>Juventude</h3><p>Estudo do Evangelho e de O Livro dos Espíritos, mediunidade sem medo, imersões com meditação e relaxamento, ação social e encontros de jovens.</p></div>
+    </div>
+    <div class="aviso" style="margin-top:18px">
+      <b>A confirmar:</b> as faixas são uma proposta. O grupo sugeriu fazer uma enquete com as famílias interessadas para ver as idades com mais procura e dividir as turmas da melhor forma. Se houver poucas pessoas no início, dá para começar com duas turmas (3 a 10 e 11 a 16 anos).
+    </div>
+    <div class="aviso" style="margin-top:12px">
+      <b>Mediunidade e crianças:</b> com crianças, o foco é educar e acolher, sem estimular a mediunidade, como orienta Kardec (O Livro dos Médiuns, cap. XVIII). Sugestões do painel envolvendo práticas mediúnicas com crianças ficam para avaliação das dirigentes.
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="funcionamento">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">Organização</p>
+      <h2>Como funciona</h2>
+    </div>
+    <table class="tabela">
+      <tbody>
+        <tr><th>Formato</th><td>Presencial, na sede da Fraternidade do Amor (Rua Madre de Deus, 915, Mooca). Gratuito, como todos os trabalhos da casa.</td></tr>
+        <tr><th>Frequência</th><td>Quinzenal (primeira sugestão): dois encontros por mês.</td></tr>
+        <tr><th>Dia e horário</th><td>Sábado à tarde ou domingo de manhã (sugestões do grupo). Proposta: <b>sábado, das 14h às 15h30</b>, a confirmar com a agenda da casa.</td></tr>
+        <tr><th>Duração do encontro</th><td>1h30.</td></tr>
+        <tr><th>Calendário</th><td>Dois semestres por ano (março a junho e agosto a novembro), com cerca de 10 encontros por semestre e uma festa de encerramento com as famílias.</td></tr>
+        <tr><th>Duração do programa</th><td>Contínuo, por ciclos de idade. Ao completar o ciclo da Juventude, o jovem pode seguir para os cursos da casa, como a Escola Mediúnica, conforme a idade mínima definida pelas dirigentes.</td></tr>
+        <tr><th>Inscrição</th><td>Ficha de inscrição com autorização dos responsáveis.</td></tr>
+        <tr><th>Famílias</th><td>Encontro de orientação aos pais no início de cada semestre, sobre a importância da evangelização infantojuvenil, e grupo de WhatsApp dos responsáveis.</td></tr>
+        <tr><th>Momentos especiais</th><td>Ação de caridade por semestre, junto com a ação social da casa (alimentos, agasalho), e um encontro ou retiro de jovens por ano, com música e prece.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="cabeca" style="margin-top:40px">
+      <h3>Como é um encontro (1h30)</h3>
+    </div>
+    <ol class="roteiro">
+      <li><span class="min">10 min</span><div><b>Acolhida e prece de abertura</b><span>Chegada, nomes, prece da turma.</span></div></li>
+      <li><span class="min">10 min</span><div><b>Boa notícia</b><span>Cada um conta algo bom que fez, viveu ou leu desde o último encontro.</span></div></li>
+      <li><span class="min">30 min</span><div><b>Tema do dia</b><span>História para os pequenos; estudo e conversa para os jovens.</span></div></li>
+      <li><span class="min">25 min</span><div><b>Atividade</b><span>Arte, jogo de convivência, teatro, música ou apresentação feita pela turma.</span></div></li>
+      <li><span class="min">10 min</span><div><b>Relaxamento e vibração</b><span>Respiração, música suave e prece pelos que precisam.</span></div></li>
+      <li><span class="min">5 min</span><div><b>Encerramento</b><span>Prece final e a tarefa da quinzena.</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="bloco alt" id="conteudo">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">Conteúdo programático</p>
+      <h2>O que vamos aprender</h2>
+      <p>Base: os materiais da Federação Espírita por faixa etária, adaptados à Fraternidade, e as obras de Allan Kardec. Cinco eixos atravessam todos os ciclos, com profundidade de acordo com a idade.</p>
+    </div>
+    <div class="grade cinco">
+      <div class="cartao" data-cor="petroleo"><span class="icone">✨</span><h3>Deus, Jesus e o Evangelho</h3><p>Deus como Pai, Jesus como guia e modelo, as passagens do Evangelho.</p></div>
+      <div class="cartao" data-cor="roxo"><span class="icone">📚</span><h3>Doutrina Espírita</h3><p>Somos espíritos, prece, reencarnação, lei de causa e efeito, mundo espiritual.</p></div>
+      <div class="cartao" data-cor="laranja"><span class="icone">💭</span><h3>Autoconhecimento e emoções</h3><p>Reconhecer e cuidar das emoções, inteligência emocional, relaxamento.</p></div>
+      <div class="cartao" data-cor="ambar"><span class="icone">🤲</span><h3>Convivência e caridade</h3><p>Respeito, amizade, família e caridade na prática.</p></div>
+      <div class="cartao" data-cor="petroleo"><span class="icone">🕊️</span><h3>Mediunidade com segurança</h3><p>Só para 14 a 16 anos: o que é, sem medo, estudo antes da prática e cuidados.</p></div>
+    </div>
+
+    <div class="cabeca" style="margin-top:40px">
+      <h3 id="plano-titulo">Plano do 1º semestre (proposta)</h3>
+      <p>As aulas completas, com roteiro por idade, referências e materiais, estão na <a href="professores/">área dos professores</a>.</p>
+    </div>
+    <ol class="temas" id="temas"></ol>
+
+    <div class="grade duas" style="margin-top:24px">
+      <div class="cartao"><h3>📱 Conteúdo digital</h3><p>Vídeos curtos (Luzinho para os pequenos, Guto Explica para os jovens), desenhos para colorir, histórias online e um grupo de WhatsApp por turma para a tarefa da quinzena.</p></div>
+      <div class="cartao"><h3>✍️ Tarefas entre os encontros</h3><p>Pequenas e práticas: trazer uma boa notícia, fazer o Evangelho no Lar, uma boa ação escondida, resumir um capítulo e apresentar para a turma.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="equipe">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">Time necessário</p>
+      <h2>Quem faz o Espaço Jovem acontecer</h2>
+      <p>Para quatro turmas, cerca de 12 a 15 voluntários. Para começar com duas turmas, cerca de 8.</p>
+    </div>
+    <div class="grade cinco">
+      <div class="cartao" data-cor="petroleo"><span class="etiqueta">1 a 2 pessoas</span><h3>Coordenação</h3><p>Calendário, ligação com as dirigentes e com as famílias, reunião mensal da equipe.</p></div>
+      <div class="cartao" data-cor="laranja"><span class="etiqueta">2 por turma</span><h3>Evangelizadores</h3><p>Titular e apoio. Sempre dois adultos por sala.</p></div>
+      <div class="cartao" data-cor="roxo"><span class="etiqueta">2 pessoas</span><h3>Acolhida e lanche</h3><p>Recepção, lista de presença, lanche e contato com os responsáveis.</p></div>
+      <div class="cartao" data-cor="ambar"><span class="etiqueta">1 a 2 pessoas</span><h3>Música e artes</h3><p>Canto, violão, materiais de arte e teatro de fantoches.</p></div>
+      <div class="cartao" data-cor="petroleo"><span class="etiqueta">1 pessoa</span><h3>Comunicação</h3><p>Grupo dos pais, divulgação e registro dos encontros.</p></div>
+    </div>
+    <div class="aviso" style="margin-top:18px"><b>Formação:</b> treinamento de evangelizadores com o material da Federação Espírita, estudo das fontes de apoio e uma reunião mensal da equipe para preparar as aulas.</div>
+  </div>
+</section>
+
+<section class="bloco alt" id="fontes">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">Fontes de apoio</p>
+      <h2>Materiais para as aulas</h2>
+      <p>Indicados pelo grupo. Os links abrem em outra aba.</p>
+    </div>
+    <div class="grade">
+      <a class="fonte" data-cor="petroleo" href="https://www.manualdoevangelizador.com.br/historias" target="_blank" rel="noopener"><div class="cartao" data-cor="petroleo"><span class="etiqueta">Para as aulas</span><h3>Manual do Evangelizador</h3><p>Histórias com fundo moral, planos de aula e desenhos para colorir.</p><span class="url">manualdoevangelizador.com.br</span></div></a>
+      <a class="fonte" data-cor="petroleo" href="https://www.passatempoespirita.com.br/historias/" target="_blank" rel="noopener"><div class="cartao" data-cor="petroleo"><span class="etiqueta">Para as aulas</span><h3>Passatempo Espírita</h3><p>Histórias infantis espíritas para transmitir valores éticos e morais.</p><span class="url">passatempoespirita.com.br</span></div></a>
+      <a class="fonte" data-cor="petroleo" href="https://www.searadomestre.com.br/evangelizacao/apostila.htm" target="_blank" rel="noopener"><div class="cartao" data-cor="petroleo"><span class="etiqueta">Para as aulas</span><h3>Seara Espírita Infantil</h3><p>Apostila de evangelização do Grupo Espírita Seara do Mestre (Santo Ângelo, RS).</p><span class="url">searadomestre.com.br</span></div></a>
+      <a class="fonte" data-cor="laranja" href="https://linktr.ee/desenhosespiritas" target="_blank" rel="noopener"><div class="cartao" data-cor="laranja"><span class="etiqueta">Para crianças</span><h3>Desenhos Espíritas</h3><p>Desenhos e conteúdos espíritas para os pequenos.</p><span class="url">linktr.ee/desenhosespiritas</span></div></a>
+      <a class="fonte" data-cor="laranja" href="https://www.instagram.com/luzinhooguiadeluz/" target="_blank" rel="noopener"><div class="cartao" data-cor="laranja"><span class="etiqueta">Para crianças</span><h3>Luzinho</h3><p>Vídeos curtos com o Luzinho, o guia de luz.</p><span class="url">@luzinhooguiadeluz</span></div></a>
+      <a class="fonte" data-cor="roxo" href="https://www.instagram.com/gutoexplica/" target="_blank" rel="noopener"><div class="cartao" data-cor="roxo"><span class="etiqueta">Para jovens</span><h3>Guto Explica</h3><p>Espiritismo explicado em 60 segundos.</p><span class="url">@gutoexplica</span></div></a>
+      <a class="fonte" data-cor="ambar" href="https://youtu.be/dFvm2VezV40" target="_blank" rel="noopener"><div class="cartao" data-cor="ambar"><span class="etiqueta">Para a equipe</span><h3>O papel da educação no cultivo da virtude</h3><p>Episódio do podcast Filosofia para Viver, com a Profª Lúcia Helena Galvão.</p><span class="url">youtube.com</span></div></a>
+      <div class="cartao" data-cor="ambar"><span class="etiqueta">Base</span><h3>Obras de Allan Kardec</h3><p>O Evangelho segundo o Espiritismo e O Livro dos Espíritos, além dos livros da Federação Espírita por faixa etária.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="passos">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="olho">Próximos passos</p>
+      <h2>Decisões para as dirigentes</h2>
+    </div>
+    <ol class="roteiro">
+      <li><span class="min">1</span><div><b>Aprovar a proposta</b><span>Nome, objetivo, missão, visão e valores.</span></div></li>
+      <li><span class="min">2</span><div><b>Enquete com as famílias</b><span>Confirmar as faixas de idade e o número de turmas.</span></div></li>
+      <li><span class="min">3</span><div><b>Dia, horário e sala</b><span>Encaixar na agenda da casa.</span></div></li>
+      <li><span class="min">4</span><div><b>Formar a equipe</b><span>Convidar os voluntários e fazer o treinamento de evangelizadores.</span></div></li>
+      <li><span class="min">5</span><div><b>Orientação aos pais</b><span>Primeiro encontro com as famílias.</span></div></li>
+      <li><span class="min">6</span><div><b>Primeiro encontro do Espaço Jovem</b><span>Começar pela aula “Bem-vindos ao Espaço Jovem”.</span></div></li>
+    </ol>
+
+    <div class="chamada" style="margin-top:36px">
+      <div>
+        <h3>Esta proposta foi feita a muitas mãos</h3>
+        <p>Ela nasceu das <span class="contador" id="contador">ideias</span> que o grupo deixou no painel. O painel continua aberto: sua ideia ainda pode entrar.</p>
+      </div>
+      <a class="btn principal" href="ideias/">💡 Ver e deixar ideias</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <div>
+      <b>Fraternidade do Amor</b><br>
+      Grupo kardecista desde 1994<br>
+      Rua Madre de Deus, 915, Mooca, São Paulo (SP)<br>
+      <a href="https://www.fraternidadedoamor.org.br" target="_blank" rel="noopener">fraternidadedoamor.org.br</a>
+    </div>
+    <div>
+      “Amar a Deus sobre todas as coisas e ao próximo como a si mesmo.”<br>
+      <a href="professores/">Área dos professores</a> · <a href="ideias/">Painel de ideias</a>
+    </div>
+  </div>
+</footer>
+
+<script src="professores/aulas.js"></script>
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDXQPP_tlk7k628PqJLQbearQlaN4pN_0w",
-    authDomain: "fraternidadedoamor-ef315.firebaseapp.com",
-    databaseURL: "https://fraternidadedoamor-ef315-default-rtdb.firebaseio.com",
-    projectId: "fraternidadedoamor-ef315",
-    storageBucket: "fraternidadedoamor-ef315.firebasestorage.app",
-    messagingSenderId: "703575848763",
-    appId: "1:703575848763:web:52548e6124b8a0841c691e",
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-  const rootRef = SvcRef.wrap(db.ref("escolaJovens"), "escolaJovens");
-
-  const APOIOS_KEY = "escolaJovens.apoios";
-  const VOTANTE_KEY = "escolaJovens.votante";
-
-  const CATEGORIAS = [
-    {
-      id: "conteudo", emoji: "📚", label: "Conteúdo programático",
-      sub: "O que estudar: temas, livros, módulos e em que ordem.",
-      ex: "Ex.: começar por O Livro dos Espíritos; um módulo sobre ansiedade e mediunidade; estudar os tipos de médiuns.",
-    },
-    {
-      id: "atividades", emoji: "🎨", label: "Atividades extras",
-      sub: "O que acontece além da aula: vivências, arte, passeios e serviço.",
-      ex: "Ex.: visita a um lar de idosos; sarau com música espírita; retiro de fim de semana; campanha do agasalho.",
-    },
-    {
-      id: "tarefas", emoji: "✍️", label: "Tarefas",
-      sub: "O que o jovem leva para casa entre um encontro e outro.",
-      ex: "Ex.: diário de autoconhecimento; ler um capítulo e trazer uma pergunta; Evangelho no Lar com a família.",
-    },
-    {
-      id: "organizacao", emoji: "🗓️", label: "Organização",
-      sub: "Como o Espaço Jovem funciona: dia, horário, idade, turmas, monitores e comunicação.",
-      ex: "Ex.: sábado à tarde; turmas de 14 a 17 e de 18 a 25 anos; grupo de WhatsApp dos pais; encontro mensal dos monitores.",
-    },
-  ];
-
-  const OBJETIVOS = [
-    {
-      titulo: "Estudar antes de praticar",
-      texto: "Conhecer a Doutrina Espírita de forma séria, contínua e organizada, a partir das obras de Allan Kardec. O estudo vem antes de qualquer prática mediúnica.",
-      cite: "Kardec, O Livro dos Médiuns, 1ª parte, cap. III: Do método",
-    },
-    {
-      titulo: "Entender a mediunidade sem medo",
-      texto: "Mostrar que a mediunidade é uma faculdade natural do ser humano, sem misticismo nem fantasia, para que o jovem entenda o que sente e saiba lidar com isso com tranquilidade.",
-    },
-    {
-      titulo: "Educação moral e reforma íntima",
-      texto: "A mediunidade tem valor quando acompanha a melhora de quem a tem. O Espaço Jovem ajuda o jovem a se conhecer, a cuidar das próprias atitudes e a crescer como pessoa.",
-      cite: "“Reconhece-se o verdadeiro espírita pela sua transformação moral…” (O Evangelho segundo o Espiritismo, cap. XVII)",
-    },
-    {
-      titulo: "Equilíbrio e segurança",
-      texto: "Ensinar a oração, a vigilância e a disciplina como proteção, e respeitar o tempo de cada um. Questões de saúde física ou emocional também pedem acompanhamento médico e psicológico.",
-    },
-    {
-      titulo: "Servir ao bem, de graça",
-      texto: "Formar médiuns que entendam a mediunidade como instrumento de caridade, com Jesus como modelo, sem vaidade e sem nenhum tipo de cobrança.",
-      cite: "“Dai gratuitamente o que gratuitamente recebestes.” (O Evangelho segundo o Espiritismo, cap. XXVI)",
-    },
-    {
-      titulo: "Convivência fraterna e protagonismo",
-      texto: "Criar um grupo onde o jovem se sinta acolhido, tenha voz e assuma responsabilidades, preparando os futuros trabalhadores da casa espírita.",
-    },
-  ];
-
-  let state = { ideias: {}, apoios: {}, config: {} };
-  let unlocked = false;
-  let editingId = null;
-  let pinIntent = null;
-  let ordem = "recentes";
-  const rascunhos = {};
-
-  // Identificador anônimo deste navegador, usado como chave do apoio (1 apoio por ideia).
-  const votanteId = (() => {
-    let v = null;
-    try { v = localStorage.getItem(VOTANTE_KEY); } catch (e) {}
-    if (!v) {
-      v = Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
-      try { localStorage.setItem(VOTANTE_KEY, v); } catch (e) {}
+  // Títulos do plano do semestre (fonte única: professores/aulas.js).
+  (function () {
+    const lista = document.getElementById("temas");
+    const dados = window.ESPACO_JOVEM_AULAS;
+    if (!lista || !dados) return;
+    for (const a of dados.aulas) {
+      const li = document.createElement("li");
+      li.textContent = a.titulo;
+      lista.appendChild(li);
     }
-    return v;
   })();
 
-  function lerApoios() {
-    try { return JSON.parse(localStorage.getItem(APOIOS_KEY) || "{}"); } catch (e) { return {}; }
-  }
-  function gravarApoio(id) {
-    const a = lerApoios();
-    a[id] = true;
-    try { localStorage.setItem(APOIOS_KEY, JSON.stringify(a)); } catch (e) {}
-  }
-  function jaApoiou(id) {
-    return !!lerApoios()[id] || !!(state.apoios[id] && state.apoios[id][votanteId]);
-  }
-  function totalApoios(id) {
-    return Object.keys(state.apoios[id] || {}).length;
-  }
-
-  function coletaAberta() {
-    return !(state.config && state.config.aberta === false);
-  }
-
-  function esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-    }[c]));
-  }
-
-  function ideiasDaCategoria(catId) {
-    return Object.entries(state.ideias || {})
-      .map(([id, it]) => ({ id, ...it, apoios: totalApoios(id) }))
-      .filter((it) => it.categoria === catId)
-      .sort((a, b) => ordem === "apoiadas"
-        ? b.apoios - a.apoios || (b.criadoEm ?? 0) - (a.criadoEm ?? 0)
-        : (b.criadoEm ?? 0) - (a.criadoEm ?? 0));
-  }
-
-  function renderIntro() {
-    const goals = OBJETIVOS.map((o, i) => `
-      <div class="goal">
-        <div class="n">OBJETIVO ${String(i + 1).padStart(2, "0")}</div>
-        <h3>${esc(o.titulo)}</h3>
-        <p>${esc(o.texto)}</p>
-        ${o.cite ? `<cite>${esc(o.cite)}</cite>` : ""}
-      </div>`).join("");
-    return `
-      <section class="intro">
-        <h2>O que buscamos no Espaço Jovem</h2>
-        <p class="lead">O Espaço Jovem é o lugar dos jovens na Fraternidade do Amor: estudo da Doutrina Espírita, educação da mediunidade e convivência fraterna, no ritmo de cada um. De base kardecista, ele não “forma videntes”: educa, unindo estudo, valores e prática responsável. Estes são os objetivos que vão guiar o projeto:</p>
-        <div class="goals">${goals}</div>
-      </section>
-
-      <section class="intro">
-        <h2>Para que serve esta página</h2>
-        <div class="purpose">
-          <p>Queremos montar o Espaço Jovem <b>junto com quem vai viver ele</b>: jovens, pais, médiuns, evangelizadores e trabalhadores da casa. Por isso, antes de fechar qualquer programa, abrimos este <b>painel de ideias</b>. Qualquer pessoa pode sugerir, sem cadastro e sem ideia certa ou errada.</p>
-          <p>As ideias estão separadas em quatro categorias: <b>conteúdo programático</b>, <b>atividades extras</b>, <b>tarefas</b> e <b>organização</b>. Escolha a coluna que combina com sua sugestão, escreva a ideia e, se quiser, explique melhor e coloque seu nome. Gostou da ideia de outra pessoa? Clique em <b>🙌 Apoiar</b>: isso ajuda a coordenação a ver o que é prioridade.</p>
-          <div class="steps">
-            <div class="step"><span class="k">PASSO 1</span><b>Coleta aberta</b>Todo mundo envia e apoia ideias. A página atualiza na hora para todos.</div>
-            <div class="step"><span class="k">PASSO 2</span><b>Encerramento</b>A coordenação encerra a coleta. As ideias continuam visíveis, mas não entram novas.</div>
-            <div class="step"><span class="k">PASSO 3</span><b>Organização</b>A coordenação agrupa, prioriza e transforma as ideias na proposta do Espaço Jovem, que depois volta para o grupo.</div>
-          </div>
-        </div>
-      </section>`;
-  }
-
-  function renderSummary() {
-    const cards = CATEGORIAS.map((c) => `
-      <div class="summary-card" data-cat="${c.id}">
-        <div class="emoji">${c.emoji}</div>
-        <div class="count">${ideiasDaCategoria(c.id).length}</div>
-        <div class="lbl">${esc(c.label)}</div>
-      </div>`).join("");
-    const total = Object.keys(state.ideias || {}).length;
-    return `<div class="summary">
-      ${cards}
-      <div class="summary-card">
-        <div class="emoji">💡</div>
-        <div class="count">${total}</div>
-        <div class="lbl">Total de ideias</div>
-      </div>
-    </div>`;
-  }
-
-  function renderItemCard(it) {
-    if (editingId === it.id) {
-      return `<div class="item-card">
-        <div class="item-edit">
-          <select data-edit-cat="${it.id}" aria-label="Categoria">
-            ${CATEGORIAS.map((c) => `<option value="${c.id}" ${c.id === it.categoria ? "selected" : ""}>${c.emoji} ${esc(c.label)}</option>`).join("")}
-          </select>
-          <input type="text" data-edit-ponto="${it.id}" value="${esc(it.ponto)}" placeholder="Ideia" maxlength="160" />
-          <textarea data-edit-desc="${it.id}" placeholder="Detalhes" maxlength="1200">${esc(it.descricao || "")}</textarea>
-          <input type="text" data-edit-autor="${it.id}" value="${esc(it.autor || "")}" placeholder="Nome" maxlength="60" />
-          <div class="edit-btns">
-            <button type="button" class="save" data-save-item="${it.id}">Salvar</button>
-            <button type="button" class="cancel" data-cancel-edit>Cancelar</button>
-          </div>
-        </div>
-      </div>`;
-    }
-    const apoiada = jaApoiou(it.id);
-    const n = it.apoios;
-    return `<div class="item-card">
-      ${unlocked ? `<button class="item-rm" data-rm-item="${it.id}" title="Remover ideia" aria-label="Remover ideia">✕</button>` : ""}
-      <p class="item-ponto" ${unlocked ? `data-edit-open="${it.id}" style="cursor:pointer;" title="Clique para editar ou mudar de categoria"` : ""}>${esc(it.ponto)}</p>
-      ${it.descricao ? `<p class="item-desc">${esc(it.descricao)}</p>` : ""}
-      <div class="item-foot">
-        <span class="item-autor">${it.autor ? `por ${esc(it.autor)}` : ""}</span>
-        <button class="apoio" data-apoio="${it.id}" data-done="${apoiada}" ${apoiada || !coletaAberta() ? "disabled" : ""}
-          title="${apoiada ? "Você já apoiou esta ideia" : "Apoiar esta ideia"}">🙌 ${apoiada ? "Apoiada" : "Apoiar"} · ${n}</button>
-      </div>
-    </div>`;
-  }
-
-  function renderColumn(c) {
-    const itens = ideiasDaCategoria(c.id);
-    const r = rascunhos[c.id] || {};
-    const list = itens.length
-      ? itens.map(renderItemCard).join("")
-      : `<div class="item-empty">Nenhuma ideia ainda. Que tal ser a primeira pessoa?</div>`;
-    return `<div class="col" data-cat="${c.id}">
-      <div class="col-head">
-        <h2>${c.emoji} ${esc(c.label)}</h2>
-        <p>${esc(c.sub)}</p>
-        <p class="ex">${esc(c.ex)}</p>
-      </div>
-      ${coletaAberta() || unlocked ? `<form class="col-form" data-form-cat="${c.id}">
-        <input type="text" name="ponto" placeholder="Sua ideia…" maxlength="160" required value="${esc(r.ponto || "")}" />
-        <textarea name="descricao" placeholder="Explique melhor (opcional)" maxlength="1200">${esc(r.descricao || "")}</textarea>
-        <input type="text" name="autor" placeholder="Seu nome (opcional)" maxlength="60" value="${esc(r.autor || "")}" />
-        <button type="submit">+ Enviar ideia</button>
-      </form>` : `<p class="closed-note">🔒 Coleta encerrada. Obrigado por contribuir!</p>`}
-      <div class="col-list">${list}</div>
-    </div>`;
-  }
-
-  function render() {
-    const ativo = document.activeElement;
-    let foco = null;
-    if (ativo && ativo.form && ativo.form.dataset.formCat) {
-      foco = { cat: ativo.form.dataset.formCat, name: ativo.name, start: ativo.selectionStart, end: ativo.selectionEnd };
-    }
-
-    document.getElementById("sheet").innerHTML = `
-      <header class="ticket">
-        <div class="ticket-top">
-          <div class="ticket-brand">
-            <img class="ticket-logo" src="logo-espaco-jovem.jpg" width="128" height="128" alt="Logo do Espaço Jovem — Fraternidade do Amor">
-            <div>
-              <p class="eyebrow">Fraternidade do Amor</p>
-              <h1>Espaço Jovem: vamos construir juntos</h1>
-              <p class="sub">Um painel aberto para reunir ideias sobre o que estudar, que atividades fazer, que tarefas propor e como organizar o Espaço Jovem. Leia os objetivos, escolha a categoria e deixe sua contribuição.</p>
-            </div>
-          </div>
-          <button class="btn-lock" id="btn-lock" data-unlocked="${unlocked}">${unlocked ? "🔓 Modo administrador" : "🔒 Sou administrador(a)"}</button>
-        </div>
-      </header>
-
-      ${renderIntro()}
-
-      ${renderSummary()}
-
-      ${coletaAberta() ? "" : `<div class="status-banner">🔒 <b>Coleta encerrada.</b> Não estamos mais recebendo ideias. Abaixo está tudo o que foi enviado, e a coordenação já está organizando a proposta.</div>`}
-
-      <div class="view-bar">
-        <div class="view-tabs">
-          <button class="view-tab" data-ordem="recentes" data-active="${ordem === "recentes"}">Mais recentes</button>
-          <button class="view-tab" data-ordem="apoiadas" data-active="${ordem === "apoiadas"}">Mais apoiadas</button>
-        </div>
-        <div class="view-actions">
-          <button class="toolbtn" id="btn-print">🖨️ Imprimir / salvar PDF</button>
-          ${unlocked ? `<button class="toolbtn ${coletaAberta() ? "danger" : ""}" id="btn-toggle-coleta">${coletaAberta() ? "🔒 Encerrar coleta" : "🔓 Reabrir coleta"}</button>` : ""}
-        </div>
-      </div>
-
-      <div class="columns">${CATEGORIAS.map(renderColumn).join("")}</div>
-
-      <footer class="legend">
-        <span class="status-pill" id="save-status">conectando…</span>
-        <span>Espaço Jovem · Fraternidade do Amor</span>
-      </footer>
-
-      <div class="pin-overlay" id="pin-overlay" style="display:none;">
-        <div class="pin-box">
-          <h2>Digite o PIN de administrador(a)</h2>
-          <input type="password" inputmode="numeric" id="pin-input" placeholder="PIN" maxlength="8" />
-          <div class="pin-error" id="pin-error"></div>
-          <div class="row">
-            <button class="cancel" id="pin-cancel">Cancelar</button>
-            <button class="submit" id="pin-submit">Entrar</button>
-          </div>
-        </div>
-      </div>
-    `;
-    attach();
-
-    if (foco) {
-      const el = document.querySelector(`[data-form-cat="${foco.cat}"] [name="${foco.name}"]`);
-      if (el) {
-        el.focus();
-        try { el.setSelectionRange(foco.start, foco.end); } catch (e) {}
-      }
-    }
-  }
-
-  function setStatus(text, tone) {
-    const pill = document.getElementById("save-status");
-    if (!pill) return;
-    pill.textContent = text;
-    if (tone) pill.dataset.tone = tone; else delete pill.dataset.tone;
-  }
-
-  function requirePin(action) {
-    pinIntent = action;
-    const overlay = document.getElementById("pin-overlay");
-    document.getElementById("pin-input").value = "";
-    document.getElementById("pin-error").textContent = "";
-    overlay.style.display = "flex";
-    document.getElementById("pin-input").focus();
-  }
-
-  async function checkPin() {
-    const val = document.getElementById("pin-input").value;
-    if (!(await SvcAuth.verify(val))) {
-      document.getElementById("pin-error").textContent = "PIN incorreto.";
-      return;
-    }
-    document.getElementById("pin-overlay").style.display = "none";
-    unlocked = true;
-    const intent = pinIntent;
-    pinIntent = null;
-    render();
-    if (typeof intent === "function") intent();
-  }
-
-  function attach() {
-    document.getElementById("btn-lock").addEventListener("click", () => {
-      if (unlocked) { unlocked = false; editingId = null; render(); return; }
-      requirePin(null);
-    });
-    document.getElementById("pin-cancel").addEventListener("click", () => {
-      document.getElementById("pin-overlay").style.display = "none";
-    });
-    document.getElementById("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
-    document.getElementById("pin-submit").addEventListener("click", checkPin);
-
-    document.querySelectorAll("[data-ordem]").forEach((btn) => {
-      btn.addEventListener("click", () => { ordem = btn.dataset.ordem; render(); });
-    });
-    document.getElementById("btn-print").addEventListener("click", () => window.print());
-    const btnColeta = document.getElementById("btn-toggle-coleta");
-    if (btnColeta) {
-      btnColeta.addEventListener("click", () => {
-        const msg = coletaAberta()
-          ? "Encerrar a coleta? Ninguém (além dos administradores) poderá enviar ou apoiar ideias."
-          : "Reabrir a coleta para novas ideias?";
-        if (!confirm(msg)) return;
-        rootRef.child("config").child("aberta").set(!coletaAberta());
-      });
-    }
-
-    document.querySelectorAll("[data-form-cat]").forEach((form) => {
-      const cat = form.dataset.formCat;
-      form.addEventListener("input", (ev) => {
-        rascunhos[cat] = rascunhos[cat] || {};
-        rascunhos[cat][ev.target.name] = ev.target.value;
-      });
-      form.addEventListener("submit", (ev) => {
-        ev.preventDefault();
-        const ponto = form.elements.ponto.value.trim();
-        const descricao = form.elements.descricao.value.trim();
-        const autor = form.elements.autor.value.trim();
-        if (!ponto) return;
-        const ref = rootRef.child("ideias").push();
-        setStatus("enviando…");
-        ref.set({ categoria: cat, ponto, descricao, autor, criadoEm: Date.now() })
-          .then(() => setStatus("ideia enviada ✓", "ok"))
-          .catch((err) => { setStatus("erro ao enviar", "err"); console.error(err); });
-        rascunhos[cat] = { autor };
-        form.elements.ponto.value = "";
-        form.elements.descricao.value = "";
-      });
-    });
-
-    document.querySelectorAll("[data-apoio]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.dataset.apoio;
-        if (jaApoiou(id) || !coletaAberta()) return;
-        gravarApoio(id);
-        rootRef.child("apoios").child(id).child(votanteId).set(true)
-          .catch((err) => { setStatus("erro ao apoiar", "err"); console.error(err); });
-        render();
-      });
-    });
-
-    document.querySelectorAll("[data-rm-item]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if (!confirm("Remover esta ideia?")) return;
-        const id = btn.dataset.rmItem;
-        rootRef.child("ideias").child(id).remove();
-        rootRef.child("apoios").child(id).remove();
-      });
-    });
-
-    document.querySelectorAll("[data-edit-open]").forEach((el) => {
-      el.addEventListener("click", () => { editingId = el.dataset.editOpen; render(); });
-    });
-    document.querySelectorAll("[data-cancel-edit]").forEach((btn) => {
-      btn.addEventListener("click", () => { editingId = null; render(); });
-    });
-    document.querySelectorAll("[data-save-item]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.dataset.saveItem;
-        const ponto = document.querySelector(`[data-edit-ponto="${id}"]`).value.trim();
-        const descricao = document.querySelector(`[data-edit-desc="${id}"]`).value.trim();
-        const autor = document.querySelector(`[data-edit-autor="${id}"]`).value.trim();
-        const categoria = document.querySelector(`[data-edit-cat="${id}"]`).value;
-        if (!ponto) return;
-        rootRef.child("ideias").child(id).update({ ponto, descricao, autor, categoria });
-        editingId = null;
-        render();
-      });
-    });
-  }
-
-  render();
-  rootRef.on("value", (snap) => {
-    const data = snap.val();
-    state = {
-      ideias: (data && data.ideias) || {},
-      apoios: (data && data.apoios) || {},
-      config: (data && data.config) || {},
-    };
-    render();
-    setStatus("conectado", "ok");
-  }, (err) => {
-    render();
-    setStatus("erro de conexão", "err");
-    console.error(err);
-  });
+  // Quantas ideias e quantas pessoas já contribuíram no painel (leitura pública do Firebase).
+  fetch("https://fraternidadedoamor-ef315-default-rtdb.firebaseio.com/escolaJovens/ideias.json")
+    .then((r) => (r.ok ? r.json() : null))
+    .then((ideias) => {
+      if (!ideias) return;
+      const lista = Object.values(ideias);
+      const el = document.getElementById("contador");
+      el.textContent = `${lista.length} ideias`;
+    })
+    .catch(() => {});
 </script>
 </body>
 </html>

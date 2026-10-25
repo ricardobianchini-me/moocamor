@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Professores — Espaço Jovem</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1d5f63">
+<link rel="icon" type="image/png" href="../icone-espaco-jovem.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilo.css">
+<style>
+  .portao { min-height: 70vh; display: grid; place-items: center; padding: 40px 0; }
+  .portao .cartao { max-width: 380px; width: 100%; text-align: center; }
+  .portao img { width: 96px; height: 96px; border-radius: 50%; margin-bottom: 10px; }
+  .portao input {
+    width: 100%; text-align: center; font-size: 1.4rem; letter-spacing: 0.4em; padding: 12px;
+    border-radius: 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); margin: 14px 0 6px;
+  }
+  .portao .erro { color: var(--danger); min-height: 1.4em; font-size: 0.8rem; margin: 0 0 8px; }
+  .portao .btn { width: 100%; justify-content: center; }
+
+  details.aula { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 4px 14px var(--shadow); }
+  details.aula + details.aula { margin-top: 12px; }
+  details.aula summary {
+    list-style: none; cursor: pointer; padding: 16px 20px; display: flex; gap: 14px; align-items: baseline;
+  }
+  details.aula summary::-webkit-details-marker { display: none; }
+  details.aula summary .num { font-family: "JetBrains Mono", monospace; color: var(--roxo); font-size: 0.8rem; }
+  details.aula summary h3 { margin: 0; flex: 1; }
+  details.aula summary .eixo { font-size: 0.8rem; color: var(--ink-soft); }
+  details.aula summary::after { content: "＋"; color: var(--brand); font-weight: 700; }
+  details.aula[open] summary::after { content: "－"; }
+  .aula-corpo { padding: 0 20px 20px; display: grid; gap: 14px; }
+  .aula-corpo .objetivo { color: var(--ink); margin: 0; }
+  .lados { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .lado { border-radius: 12px; padding: 14px 16px; background: var(--c-soft); }
+  .lado h4 { font-family: "Fredoka", sans-serif; font-weight: 600; margin: 0 0 6px; color: var(--c); }
+  .lado p { margin: 0; }
+  .linha-meta { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+  .linha-meta b { color: var(--ink); }
+  .barra-acoes { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="marca" href="../"><img src="../logo-espaco-jovem.jpg" width="38" height="38" alt=""><span>Espaço Jovem</span></a>
+    <nav class="menu" aria-label="Navegação">
+      <a href="../">← Site</a>
+      <a href="../ideias/">Painel de ideias</a>
+      <a href="#" id="sair" hidden>Sair</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app">
+  <div class="wrap portao">
+    <form class="cartao" id="form-pin">
+      <img src="../logo-espaco-jovem.jpg" width="96" height="96" alt="">
+      <h3>Área dos professores</h3>
+      <p>Aulas, roteiros e materiais do Espaço Jovem. Digite o PIN dos professores.</p>
+      <input type="password" inputmode="numeric" autocomplete="off" id="pin" maxlength="8" aria-label="PIN dos professores" required>
+      <p class="erro" id="erro"></p>
+      <button class="btn principal" type="submit">Entrar</button>
+    </form>
+  </div>
+</main>
+
+<script src="aulas.js"></script>
+<script>
+  // Porta simples, por decisão do grupo: o PIN só esconde a tela. O conteúdo
+  // está no código público (aulas.js), então não é segredo. Guardamos aqui só
+  // o SHA-256 de "espacojovem:<PIN>", nunca o PIN.
+  const PIN_HASH = "210c8b8d02f9f50584ea271549993fe7e2d6563339e8e63be230ef4279652dfe";
+  const CHAVE = "espacojovem.professores";
+
+  async function sha256(texto) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  function liberado() {
+    try { return sessionStorage.getItem(CHAVE) === PIN_HASH; } catch (e) { return false; }
+  }
+
+  function mostrarAulas() {
+    const dados = window.ESPACO_JOVEM_AULAS;
+    const fontes = window.ESPACO_JOVEM_FONTES;
+    const aulas = dados.aulas.map((a, i) => {
+      const links = (a.fontes || []).map((k) => fontes[k]).filter(Boolean)
+        .map((f) => `<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.nome)}</a>`).join(" · ");
+      return `
+        <details class="aula" ${i === 0 ? "open" : ""}>
+          <summary><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(a.titulo)}</h3><span class="eixo">${esc(a.eixo)}</span></summary>
+          <div class="aula-corpo">
+            <p class="objetivo"><b>Objetivo:</b> ${esc(a.objetivo)}</p>
+            <div class="lados">
+              <div class="lado" data-cor="laranja"><h4>Crianças (3 a 10 anos)</h4><p>${esc(a.criancas)}</p></div>
+              <div class="lado" data-cor="petroleo"><h4>Jovens (11 a 16 anos)</h4><p>${esc(a.jovens)}</p></div>
+            </div>
+            ${a.referencias && a.referencias.length ? `<p class="linha-meta"><b>Referências:</b> ${a.referencias.map(esc).join("; ")}</p>` : ""}
+            ${links ? `<p class="linha-meta"><b>Materiais:</b> ${links}</p>` : ""}
+            <p class="linha-meta"><b>Tarefa da quinzena:</b> ${esc(a.tarefa)}</p>
+          </div>
+        </details>`;
+    }).join("");
+
+    const todasFontes = Object.values(fontes)
+      .map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.nome)}</a></li>`).join("");
+
+    document.getElementById("app").innerHTML = `
+      <section class="bloco">
+        <div class="wrap">
+          <div class="cabeca">
+            <p class="olho">Área dos professores · ${esc(dados.status)}</p>
+            <h2>${esc(dados.titulo)}</h2>
+            <p>Dez encontros quinzenais. Cada aula traz o objetivo, um roteiro para crianças e outro para jovens, as referências e a tarefa. Adapte a linguagem a cada ciclo: Fraterninhos (3 a 6), Aprendizes do Bem (7 a 10), Pré-juventude (11 a 13) e Juventude (14 a 16).</p>
+          </div>
+          <div class="barra-acoes">
+            <button class="btn secundario" type="button" onclick="document.querySelectorAll('details.aula').forEach(d => d.open = true)">Abrir todas</button>
+            <button class="btn secundario" type="button" onclick="window.print()">🖨️ Imprimir / salvar PDF</button>
+          </div>
+          ${aulas}
+        </div>
+      </section>
+      <section class="bloco alt">
+        <div class="wrap grade duas">
+          <div class="cartao">
+            <h3>Roteiro de cada encontro (1h30)</h3>
+            <ul>
+              <li><b>10 min</b> · Acolhida e prece de abertura</li>
+              <li><b>10 min</b> · Boa notícia da quinzena</li>
+              <li><b>30 min</b> · Tema do dia (história ou estudo)</li>
+              <li><b>25 min</b> · Atividade (arte, jogo, teatro, música)</li>
+              <li><b>10 min</b> · Relaxamento e vibração</li>
+              <li><b>5 min</b> · Prece final e tarefa</li>
+            </ul>
+          </div>
+          <div class="cartao">
+            <h3>Fontes de apoio</h3>
+            <ul>${todasFontes}<li>O Evangelho segundo o Espiritismo e O Livro dos Espíritos</li><li>Livros da Federação Espírita por faixa etária (com a Alexandra)</li></ul>
+            <p style="margin-top:10px">Lembretes: sempre dois adultos por sala; com crianças, acolher sem estimular a mediunidade.</p>
+          </div>
+        </div>
+      </section>`;
+    document.getElementById("sair").hidden = false;
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById("form-pin").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const erro = document.getElementById("erro");
+    const pin = document.getElementById("pin").value.trim();
+    if ((await sha256("espacojovem:" + pin)) !== PIN_HASH) {
+      erro.textContent = "PIN incorreto.";
+      return;
+    }
+    try { sessionStorage.setItem(CHAVE, PIN_HASH); } catch (e) {}
+    mostrarAulas();
+  });
+
+  document.getElementById("sair").addEventListener("click", (ev) => {
+    ev.preventDefault();
+    try { sessionStorage.removeItem(CHAVE); } catch (e) {}
+    location.reload();
+  });
+
+  if (liberado()) mostrarAulas();
+</script>
+</body>
+</html>

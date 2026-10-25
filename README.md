@@ -18,7 +18,9 @@ Páginas estáticas (HTML puro, sem build), publicadas em dois lugares a cada pu
 | Pesquisa do Futuro | `pesquisa-futuro/` | `pesquisaMoocAmor` |
 | Lições Aprendidas (Good, Bad & Ugly) | `licoesdamoocamor/` | `licoesMoocamor` |
 | Estudo de Obras Espíritas | `LivrosEscolaMediuns/` | `livrosEspiritas` |
-| Espaço Jovem (painel de ideias) | `espacojovem/` (`escoladejovens/` redireciona para cá) | `escolaJovens` (nome antigo mantido para não perder os dados) |
+| Espaço Jovem: site da proposta | `espacojovem/` (estilo em `estilo.css`) | só lê a contagem de ideias |
+| Espaço Jovem: painel de ideias | `espacojovem/ideias/` (`escoladejovens/` redireciona para cá) | `escolaJovens` (nome antigo mantido para não perder os dados) |
+| Espaço Jovem: área dos professores | `espacojovem/professores/`; aulas em `professores/aulas.js` (o site lê os títulos daqui) | nenhum. O PIN só esconde a tela: o conteúdo é público no repositório |
 
 ## Configuração versionada
 

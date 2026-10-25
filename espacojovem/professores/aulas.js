@@ -1,0 +1,122 @@
+/*
+ * Aulas do Espaço Jovem. Fonte única: o site mostra os títulos e a área dos
+ * professores mostra tudo. Para mudar uma aula, edite aqui e publique.
+ * Atenção: o repositório é público; não coloque aqui nada que precise ser secreto.
+ *
+ * Abreviações: LE = O Livro dos Espíritos (questão); ESE = O Evangelho segundo o Espiritismo (capítulo).
+ */
+window.ESPACO_JOVEM_FONTES = {
+  manual: { nome: "Manual do Evangelizador", url: "https://www.manualdoevangelizador.com.br/historias" },
+  passatempo: { nome: "Passatempo Espírita (histórias)", url: "https://www.passatempoespirita.com.br/historias/" },
+  seara: { nome: "Seara Espírita Infantil (apostila)", url: "https://www.searadomestre.com.br/evangelizacao/apostila.htm" },
+  desenhos: { nome: "Desenhos Espíritas", url: "https://linktr.ee/desenhosespiritas" },
+  luzinho: { nome: "Luzinho (vídeos para crianças)", url: "https://www.instagram.com/luzinhooguiadeluz/" },
+  guto: { nome: "Guto Explica (Espiritismo em 60s)", url: "https://www.instagram.com/gutoexplica/" },
+};
+
+window.ESPACO_JOVEM_AULAS = {
+  titulo: "Plano do 1º semestre",
+  status: "Proposta para aprovação das dirigentes",
+  aulas: [
+    {
+      titulo: "Bem-vindos ao Espaço Jovem",
+      eixo: "Convivência",
+      objetivo: "Acolher, conhecer cada um e construir juntos os combinados da turma.",
+      criancas: "Roda de nomes com uma bola ou novelo de lã (cada um diz o nome e do que gosta). Desenho “Quem sou eu”. Combinados da turma com desenhos colados num cartaz.",
+      jovens: "Roda de escuta: o que esperam do Espaço Jovem e quais atividades gostariam de fazer (ouvir os jovens antes de fechar o programa). Combinados construídos pela turma.",
+      referencias: [],
+      fontes: ["desenhos"],
+      tarefa: "Na próxima vez, trazer uma boa notícia: algo bom que fez, viveu ou leu.",
+    },
+    {
+      titulo: "Deus, nosso Pai e Criador",
+      eixo: "Deus, Jesus e o Evangelho",
+      objetivo: "Perceber Deus como causa de tudo o que existe e como Pai amoroso.",
+      criancas: "Caminhada pelos sentidos: observar folhas, flores, o céu, o próprio corpo. História sobre a natureza como obra de Deus. Desenho “o que Deus criou que eu mais gosto”.",
+      jovens: "Conversa a partir da LE 1 e LE 4: como podemos perceber Deus? Debate em grupos: “não há efeito sem causa”.",
+      referencias: ["LE 1: “Deus é a inteligência suprema, causa primária de todas as coisas.”", "LE 4"],
+      fontes: ["manual", "passatempo"],
+      tarefa: "Agradecer a Deus, todo dia antes de dormir, por uma coisa boa do dia.",
+    },
+    {
+      titulo: "Jesus, nosso guia e modelo",
+      eixo: "Deus, Jesus e o Evangelho",
+      objetivo: "Conhecer Jesus como exemplo de amor e de conduta para a nossa vida.",
+      criancas: "História: “Deixai vir a mim as criancinhas”. Dramatização simples com a turma. Colorir a cena.",
+      jovens: "LE 625: Jesus como modelo. Dinâmica “o que Jesus faria?” com situações do dia a dia (escola, redes sociais, família).",
+      referencias: ["LE 625"],
+      fontes: ["seara", "desenhos"],
+      tarefa: "Fazer uma boa ação escondida durante a semana e contar como se sentiu.",
+    },
+    {
+      titulo: "A prece: conversando com Deus",
+      eixo: "Doutrina Espírita",
+      objetivo: "Entender a prece como conversa sincera com Deus e aprender a orar com as próprias palavras.",
+      criancas: "Criar juntos a “prece da turma”, escrita num cartaz e usada em todos os encontros. Música de prece.",
+      jovens: "ESE cap. XXVII (“Pedi e obtereis”): o valor da prece sincera. Prática de prece espontânea em pequenos grupos.",
+      referencias: ["ESE cap. XXVII"],
+      fontes: ["manual"],
+      tarefa: "Fazer o Evangelho no Lar com a família ao menos uma vez.",
+    },
+    {
+      titulo: "Somos espíritos",
+      eixo: "Doutrina Espírita",
+      objetivo: "Compreender que somos espíritos imortais e que o corpo é temporário.",
+      criancas: "Analogia da roupa: o corpo é a roupa que o espírito usa nesta vida. Brincadeira de vestir e tirar um casaco.",
+      jovens: "LE 134 (“Que é a alma? Um Espírito encarnado.”). Conversa sobre imortalidade e o que levamos desta vida.",
+      referencias: ["LE 134"],
+      fontes: ["passatempo", "guto"],
+      tarefa: "Perguntar a alguém mais velho da família o que ele acredita sobre a vida depois da morte.",
+    },
+    {
+      titulo: "Reencarnação: a escola da vida",
+      eixo: "Doutrina Espírita",
+      objetivo: "Entender a reencarnação como oportunidade de aprender e melhorar.",
+      criancas: "História da “escola da vida”: cada vida é como uma série da escola, com novas lições. Jogo de trilha com desafios do bem.",
+      jovens: "ESE cap. IV e LE 166. Lei de causa e efeito e livre-arbítrio. Debate: “por que nascemos em famílias e situações tão diferentes?”",
+      referencias: ["ESE cap. IV", "LE 166"],
+      fontes: ["seara", "guto"],
+      tarefa: "Escolher uma “lição” que quer aprender neste semestre (paciência, coragem, perdão…).",
+    },
+    {
+      titulo: "Emoções: conhecer e cuidar do que sinto",
+      eixo: "Autoconhecimento e emoções",
+      objetivo: "Reconhecer as próprias emoções e aprender formas saudáveis de lidar com elas.",
+      criancas: "Termômetro das emoções com carinhas. Teatro de fantoches: o que fazer quando fico bravo ou triste. Respiração do balão.",
+      jovens: "LE 919 (“Conhece-te a ti mesmo”). Inteligência emocional: raiva, ansiedade e comparação nas redes. Técnica simples de respiração e relaxamento.",
+      referencias: ["LE 919"],
+      fontes: ["desenhos", "luzinho"],
+      tarefa: "Anotar durante a semana uma emoção forte e o que fez com ela.",
+    },
+    {
+      titulo: "Amigos espirituais",
+      eixo: "Doutrina Espírita / Mediunidade com segurança",
+      objetivo: "Saber que não estamos sós: temos amigos espirituais. Para os jovens, entender a mediunidade sem medo.",
+      criancas: "O anjo da guarda como amigo que nos inspira o bem. Desenho do “meu amigo espiritual”. Com crianças, só acolhimento: sem estimular a mediunidade.",
+      jovens: "LE 489 a 491 (anjos da guarda). Mediunidade sem medo: o que é, como se manifesta, por que estudar antes de praticar, a importância da prece e da vigilância e a quem procurar quando algo assusta.",
+      referencias: ["LE 489–491", "O Livro dos Médiuns"],
+      fontes: ["guto", "luzinho"],
+      tarefa: "Fazer uma prece pedindo inspiração ao amigo espiritual antes de uma prova ou decisão.",
+    },
+    {
+      titulo: "Caridade em ação",
+      eixo: "Convivência e caridade",
+      objetivo: "Viver a caridade na prática, junto com a ação social da casa.",
+      criancas: "Montar cartões e desenhos para acompanhar as cestas básicas da casa. Campanha de arrecadação (alimentos ou agasalho).",
+      jovens: "ESE cap. XV e LE 886 (o verdadeiro sentido da caridade). Planejar e fazer uma ação: arrecadação, campanha do agasalho ou visita, junto com a ação social da casa.",
+      referencias: ["ESE cap. XV", "LE 886"],
+      fontes: ["manual"],
+      tarefa: "Participar da arrecadação e trazer o que conseguir.",
+    },
+    {
+      titulo: "Festa de encerramento com as famílias",
+      eixo: "Convivência",
+      objetivo: "Celebrar o semestre, mostrar às famílias o que foi vivido e ouvir a turma.",
+      criancas: "Apresentação de uma música, teatro de fantoches ou exposição dos desenhos para as famílias.",
+      jovens: "Sarau ou luau com música e prece. Avaliação do semestre: o que foi bom, o que mudar, o que querem no próximo.",
+      referencias: [],
+      fontes: [],
+      tarefa: "Convidar a família para a festa.",
+    },
+  ],
+};
