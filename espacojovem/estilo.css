@@ -237,6 +237,41 @@ footer.rodape { border-top: 1px solid var(--line); padding: 36px 0 48px; color: 
 footer.rodape .wrap { display: flex; gap: 24px; justify-content: space-between; flex-wrap: wrap; }
 footer.rodape b { color: var(--ink); font-family: "Fredoka", sans-serif; font-weight: 600; }
 
+
+/* Elementos do projeto institucional */
+.hero .sub-hero { font-family: "Fredoka", sans-serif; font-weight: 500; font-size: 1.15rem; color: var(--ink); margin: -4px 0 8px; }
+.ideia-central { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 22px 24px; box-shadow: 0 4px 14px var(--shadow); }
+.ideia-central .nota { margin: 14px 0 0; color: var(--ink-soft); }
+.passos3 { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); margin-top: 6px; }
+.passos3 > div { border-radius: 14px; padding: 14px 16px; background: var(--petroleo-soft); }
+.passos3 > div:nth-child(2) { background: var(--laranja-soft); }
+.passos3 > div:nth-child(3) { background: var(--roxo-soft); }
+.passos3 b { display: block; font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.35rem; color: var(--brand); }
+.passos3 span { color: var(--ink-soft); }
+.cartao .vivencia { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
+.cartao p b { color: var(--ink); }
+.tabela.anual th, .tabela.anual td { width: auto; }
+.tabela.anual thead th { background: var(--brand); color: var(--on-brand); font-size: 0.9rem; }
+.tabela.anual tbody td:first-child { font-family: "JetBrains Mono", monospace; font-size: 0.9rem; color: var(--roxo); white-space: nowrap; }
+.tabela.anual tbody td:nth-child(2) { color: var(--ink); font-weight: 700; }
+@media (max-width: 600px) {
+  .tabela.anual thead { display: none; }
+  .tabela.anual tbody tr { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .tabela.anual tbody td { border: none; padding: 2px 16px; }
+}
+ul.links { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 10px; }
+ul.links li { margin: 0; }
+ul.links a { font-weight: 700; }
+ul.links span { display: block; font-size: 0.9rem; color: var(--ink-soft); }
+ol.numerada { margin: 8px 0 0; padding-left: 20px; color: var(--ink-soft); }
+ol.numerada li + li { margin-top: 4px; }
+section.mensagem { padding: 56px 0; }
+section.mensagem blockquote {
+  margin: 0 auto; max-width: 820px; text-align: center; font-family: "Fredoka", sans-serif; font-weight: 500;
+  font-size: clamp(1.15rem, 2.6vw, 1.45rem); line-height: 1.5; color: var(--brand);
+}
+section.mensagem blockquote::before { content: "“"; display: block; font-size: 3rem; line-height: 1; color: var(--laranja); }
+
 @media print {
   .topbar, .acoes, .chamada .btn { display: none !important; }
   section.bloco { padding: 24px 0; break-inside: avoid; }

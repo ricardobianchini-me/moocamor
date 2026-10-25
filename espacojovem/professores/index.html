@@ -41,6 +41,9 @@
   .linha-meta { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
   .linha-meta b { color: var(--ink); }
   .barra-acoes { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  ul.checklist { list-style: none; padding-left: 0; }
+  ul.checklist input { margin-right: 6px; accent-color: var(--brand); }
+  details.aula summary .num { min-width: 64px; }
 </style>
 </head>
 <body>
@@ -93,27 +96,30 @@
   function mostrarAulas() {
     const dados = window.ESPACO_JOVEM_AULAS;
     const fontes = window.ESPACO_JOVEM_FONTES;
+    const inc = window.ESPACO_JOVEM_INCLUSAO;
     const aulas = dados.aulas.map((a, i) => {
       const links = (a.fontes || []).map((k) => fontes[k]).filter(Boolean)
         .map((f) => `<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.nome)}</a>`).join(" · ");
       return `
         <details class="aula" ${i === 0 ? "open" : ""}>
-          <summary><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(a.titulo)}</h3><span class="eixo">${esc(a.eixo)}</span></summary>
+          <summary><span class="num">${esc(a.mes)}</span><h3>${esc(a.titulo)}</h3><span class="eixo">${esc(a.atividade)}</span></summary>
           <div class="aula-corpo">
             <p class="objetivo"><b>Objetivo:</b> ${esc(a.objetivo)}</p>
             <div class="lados">
-              <div class="lado" data-cor="laranja"><h4>Crianças (3 a 10 anos)</h4><p>${esc(a.criancas)}</p></div>
-              <div class="lado" data-cor="petroleo"><h4>Jovens (11 a 16 anos)</h4><p>${esc(a.jovens)}</p></div>
+              <div class="lado" data-cor="laranja"><h4>Crianças (3 a 8 anos)</h4><p>${esc(a.criancas)}</p></div>
+              <div class="lado" data-cor="petroleo"><h4>Maiores (9 a 17 anos)</h4><p>${esc(a.maiores)}</p></div>
             </div>
+            <p class="linha-meta"><b>Atividade integradora do mês:</b> ${esc(a.atividade)}</p>
             ${a.referencias && a.referencias.length ? `<p class="linha-meta"><b>Referências:</b> ${a.referencias.map(esc).join("; ")}</p>` : ""}
             ${links ? `<p class="linha-meta"><b>Materiais:</b> ${links}</p>` : ""}
-            <p class="linha-meta"><b>Tarefa da quinzena:</b> ${esc(a.tarefa)}</p>
+            <p class="linha-meta"><b>Vivência da semana (convite, sem cobrança):</b> ${esc(a.vivencia)}</p>
           </div>
         </details>`;
     }).join("");
 
     const todasFontes = Object.values(fontes)
       .map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.nome)}</a></li>`).join("");
+    const pares = (lista) => lista.map(([t, d]) => `<li><b>${esc(t)}:</b> ${esc(d)}</li>`).join("");
 
     document.getElementById("app").innerHTML = `
       <section class="bloco">
@@ -121,7 +127,7 @@
           <div class="cabeca">
             <p class="olho">Área dos professores · ${esc(dados.status)}</p>
             <h2>${esc(dados.titulo)}</h2>
-            <p>Dez encontros quinzenais. Cada aula traz o objetivo, um roteiro para crianças e outro para jovens, as referências e a tarefa. Adapte a linguagem a cada ciclo: Fraterninhos (3 a 6), Aprendizes do Bem (7 a 10), Pré-juventude (11 a 13) e Juventude (14 a 16).</p>
+            <p>${esc(dados.nota)} Grupos: Infância inicial (3 a 5), Infância intermediária (6 a 8), Infância ampliada (9 a 11) e Adolescência (12 a 17).</p>
           </div>
           <div class="barra-acoes">
             <button class="btn secundario" type="button" onclick="document.querySelectorAll('details.aula').forEach(d => d.open = true)">Abrir todas</button>
@@ -133,20 +139,36 @@
       <section class="bloco alt">
         <div class="wrap grade duas">
           <div class="cartao">
-            <h3>Roteiro de cada encontro (1h30)</h3>
+            <h3>Metodologia de cada encontro (cerca de 60 min)</h3>
             <ul>
-              <li><b>10 min</b> · Acolhida e prece de abertura</li>
-              <li><b>10 min</b> · Boa notícia da quinzena</li>
-              <li><b>30 min</b> · Tema do dia (história ou estudo)</li>
-              <li><b>25 min</b> · Atividade (arte, jogo, teatro, música)</li>
-              <li><b>10 min</b> · Relaxamento e vibração</li>
-              <li><b>5 min</b> · Prece final e tarefa</li>
+              <li><b>5 min</b> · Acolhimento: recepção, música ou dinâmica breve</li>
+              <li><b>10 min</b> · Integração: brincadeira, pergunta ou partilha voluntária (a boa notícia)</li>
+              <li><b>10 min</b> · História ou conteúdo</li>
+              <li><b>20 min</b> · Atividade pedagógica: jogo, dramatização, arte ou roda de conversa</li>
+              <li><b>10 min</b> · Vivência prática: escolher uma atitude possível para a semana</li>
+              <li><b>5 min</b> · Encerramento: síntese e prece facultativa</li>
             </ul>
           </div>
           <div class="cartao">
             <h3>Fontes de apoio</h3>
             <ul>${todasFontes}<li>O Evangelho segundo o Espiritismo e O Livro dos Espíritos</li><li>Livros da Federação Espírita por faixa etária (com a Alexandra)</li></ul>
-            <p style="margin-top:10px">Lembretes: sempre dois adultos por sala; com crianças, acolher sem estimular a mediunidade.</p>
+            <p style="margin-top:10px">Lembretes: sempre dois adultos por sala; com crianças, acolher sem estimular a mediunidade; sem medo, culpa ou exposição.</p>
+          </div>
+        </div>
+      </section>
+      <section class="bloco" id="inclusao">
+        <div class="wrap">
+          <div class="cabeca">
+            <p class="olho">Anexo do projeto</p>
+            <h2>Atividades práticas e acolhimento à neurodiversidade</h2>
+            <p>Propostas adaptáveis por faixa etária. Considere os interesses, a comunicação, o ritmo, as necessidades sensoriais e a segurança de cada participante.</p>
+          </div>
+          <div class="grade duas">
+            <div class="cartao"><h3>Atividades práticas para os encontros</h3><ul>${pares(inc.atividades)}</ul></div>
+            <div class="cartao"><h3>Espaço de acolhimento à neurodiversidade</h3><ul>${pares(inc.principios)}</ul></div>
+            <div class="cartao"><h3>Exemplo de encontro inclusivo (60 min)</h3><ul>${inc.encontro.map(([t, n, d]) => `<li><b>${esc(t)} · ${esc(n)}:</b> ${esc(d)}</li>`).join("")}</ul></div>
+            <div class="cartao"><h3>Checklist da equipe antes de cada aula</h3><ul class="checklist">${inc.checklist.map((c) => `<li><label><input type="checkbox"> ${esc(c)}</label></li>`).join("")}</ul>
+              <h3 style="margin-top:18px">Uso dos materiais</h3><ul>${inc.usoMateriais.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>
           </div>
         </div>
       </section>`;
