@@ -76,6 +76,15 @@
   .notas { font-size: 0.86rem; color: var(--ink-soft); }
   .notas li + li { margin-top: 4px; }
 
+  .portao { display: grid; place-items: center; padding: 20px 0 40px; }
+  .portao form { width: 100%; max-width: 380px; text-align: center; background: var(--branco); border: 1.5px solid var(--linha); border-radius: 24px; padding: 30px 26px; box-shadow: var(--sombra); }
+  .portao h2 { font-size: 1.5rem; }
+  .portao h2::after { display: none; }
+  .portao p { color: var(--ink-soft); margin: 8px 0 0; }
+  .portao input { width: 100%; text-align: center; font-family: "Roboto Mono", monospace; font-size: 1.5rem; letter-spacing: 0.4em; padding: 12px; border-radius: 14px; border: 1.5px solid var(--linha); background: var(--creme); color: var(--ink); margin: 18px 0 6px; }
+  .portao input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .portao .erro { color: #c23b2a; min-height: 1.4em; margin: 0 0 10px; font-size: 0.9rem; }
+  .portao .btn { width: 100%; justify-content: center; }
   #dica { position: fixed; z-index: 50; pointer-events: none; background: var(--ink); color: var(--creme); font-size: 0.82rem; padding: 7px 10px; border-radius: 8px; max-width: 260px; display: none; box-shadow: var(--sombra); }
   .menu-simples { display: flex; gap: 2px; margin-left: auto; }
   .menu-simples a { font-family: "Roboto Mono", monospace; font-size: 0.85rem; color: var(--ink-soft); text-decoration: none; padding: 8px 10px; }
@@ -88,12 +97,12 @@
 <header class="topo">
   <div class="largo">
     <a class="wordmark" href="../../"><img src="../../logo-espaco-jovem.jpg" width="36" height="36" alt=""><span>Espaço Jovem</span></a>
-    <nav class="menu-simples" aria-label="Navegação"><a href="../../">Site</a><a href="../">Enquete</a><a href="../../ideias/">Ideias</a></nav>
+    <nav class="menu-simples" aria-label="Navegação"><a href="../../">Site</a><a href="../../professores/">Professores</a><a href="#" id="sair" hidden>Sair</a></nav>
   </div>
 </header>
 
 <section class="faixa">
-  <p class="olho">Enquete do Espaço Jovem</p>
+  <p class="olho">Área dos professores · enquete do Espaço Jovem</p>
   <h1>Resultados</h1>
   <p>O que as famílias e os jovens responderam até agora. Só números e sugestões, sem identificar ninguém.</p>
   <span class="atualizado" id="atualizado">carregando…</span>
@@ -293,13 +302,47 @@
   });
   document.addEventListener("focusout", () => { dica.style.display = "none"; });
 
-  fetch(API)
-    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(desenhar)
-    .catch(() => {
-      document.getElementById("atualizado").textContent = "indisponível agora";
-      document.getElementById("app").innerHTML = `<div class="bloco aviso-vazio"><h2>Não foi possível carregar</h2><p class="sub">Tente de novo em instantes.</p></div>`;
-    });
+  // PIN dos professores (o mesmo da área dos professores). O servidor confere;
+  // sem ele, a API não devolve nada. Fica só nesta sessão do navegador.
+  const CHAVE_PIN = "espacojovem.pin";
+  const lerPin = () => { try { return sessionStorage.getItem(CHAVE_PIN) || ""; } catch (e) { return ""; } };
+  const gravarPin = (p) => { try { p ? sessionStorage.setItem(CHAVE_PIN, p) : sessionStorage.removeItem(CHAVE_PIN); } catch (e) {} };
+
+  function portao(mensagem) {
+    document.getElementById("atualizado").textContent = "acesso dos professores";
+    document.getElementById("app").innerHTML = `<div class="portao"><form id="form-pin">
+      <h2>Entrar</h2><p>Digite o PIN dos professores para ver os resultados.</p>
+      <input type="password" inputmode="numeric" autocomplete="off" id="pin" maxlength="8" aria-label="PIN dos professores" required>
+      <p class="erro" id="erro">${esc(mensagem || "")}</p>
+      <button class="btn laranja" type="submit">Entrar</button></form></div>`;
+    const input = document.getElementById("pin"); input.focus();
+    document.getElementById("form-pin").addEventListener("submit", (ev) => { ev.preventDefault(); carregar(input.value.trim()); });
+  }
+
+  function carregar(pin) {
+    if (!pin) return portao();
+    fetch(API, { headers: { "X-Professores-Pin": pin } })
+      .then((r) => {
+        if (r.status === 403) { gravarPin(""); portao("PIN incorreto."); return null; }
+        if (r.status === 429) { gravarPin(""); portao("Muitas tentativas. Tente de novo em 15 minutos."); return null; }
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+      })
+      .then((d) => { if (!d) return; gravarPin(pin); document.getElementById("sair").hidden = false; desenhar(d); })
+      .catch(() => {
+        document.getElementById("atualizado").textContent = "indisponível agora";
+        document.getElementById("app").innerHTML = `<div class="bloco aviso-vazio"><h2>Não foi possível carregar</h2><p class="sub">Tente de novo em instantes.</p></div>`;
+      });
+  }
+
+  document.getElementById("sair").addEventListener("click", (ev) => {
+    ev.preventDefault();
+    gravarPin("");
+    try { sessionStorage.removeItem("espacojovem.professores"); } catch (e) {}
+    location.reload();
+  });
+
+  carregar(lerPin());
 </script>
 </body>
 </html>

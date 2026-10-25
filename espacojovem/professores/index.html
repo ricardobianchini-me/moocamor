@@ -158,6 +158,7 @@
             <button class="btn claro" type="button" onclick="document.querySelectorAll('details.aula').forEach(d => d.open = true)">Abrir todas</button>
             <button class="btn claro" type="button" onclick="window.print()">Imprimir ou salvar PDF</button>
             <a class="btn petroleo" href="#inclusao">Guia de inclusão</a>
+            <a class="btn laranja" href="../enquete/resultados/">Resultados da enquete</a>
           </div>
           ${aulas}
         </div>
@@ -210,13 +211,13 @@
       erro.textContent = "PIN incorreto.";
       return;
     }
-    try { sessionStorage.setItem(CHAVE, PIN_HASH); } catch (e) {}
+    try { sessionStorage.setItem(CHAVE, PIN_HASH); sessionStorage.setItem("espacojovem.pin", pin); } catch (e) {}
     mostrarAulas();
   });
 
   document.getElementById("sair").addEventListener("click", (ev) => {
     ev.preventDefault();
-    try { sessionStorage.removeItem(CHAVE); } catch (e) {}
+    try { sessionStorage.removeItem(CHAVE); sessionStorage.removeItem("espacojovem.pin"); } catch (e) {}
     location.reload();
   });
 
