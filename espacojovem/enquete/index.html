@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enquete — Espaço Jovem</title>
+<meta name="description" content="Enquete do Espaço Jovem da Fraternidade do Amor: ajude a definir turmas, dias e horários e o que vamos viver juntos.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fraternidade do Amor">
+<meta property="og:title" content="Enquete do Espaço Jovem — Fraternidade do Amor">
+<meta property="og:description" content="3 minutinhos para ajudar a montar as turmas, os horários e as atividades do Espaço Jovem.">
+<meta property="og:url" content="https://moocamor.duckdns.org/espacojovem/enquete/">
+<meta property="og:image" content="https://moocamor.duckdns.org/espacojovem/og-espaco-jovem.jpg">
+<meta name="theme-color" content="#123c3f">
+<link rel="icon" type="image/png" href="../icone-espaco-jovem.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../estilo.css">
+<style>
+  .faixa { background: linear-gradient(135deg, rgba(18, 60, 63, 0.94), rgba(29, 107, 110, 0.88) 50%, rgba(118, 82, 168, 0.90)), url("../padrao-espaco-jovem.jpg") center / 480px auto repeat; color: #fff; text-align: center; padding: 56px 20px 64px; }
+  .faixa img { width: 110px; height: 110px; border-radius: 50%; box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.10); }
+  .faixa .olho { color: #bfe0dd; margin-top: 18px; }
+  .faixa h1 { font-weight: 700; font-size: clamp(2rem, 6vw, 3rem); }
+  .faixa p { margin: 10px auto 0; max-width: 56ch; opacity: 0.94; }
+  .faixa .tempo { display: inline-block; margin-top: 16px; font-family: "Roboto Mono", monospace; font-size: 0.8rem; background: rgba(255, 255, 255, 0.14); border-radius: 999px; padding: 6px 14px; }
+
+  form { max-width: 760px; margin: -32px auto 0; padding: 0 16px 80px; position: relative; }
+  fieldset { border: 1.5px solid var(--linha); border-radius: 24px; background: var(--branco); padding: 24px 24px 22px; margin: 0 0 18px; box-shadow: var(--sombra); min-width: 0; }
+  legend { float: left; width: 100%; padding: 0; display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  legend .n { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: var(--c, var(--petroleo)); color: #fff; font-family: "Poppins", sans-serif; font-weight: 700; }
+  legend h2 { font-size: 1.3rem; font-weight: 700; }
+  legend h2::after { display: none; }
+  .explica { clear: both; color: var(--ink-soft); margin: 4px 0 16px; font-size: 0.97rem; }
+  .pergunta { margin: 18px 0 0; }
+  .pergunta > label, .pergunta > .rotulo { display: block; font-family: "Poppins", sans-serif; font-weight: 600; margin-bottom: 8px; }
+  .pergunta small { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 400; color: var(--ink-soft); }
+  input[type="text"], input[type="tel"], textarea {
+    width: 100%; font: inherit; color: var(--ink); background: var(--creme); border: 1.5px solid var(--linha); border-radius: 14px; padding: 12px 14px;
+  }
+  textarea { min-height: 96px; resize: vertical; }
+  input:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
+
+  /* Opções como chips */
+  .opcoes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opcoes label { position: relative; cursor: pointer; }
+  .opcoes input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .opcoes span {
+    display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border-radius: 999px; border: 1.5px solid var(--linha);
+    background: var(--branco); font-size: 0.95rem; line-height: 1.3; transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .opcoes span small { color: var(--ink-soft); font-size: 0.82rem; }
+  .opcoes label:hover span { border-color: var(--c, var(--petroleo)); }
+  .opcoes input:checked + span { background: var(--c, var(--petroleo)); border-color: var(--c, var(--petroleo)); color: var(--on, #fff); transform: rotate(-1deg); }
+  .opcoes input:checked + span small { color: inherit; opacity: 0.85; }
+  .opcoes input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .opcoes.coluna-unica { flex-direction: column; align-items: flex-start; }
+
+  .oculto { display: none !important; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  .consent input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--petroleo); flex-shrink: 0; }
+  .enviar { text-align: center; margin-top: 8px; }
+  .enviar .btn { font-size: 1.05rem; padding: 15px 34px; }
+  .msg { text-align: center; min-height: 1.5em; margin: 12px 0 0; font-weight: 700; }
+  .msg.erro { color: #c23b2a; }
+
+  .obrigado { max-width: 620px; margin: -32px auto 80px; padding: 0 16px; }
+  .obrigado .caixa { background: var(--branco); border: 1.5px solid var(--linha); border-radius: 24px; padding: 34px 28px; text-align: center; box-shadow: var(--sombra); }
+  .obrigado h2 { font-size: 1.8rem; }
+  .obrigado h2::after { display: none; }
+  .obrigado p { color: var(--ink-soft); }
+  .obrigado .acoes { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .btn.claro { background: var(--branco); color: var(--ink); border: 1.5px solid var(--linha); }
+  .menu-simples { display: flex; gap: 2px; margin-left: auto; }
+  .menu-simples a { font-family: "Roboto Mono", monospace; font-size: 0.85rem; color: var(--ink-soft); text-decoration: none; padding: 8px 10px; }
+  .menu-simples a:hover { color: var(--ink); }
+  @media (max-width: 480px) { .wordmark span { display: none; } .menu-simples a { padding: 8px 7px; } fieldset { padding: 20px 16px; } }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="largo">
+    <a class="wordmark" href="../"><img src="../logo-espaco-jovem.jpg" width="36" height="36" alt=""><span>Espaço Jovem</span></a>
+    <nav class="menu-simples" aria-label="Navegação"><a href="../">Site</a><a href="../ideias/">Ideias</a></nav>
+  </div>
+</header>
+
+<section class="faixa">
+  <img src="../logo-espaco-jovem.jpg" width="110" height="110" alt="Logo do Espaço Jovem">
+  <p class="olho">Enquete do Espaço Jovem</p>
+  <h1>Ajude a montar o Espaço Jovem</h1>
+  <p>Queremos saber quantas crianças e jovens participariam, de que idades, em que dias e o que eles gostariam de viver aqui. Suas respostas definem as turmas, os horários e a equipe.</p>
+  <span class="tempo">cerca de 3 minutos · sem cadastro</span>
+</section>
+
+<form id="enquete" novalidate>
+
+  <fieldset style="--c:var(--petroleo)">
+    <legend><span class="n">1</span><h2>Quem está respondendo?</h2></legend>
+    <p class="explica">Pais e responsáveis respondem pela família. Jovens de 12 a 17 anos também podem responder por conta própria: a sua opinião conta muito para escolher as atividades.</p>
+    <div class="opcoes" data-grupo="quem">
+      <label><input type="radio" name="quem" value="responsavel" required><span>Sou pai, mãe ou responsável</span></label>
+      <label><input type="radio" name="quem" value="jovem"><span>Sou jovem (12 a 17 anos)</span></label>
+    </div>
+  </fieldset>
+
+  <fieldset style="--c:var(--laranja)" data-para="responsavel">
+    <legend><span class="n">2</span><h2>Sua família</h2></legend>
+    <p class="explica">Só para a coordenação saber com quem falar. O WhatsApp é opcional e serve apenas para avisar sobre o início do Espaço Jovem.</p>
+    <div class="pergunta"><label for="nome">Seu nome</label><input type="text" id="nome" name="nome" maxlength="80" autocomplete="name"></div>
+    <div class="pergunta"><label for="whatsapp">WhatsApp <small>(opcional)</small></label><input type="tel" id="whatsapp" name="whatsapp" maxlength="20" autocomplete="tel" placeholder="(11) 9xxxx-xxxx"></div>
+    <div class="pergunta">
+      <span class="rotulo">Vocês já frequentam a Fraternidade do Amor?</span>
+      <div class="opcoes">
+        <label><input type="radio" name="frequenta" value="semanal"><span>Sim, toda semana</span></label>
+        <label><input type="radio" name="frequenta" value="as-vezes"><span>De vez em quando</span></label>
+        <label><input type="radio" name="frequenta" value="ainda-nao"><span>Ainda não, mas temos interesse</span></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="--c:var(--roxo)" data-para="responsavel">
+    <legend><span class="n">3</span><h2>Crianças e jovens</h2></legend>
+    <p class="explica">Não precisamos do nome nem da data de nascimento das crianças: a faixa de idade basta para montar as turmas. Vamos abrir uma turma para cada faixa com procura suficiente.</p>
+    <div class="pergunta">
+      <span class="rotulo">Quantos participariam?</span>
+      <div class="opcoes">
+        <label><input type="radio" name="quantos" value="1"><span>1</span></label>
+        <label><input type="radio" name="quantos" value="2"><span>2</span></label>
+        <label><input type="radio" name="quantos" value="3+"><span>3 ou mais</span></label>
+      </div>
+    </div>
+    <div class="pergunta">
+      <span class="rotulo">Quais as idades? <small>Pode marcar mais de uma.</small></span>
+      <div class="opcoes">
+        <label><input type="checkbox" name="idades" value="3-5"><span>3 a 5 anos</span></label>
+        <label><input type="checkbox" name="idades" value="6-8"><span>6 a 8 anos</span></label>
+        <label><input type="checkbox" name="idades" value="9-11"><span>9 a 11 anos</span></label>
+        <label><input type="checkbox" name="idades" value="12-14"><span>12 a 14 anos</span></label>
+        <label><input type="checkbox" name="idades" value="15-17"><span>15 a 17 anos</span></label>
+      </div>
+    </div>
+    <div class="pergunta">
+      <span class="rotulo">Se tiver filhos com 12 anos ou mais: eles mesmos têm interesse?</span>
+      <div class="opcoes">
+        <label><input type="radio" name="interesseJovem" value="sim"><span>Sim</span></label>
+        <label><input type="radio" name="interesseJovem" value="talvez"><span>Talvez, depende das atividades</span></label>
+        <label><input type="radio" name="interesseJovem" value="nao-sei"><span>Não sei ainda</span></label>
+        <label><input type="radio" name="interesseJovem" value="nao-se-aplica"><span>Não se aplica</span></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="--c:var(--roxo)" data-para="jovem">
+    <legend><span class="n">2</span><h2>Sobre você</h2></legend>
+    <p class="explica">Não precisa se identificar. Queremos ouvir os jovens antes de fechar as atividades.</p>
+    <div class="pergunta">
+      <span class="rotulo">Sua idade</span>
+      <div class="opcoes">
+        <label><input type="radio" name="idadeJovem" value="12-14"><span>12 a 14 anos</span></label>
+        <label><input type="radio" name="idadeJovem" value="15-17"><span>15 a 17 anos</span></label>
+      </div>
+    </div>
+    <div class="pergunta">
+      <span class="rotulo">Você viria ao Espaço Jovem?</span>
+      <div class="opcoes">
+        <label><input type="radio" name="viria" value="sim"><span>Sim</span></label>
+        <label><input type="radio" name="viria" value="talvez"><span>Talvez, depende das atividades</span></label>
+        <label><input type="radio" name="viria" value="nao-sei"><span>Não sei ainda</span></label>
+      </div>
+    </div>
+    <div class="pergunta"><label for="assuntos">Sobre quais assuntos você gostaria de conversar? <small>(opcional)</small></label><textarea id="assuntos" name="assuntos" maxlength="600" placeholder="Ex.: amizade, ansiedade, redes sociais, propósito, família…"></textarea></div>
+  </fieldset>
+
+  <fieldset style="--c:var(--ambar);--on:#2a1606">
+    <legend><span class="n" data-num="dias">4</span><h2>Dias e horários</h2></legend>
+    <p class="explica">Sugerimos os mesmos dias em que a casa já funciona. Assim, a família pode vir junto: os adultos no passe ou na palestra enquanto os filhos estão no Espaço Jovem. Marque todos os que funcionam para vocês.</p>
+    <div class="pergunta">
+      <div class="opcoes coluna-unica">
+        <label><input type="checkbox" name="horarios" value="ter-tarde"><span>Terça à tarde <small>14h às 16h</small></span></label>
+        <label><input type="checkbox" name="horarios" value="ter-noite"><span>Terça à noite <small>18h30 às 20h</small></span></label>
+        <label><input type="checkbox" name="horarios" value="qua-noite"><span>Quarta à noite <small>18h30 às 20h</small></span></label>
+        <label><input type="checkbox" name="horarios" value="sab-manha"><span>Sábado de manhã <small>9h às 11h30</small></span></label>
+        <label><input type="checkbox" name="horarios" value="dom-pet"><span>1º domingo do mês <small>junto com o PET Fraterno</small></span></label>
+      </div>
+    </div>
+    <div class="pergunta"><label for="horarioOutro">Outro dia ou horário <small>(opcional)</small></label><input type="text" id="horarioOutro" name="horarioOutro" maxlength="120" placeholder="Ex.: sábado à tarde"></div>
+    <div class="pergunta">
+      <span class="rotulo">Com que frequência?</span>
+      <div class="opcoes">
+        <label><input type="radio" name="frequencia" value="quinzenal"><span>Quinzenal <small>(a proposta)</small></span></label>
+        <label><input type="radio" name="frequencia" value="semanal"><span>Semanal</span></label>
+        <label><input type="radio" name="frequencia" value="mensal"><span>Mensal</span></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="--c:var(--petroleo)">
+    <legend><span class="n" data-num="conteudo">5</span><h2>O que vamos viver</h2></legend>
+    <p class="explica">Estes são os temas e as atividades da proposta. Marque o que mais atrai vocês: isso ajuda a decidir por onde começar.</p>
+    <div class="pergunta">
+      <span class="rotulo">Temas que mais interessam</span>
+      <div class="opcoes">
+        <label><input type="checkbox" name="temas" value="deus-gratidao"><span>Deus, criação e gratidão</span></label>
+        <label><input type="checkbox" name="temas" value="jesus-evangelho"><span>Jesus e o Evangelho</span></label>
+        <label><input type="checkbox" name="temas" value="sentimentos"><span>Sentimentos e escolhas</span></label>
+        <label><input type="checkbox" name="temas" value="amizade-familia"><span>Amizade, família e convivência</span></label>
+        <label><input type="checkbox" name="temas" value="caridade"><span>Caridade e solidariedade</span></label>
+        <label><input type="checkbox" name="temas" value="progresso"><span>Imortalidade, reencarnação e progresso</span></label>
+        <label><input type="checkbox" name="temas" value="interiorizacao"><span>Espiritualidade e interiorização</span></label>
+      </div>
+    </div>
+    <div class="pergunta">
+      <span class="rotulo">Atividades que mais atraem</span>
+      <div class="opcoes">
+        <label><input type="checkbox" name="atividades" value="historias"><span>Histórias e rodas de conversa</span></label>
+        <label><input type="checkbox" name="atividades" value="musica"><span>Música</span></label>
+        <label><input type="checkbox" name="atividades" value="teatro-arte"><span>Teatro e arte</span></label>
+        <label><input type="checkbox" name="atividades" value="jogos"><span>Jogos e brincadeiras</span></label>
+        <label><input type="checkbox" name="atividades" value="acao-social"><span>Ação social</span></label>
+        <label><input type="checkbox" name="atividades" value="encontros"><span>Encontros e passeios</span></label>
+        <label><input type="checkbox" name="atividades" value="online"><span>Atividades on-line</span></label>
+        <label><input type="checkbox" name="atividades" value="festival"><span>Festival de Arte, Amor e Fraternidade</span></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="--c:var(--laranja)" data-para="responsavel">
+    <legend><span class="n">6</span><h2>Participação da família</h2></legend>
+    <p class="explica">O Espaço Jovem é feito junto com as famílias: um encontro com os pais a cada dois meses e uma equipe de voluntários. Toda ajuda conta, mesmo que seja pouca.</p>
+    <div class="pergunta">
+      <span class="rotulo">Você participaria do encontro com os pais a cada dois meses?</span>
+      <div class="opcoes">
+        <label><input type="radio" name="encontroPais" value="sim"><span>Sim</span></label>
+        <label><input type="radio" name="encontroPais" value="talvez"><span>Talvez</span></label>
+        <label><input type="radio" name="encontroPais" value="nao"><span>Não</span></label>
+      </div>
+    </div>
+    <div class="pergunta">
+      <span class="rotulo">Gostaria de ajudar como voluntário(a)? <small>Pode marcar mais de uma.</small></span>
+      <div class="opcoes">
+        <label><input type="checkbox" name="voluntario" value="evangelizador"><span>Evangelizador(a)</span></label>
+        <label><input type="checkbox" name="voluntario" value="acolhida-lanche"><span>Acolhida ou lanche</span></label>
+        <label><input type="checkbox" name="voluntario" value="musica-artes"><span>Música ou artes</span></label>
+        <label><input type="checkbox" name="voluntario" value="comunicacao"><span>Comunicação</span></label>
+        <label><input type="checkbox" name="voluntario" value="nao-agora"><span>Por enquanto não</span></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="--c:var(--roxo)" data-para="responsavel">
+    <legend><span class="n">7</span><h2>Acolhimento</h2></legend>
+    <p class="explica">Cada criança aprende e participa de um jeito, e queremos acolher todas. Não pedimos detalhes nem laudo aqui: se quiser, a coordenação conversa com você pessoalmente, com toda a discrição.</p>
+    <div class="pergunta">
+      <span class="rotulo">Gostaria de conversar com a coordenação sobre alguma necessidade específica?</span>
+      <div class="opcoes">
+        <label><input type="radio" name="conversa" value="sim"><span>Sim, prefiro conversar pessoalmente</span></label>
+        <label><input type="radio" name="conversa" value="nao"><span>Não</span></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="--c:var(--ambar);--on:#2a1606">
+    <legend><span class="n" data-num="sugestoes">8</span><h2>Sugestões</h2></legend>
+    <p class="explica">O que você espera do Espaço Jovem? Tem uma ideia, um pedido ou uma preocupação? Este espaço é seu. Para ideias que todos podem ver e apoiar, use também o <a href="../ideias/">painel de ideias</a>.</p>
+    <div class="pergunta"><textarea aria-label="Suas sugestões" id="sugestoes" name="sugestoes" maxlength="1500" placeholder="Escreva aqui (opcional)"></textarea></div>
+  </fieldset>
+
+  <fieldset style="--c:var(--petroleo)">
+    <legend><span class="n" data-num="consent">9</span><h2>Seus dados</h2></legend>
+    <p class="explica">As respostas ficam guardadas de forma reservada: só a coordenação do Espaço Jovem tem acesso, e elas não aparecem no site. Serão usadas apenas para organizar o Espaço Jovem e apagadas quando não forem mais necessárias.</p>
+    <label class="consent"><input type="checkbox" id="consentimento" name="consentimento" required><span>Autorizo o uso destas respostas apenas para organizar o Espaço Jovem.</span></label>
+  </fieldset>
+
+  <div class="enviar">
+    <button class="btn laranja" type="submit" id="botao-enviar">Enviar respostas</button>
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  </div>
+</form>
+
+<section class="obrigado oculto" id="obrigado">
+  <div class="caixa">
+    <h2>Obrigado!</h2>
+    <p>Suas respostas chegaram à coordenação do Espaço Jovem. Em breve contamos as novidades no grupo.</p>
+    <div class="acoes">
+      <a class="btn laranja" href="../">Conhecer a proposta</a>
+      <a class="btn claro" href="../ideias/">Deixar uma ideia</a>
+      <button class="btn claro" type="button" id="outra">Enviar outra resposta</button>
+    </div>
+  </div>
+</section>
+
+<footer class="rodape">
+  <div class="coluna">
+    <h3>Fraternidade do Amor</h3>
+    <p>Rua Madre de Deus, 915, Mooca, São Paulo (SP)</p>
+    <p class="creditos">Educar para o amor · Vivenciar o bem · Fortalecer os laços</p>
+  </div>
+</footer>
+
+<script>
+  // Grava pelo serviço da casa (/moocamor-api). O caminho espacoJovemEnquete/respostas/
+  // aceita escrita sem PIN, mas não é legível pela internet (regras do Firebase).
+  const API = "/moocamor-api/db/write";
+  const CAMINHO = "espacoJovemEnquete/respostas/";
+  const form = document.getElementById("enquete");
+  const msg = document.getElementById("msg");
+
+  function novaChave() {
+    const t = Date.now().toString(36).padStart(9, "0");
+    let r = "";
+    while (r.length < 11) r += Math.random().toString(36).slice(2);
+    return t + r.slice(0, 11);
+  }
+
+  // Mostra só as seções de quem está respondendo e renumera
+  function ajustarSecoes() {
+    const quem = form.querySelector('input[name="quem"]:checked');
+    const tipo = quem ? quem.value : "responsavel";
+    let n = 0;
+    form.querySelectorAll("fieldset").forEach((fs) => {
+      const para = fs.dataset.para;
+      const mostra = !para || para === tipo;
+      fs.classList.toggle("oculto", !mostra);
+      if (mostra) fs.querySelector("legend .n").textContent = ++n;
+    });
+  }
+  form.querySelectorAll('input[name="quem"]').forEach((r) => r.addEventListener("change", ajustarSecoes));
+  ajustarSecoes();
+
+  function valor(nome) {
+    const el = form.querySelector(`[name="${nome}"]:checked`) || form.querySelector(`[name="${nome}"]:not([type=radio]):not([type=checkbox])`);
+    return el ? el.value.trim() : "";
+  }
+  function marcados(nome) {
+    return [...form.querySelectorAll(`[name="${nome}"]:checked`)].map((e) => e.value);
+  }
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    msg.className = "msg"; msg.textContent = "";
+    const quem = valor("quem");
+    if (!quem) { msg.className = "msg erro"; msg.textContent = "Responda a pergunta 1: quem está respondendo."; form.querySelector('[name="quem"]').focus(); return; }
+    if (!document.getElementById("consentimento").checked) { msg.className = "msg erro"; msg.textContent = "Marque a autorização no final para enviar."; document.getElementById("consentimento").focus(); return; }
+
+    const dados = { quem, horarios: marcados("horarios"), horarioOutro: valor("horarioOutro"), frequencia: valor("frequencia"),
+      temas: marcados("temas"), atividades: marcados("atividades"), sugestoes: valor("sugestoes"), consentimento: true, criadoEm: "__ts__" };
+    if (quem === "responsavel") {
+      Object.assign(dados, { nome: valor("nome"), whatsapp: valor("whatsapp"), frequenta: valor("frequenta"), quantos: valor("quantos"),
+        idades: marcados("idades"), interesseJovem: valor("interesseJovem"), encontroPais: valor("encontroPais"),
+        voluntario: marcados("voluntario"), conversa: valor("conversa") });
+    } else {
+      Object.assign(dados, { idadeJovem: valor("idadeJovem"), viria: valor("viria"), assuntos: valor("assuntos") });
+    }
+
+    const botao = document.getElementById("botao-enviar");
+    botao.disabled = true; msg.textContent = "Enviando…";
+    try {
+      const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ op: "set", path: CAMINHO + novaChave(), data: dados }) });
+      if (!r.ok) throw new Error(r.status);
+      form.classList.add("oculto");
+      document.getElementById("obrigado").classList.remove("oculto");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (e) {
+      msg.className = "msg erro";
+      msg.textContent = "Não conseguimos enviar agora. Tente de novo em instantes.";
+    } finally {
+      botao.disabled = false;
+    }
+  });
+
+  document.getElementById("outra").addEventListener("click", () => {
+    form.reset(); ajustarSecoes();
+    document.getElementById("obrigado").classList.add("oculto");
+    form.classList.remove("oculto"); msg.textContent = "";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+</body>
+</html>
