@@ -79,10 +79,28 @@
   .fato b { display: block; font-family: "Poppins", sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--petroleo); }
   .fato.def b { color: var(--laranja-txt); }
 
-  .deck-temas { columns: 2 320px; column-gap: 28px; list-style: none; padding: 0; margin: 0; }
-  .deck-temas li { break-inside: avoid; padding: 12px 0; border-bottom: 1px solid var(--linha); }
-  .deck-temas b { font-family: "Poppins", sans-serif; font-weight: 600; display: block; }
-  .deck-temas span { color: var(--ink-soft); font-size: 0.95rem; }
+  .deck-temas { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+  .deck-temas li {
+    flex: 0 0 calc((100% - 3 * 14px) / 4); display: flex; flex-direction: column;
+    background: var(--creme); border: 1.5px solid var(--linha); border-radius: 20px; padding: 18px 18px 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .deck-temas li:hover { transform: translateY(-3px) rotate(-0.5deg); box-shadow: var(--sombra); }
+  .deck-temas .ic { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--c-soft); color: var(--c); transform: rotate(-6deg); margin-bottom: 12px; }
+  .deck-temas .ic svg { width: 24px; height: 24px; transform: rotate(6deg); }
+  .deck-temas b { font-family: "Poppins", sans-serif; font-weight: 600; font-size: 1.04rem; line-height: 1.25; display: block; }
+  .deck-temas .viv { margin-top: auto; padding-top: 12px; }
+  .deck-temas .viv i { display: block; font-style: normal; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-txt, var(--c)); margin: 10px 0 3px; padding-top: 10px; border-top: 1.5px dashed var(--linha); }
+  .deck-temas .viv span { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.45; }
+  @media (max-width: 1100px) {
+    .deck-temas li { padding: 13px 14px 12px; }
+    .deck-temas .ic { width: 36px; height: 36px; margin-bottom: 8px; }
+    .deck-temas .viv { padding-top: 6px; }
+    .deck-temas .viv i { margin-top: 6px; padding-top: 7px; }
+  }
+  @media (max-width: 1100px) and (max-height: 760px) { .deck-temas .ic { display: none; } }
+  @media (max-width: 1000px) { .deck-temas li { flex-basis: calc((100% - 14px) / 2); } }
+  @media (max-width: 560px) { .deck-temas li { flex-basis: 100%; } }
 
   .deck-trilha { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 14px 12px; grid-template-columns: repeat(6, 1fr); counter-reset: p; }
   .deck-trilha li { position: relative; background: var(--branco); border: 1.5px solid var(--linha); border-radius: 16px; padding: 30px 12px 12px; font-size: 0.88rem; }
@@ -140,7 +158,8 @@
     .slide { padding: 26px 24px; }
     h2.titulo { font-size: clamp(1.7rem, 3.6vw, 2.4rem); margin-bottom: 14px; }
     .lead { margin-bottom: 14px; }
-    .deck-temas li { padding: 7px 0; }
+    .deck-temas li { padding: 14px 14px 12px; }
+    .deck-temas .ic { width: 38px; height: 38px; margin-bottom: 8px; }
     .card { padding: 18px; }
     .org .liga { height: 18px; }
     .org .ramos { padding-top: 18px; }
@@ -317,13 +336,13 @@
         <p class="olho">Conteúdo programático</p>
         <h2 class="titulo">Sete temas, com profundidade de acordo com a idade</h2>
         <ul class="deck-temas">
-          <li><b>Deus, criação e gratidão</b><span>Vivência: cuidar de uma planta ou evitar desperdícios.</span></li>
-          <li><b>Jesus e os ensinamentos do Evangelho</b><span>Vivência: praticar gentileza ou acolher alguém.</span></li>
-          <li><b>Sentimentos, escolhas e responsabilidade</b><span>Vivência: reconhecer um erro e pensar em como repará-lo.</span></li>
-          <li><b>Amizade, família e convivência</b><span>Vivência: agradecer, escutar ou colaborar em casa.</span></li>
-          <li><b>Caridade e solidariedade</b><span>Vivência: uma ação de cuidado, respeitando a dignidade de todos.</span></li>
-          <li><b>Imortalidade, reencarnação e progresso</b><span>Vivência: escolher uma atitude a desenvolver, sem culpabilizar o sofrimento.</span></li>
-          <li><b>Espiritualidade e interiorização</b><span>Vivência: reservar um momento para refletir sobre as próprias atitudes.</span></li>
+          <li style="--c:var(--petroleo);--c-soft:var(--verde-soft)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 20h10"/><path d="M12 20v-8"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6z"/><path d="M12 10c0-3 2-5 6-5 0 3-2 5-6 5z"/></svg></span><b>Deus, criação e gratidão</b><div class="viv"><i>Vivência</i><span>Cuidar de uma planta ou evitar desperdícios.</span></div></li>
+          <li style="--c:var(--laranja);--c-soft:var(--laranja-soft);--c-txt:var(--laranja-txt)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></span><b>Jesus e os ensinamentos do Evangelho</b><div class="viv"><i>Vivência</i><span>Praticar gentileza ou acolher alguém.</span></div></li>
+          <li style="--c:var(--roxo);--c-soft:var(--roxo-soft)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><path d="M5 6h11l3 3-3 3H5z"/><path d="M19 14H8l-3 3 3 3h11"/></svg></span><b>Sentimentos, escolhas e responsabilidade</b><div class="viv"><i>Vivência</i><span>Reconhecer um erro e pensar em como repará-lo.</span></div></li>
+          <li style="--c:var(--ambar);--c-soft:var(--ambar-soft);--c-txt:var(--laranja-txt)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span><b>Amizade, família e convivência</b><div class="viv"><i>Vivência</i><span>Agradecer, escutar ou colaborar em casa.</span></div></li>
+          <li style="--c:var(--petroleo);--c-soft:var(--verde-soft)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><b>Caridade e solidariedade</b><div class="viv"><i>Vivência</i><span>Uma ação de cuidado, respeitando a dignidade de todos.</span></div></li>
+          <li style="--c:var(--laranja);--c-soft:var(--laranja-soft);--c-txt:var(--laranja-txt)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12c-2-2.7-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.3 6-4zm0 0c2 2.7 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.3-6 4z"/></svg></span><b>Imortalidade, reencarnação e progresso</b><div class="viv"><i>Vivência</i><span>Escolher uma atitude a desenvolver, sem culpabilizar o sofrimento.</span></div></li>
+          <li style="--c:var(--roxo);--c-soft:var(--roxo-soft)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></span><b>Espiritualidade e interiorização</b><div class="viv"><i>Vivência</i><span>Reservar um momento para refletir sobre as próprias atitudes.</span></div></li>
         </ul>
       </div>
     </section>
