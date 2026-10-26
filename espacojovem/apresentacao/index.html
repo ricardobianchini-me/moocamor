@@ -111,6 +111,10 @@
   .org .no .papel { font-family: "Roboto Mono", monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
   .org .no .nome { font-family: "Poppins", sans-serif; font-weight: 700; font-size: 1.15rem; }
   .org .liga { width: 2px; height: 26px; background: var(--linha); }
+  .org .org-dupla .nomes { display: flex; justify-content: center; gap: 0; margin-top: 4px; }
+  .org .org-dupla .nomes > div { padding: 0 18px; }
+  .org .org-dupla .nomes > div + div { border-left: 1.5px solid var(--linha); }
+  .org .org-dupla .nomes .papel { text-transform: none; letter-spacing: 0; font-size: 0.78rem; }
   .org .ramos { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; width: 100%; max-width: 820px; position: relative; padding-top: 26px; }
   .org .ramos::before { content: ""; position: absolute; top: 0; left: 25%; right: 25%; height: 2px; background: var(--linha); }
   .org .ramo { position: relative; display: flex; flex-direction: column; align-items: center; }
@@ -141,8 +145,12 @@
     .org .liga { height: 18px; }
     .org .ramos { padding-top: 18px; }
     .org .ramo::before { top: -18px; height: 18px; }
-    .org .no { padding: 9px 18px; }
-    .org .equipe { margin-top: 10px; }
+    .org .no { padding: 7px 16px; }
+    .org .equipe { margin-top: 8px; gap: 6px; }
+    .org .pessoa { padding: 6px 13px; }
+    .org .legenda { margin-top: 10px; }
+    .slide[aria-label="Organograma"] .olho { margin-bottom: 2px; }
+    .slide[aria-label="Organograma"] h2.titulo { margin-bottom: 8px; }
   }
   blockquote.msg { margin: 0 auto; max-width: 820px; font-family: "Poppins", sans-serif; font-weight: 500; font-size: clamp(1.15rem, 2.6vw, 1.55rem); line-height: 1.5; color: #fff; text-align: center; }
 
@@ -395,7 +403,9 @@
         <div class="org">
           <div class="no" style="--c:var(--petroleo)"><div class="papel">Coordenadora geral de educação</div><div class="nome">Chris</div></div>
           <div class="liga" aria-hidden="true"></div>
-          <div class="no" style="--c:var(--laranja)"><div class="papel">Líder do grupo</div><div class="nome">Alessandra Aparecida</div></div>
+          <div class="no org-dupla" style="--c:var(--laranja)"><div class="papel">Organização</div>
+            <div class="nomes"><div><div class="nome">Alessandra Aparecida</div><div class="papel">líder do grupo</div></div><div><div class="nome">Daniela</div></div></div>
+          </div>
           <div class="ramos">
             <div class="ramo" style="--c:var(--roxo);--c-soft:var(--roxo-soft)">
               <div class="no" style="--c:var(--roxo)"><div class="papel">Equipe</div><div class="nome">Professoras</div></div>
