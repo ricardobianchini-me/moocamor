@@ -23,6 +23,7 @@ Páginas estáticas (HTML puro, sem build), publicadas em dois lugares a cada pu
 | Espaço Jovem: área dos professores | `espacojovem/professores/`; aulas em `professores/aulas.js` (o site lê os títulos daqui) | nenhum. O PIN só esconde a tela: o conteúdo é público no repositório |
 | Espaço Jovem: enquete das famílias | `espacojovem/enquete/` | `espacoJovemEnquete/respostas` (escrita pública, **sem leitura pública**: não entra em `database.rules.json` porque tem nome e WhatsApp; respostas completas só pelo console do Firebase) |
 | Espaço Jovem: resultados da enquete | `espacojovem/enquete/resultados/` (PIN dos professores; link na área dos professores) | lê `GET /moocamor-api/enquete/resumo` do hlera_bot, que confere o PIN no servidor e devolve só contagens e textos livres, nunca nome nem WhatsApp. A enquete em si (`espacojovem/enquete/`) é aberta, sem PIN |
+| Espaço Jovem: apresentação à diretoria | `espacojovem/apresentacao/` (carrossel; ←/→, deslizar, `#N` abre o slide N, imprimir gera um PDF com um slide por página) | só lê a contagem de ideias; a trilha do ano vem de `professores/aulas.js` |
 
 ## Configuração versionada
 
