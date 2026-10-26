@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Resultados da enquete — Espaço Jovem</title>
 <meta name="robots" content="noindex">
@@ -15,7 +16,7 @@
   /* Cor das barras validada (dataviz/validate_palette.js): claro #009690, escuro #1fa9a2. */
   :root { --barra: #009690; --trilho: #e9efee; --celula-texto-claro: #ffffff; --celula-texto-escuro: #10201f; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --barra: #1fa9a2; --trilho: #22302f; --celula-texto-claro: #0b1716; --celula-texto-escuro: #e8f3f2; } }
-  :root[data-theme="dark"] { --barra: #1fa9a2; --trilho: #22302f; --celula-texto-claro: #0b1716; --celula-texto-escuro: #e8f3f2; }
+  :root[data-theme="dark"] { color-scheme: dark; --barra: #1fa9a2; --trilho: #22302f; --celula-texto-claro: #0b1716; --celula-texto-escuro: #e8f3f2; }
 
   .faixa { background: linear-gradient(135deg, rgba(18, 60, 63, 0.94), rgba(29, 107, 110, 0.88) 50%, rgba(118, 82, 168, 0.90)), url("../../padrao-espaco-jovem.jpg") center / 480px auto repeat; color: #fff; text-align: center; padding: 52px 20px 58px; }
   .faixa .olho { color: #bfe0dd; }
