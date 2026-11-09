@@ -196,6 +196,12 @@
   .item-desc { font-size: 0.85rem; color: var(--ink-soft); margin: 0; line-height: 1.5; white-space: pre-wrap; }
   .item-empty { font-size: 0.84rem; color: var(--ink-soft); font-style: italic; padding: 6px 2px; }
 
+  .item-resposta {
+    margin: 8px 0 0; padding: 8px 10px; border-radius: 9px; background: var(--card);
+    border: 1px solid var(--paper-line); font-size: 0.83rem; line-height: 1.5; color: var(--ink);
+  }
+  .item-resposta b { font-family: "Fredoka", sans-serif; font-weight: 600; display: block; margin-bottom: 2px; color: var(--good-deep); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+
   .item-rm {
     position: absolute; top: 8px; right: 8px; border: none; background: none; color: var(--ink-soft);
     cursor: pointer; font-size: 0.9rem; padding: 3px 5px; border-radius: 6px; line-height: 1;
@@ -414,6 +420,7 @@
           </select>
           <input type="text" data-edit-ponto="${it.id}" value="${esc(it.ponto)}" placeholder="Ponto" />
           <textarea data-edit-desc="${it.id}" placeholder="Descrição">${esc(it.descricao || "")}</textarea>
+          <textarea data-edit-resposta="${it.id}" placeholder="Resposta / plano de ação da organização">${esc(it.resposta || "")}</textarea>
           <div style="display:flex;gap:6px;margin-top:6px;">
             <button type="button" class="col-form-save" data-save-item="${it.id}" style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.82rem;background:var(--good);color:#fff;border:none;border-radius:999px;padding:7px 14px;cursor:pointer;">Salvar</button>
             <button type="button" data-cancel-edit style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.82rem;background:var(--paper);border:1px solid var(--paper-line);border-radius:999px;padding:7px 14px;cursor:pointer;">Cancelar</button>
@@ -425,6 +432,7 @@
       ${unlocked ? `<button class="item-rm" data-rm-item="${it.id}" title="Remover">✕</button>` : ""}
       <p class="item-ponto" ${unlocked ? `data-edit-open="${it.id}" style="cursor:pointer;"` : ""}>${esc(it.ponto)}</p>
       ${it.descricao ? `<p class="item-desc">${esc(it.descricao)}</p>` : ""}
+      ${it.resposta ? `<p class="item-resposta"><b>📋 Resposta da organização</b>${esc(it.resposta)}</p>` : ""}
       ${unlocked ? `<span class="cat-badge">${esc((CATEGORIAS.find((c) => c.id === (it.categoria || "")) || CATEGORIAS[5]).label)}</span>` : ""}
     </div>`;
   }
@@ -442,6 +450,7 @@
         <div class="cat-item ${it.grupo}">
           <span class="tag">${GRUPO_LABEL[it.grupo]}</span><b>${esc(it.ponto)}</b>
           ${it.descricao ? `<details><summary>ver detalhes</summary><p>${esc(it.descricao)}</p></details>` : ""}
+          ${it.resposta ? `<p class="item-resposta"><b>📋 Resposta da organização</b>${esc(it.resposta)}</p>` : ""}
         </div>`).join("");
       const pct = (v) => (v / itens.length) * 100;
       const share = todos.length ? Math.round((itens.length / todos.length) * 100) : 0;
@@ -640,9 +649,10 @@
         const id = btn.dataset.saveItem;
         const ponto = document.querySelector(`[data-edit-ponto="${id}"]`).value.trim();
         const descricao = document.querySelector(`[data-edit-desc="${id}"]`).value.trim();
+        const resposta = document.querySelector(`[data-edit-resposta="${id}"]`).value.trim();
         const categoria = document.querySelector(`[data-edit-cat="${id}"]`).value;
         if (!ponto) return;
-        rootRef.child("itens").child(id).update({ ponto, descricao, categoria });
+        rootRef.child("itens").child(id).update({ ponto, descricao, resposta, categoria });
         editingId = null;
         render();
       });
